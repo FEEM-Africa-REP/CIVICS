@@ -63,6 +63,7 @@ class C_SUT:
 
     def plot_dx(self, old_x,new_x,level=False,Type='bar'):
         import matplotlib.pyplot as plt
+        import numpy as np
         
         fig, ax = plt.subplots()
         
@@ -98,7 +99,32 @@ class C_SUT:
                 plt.show()
         
         
+    def plot_dv(self, old_v,new_v,level=False,Type='bar'):
+        import matplotlib.pyplot as plt
+        import numpy as np
         
+
+        
+        dv = new_v-old_v
+        dv.index = dv.index.get_level_values(0)
+        
+        if Type == 'bar':
+            if level == False:
+                
+                dv.plot(kind='bar')
+                plt.title('Value Added')
+                plt.ylabel('M Ksh')
+                plt.legend(loc=1,bbox_to_anchor = (1.5,1))
+                plt.show()
+                
+            else:
+                
+                dv = dv[level]
+                dv.plot(kind='bar')
+                plt.title('Value Added')
+                plt.ylabel('M Ksh')
+                plt.legend(loc=1,bbox_to_anchor = (1.5,1))
+                plt.show()    
         
             
     def calc_all(self):        
@@ -107,37 +133,65 @@ class C_SUT:
         
         self.Y   = pd.DataFrame(self.F.sum(axis=1)+ self.EXP.sum(axis=1)+ self.INV.sum(axis=1),index = self.F.index,columns = ['Total final demand'])
         self.x   = pd.DataFrame(self.L @ self.Y.values,index = self.Z.index,columns = ['Total Production'])
-        self.VA  = pd.DataFrame(self.va @ (self.x.values  * np.identity(len(self.x))),index = self.VA_ind,columns =  self.Z.columns)
-        self.IMP = pd.DataFrame(self.imp @ (self.x.values  * np.identity(len(self.x))),index = self.IMP_ind,columns =  self.Z.columns)
+        self.VA  = pd.DataFrame(self.va.values @ (self.x.values  * np.identity(len(self.x))),index = self.VA_ind,columns =  self.Z.columns)
+        self.IMP = pd.DataFrame(self.imp.values @ (self.x.values  * np.identity(len(self.x))),index = self.IMP_ind,columns =  self.Z.columns)
         self.E   = pd.DataFrame(self.e @ (self.x.values * np.identity(len(self.x))),index = self.E_ind , columns = self.Z.columns)
         
         # Aggregating Results
-#        com_pr = self.x.loc['commodity']
-#        com_pr.index = com_pr.index.get_level_values(3)
-#        com_pr = com_pr.groupby(axis=0,level=0).sum()
-#        
-#        ind_pr = self.x.loc['industry']
-#        ind_pr.index = ind_pr.index.get_level_values(3)
-#        ind_pr = ind_pr.groupby(axis=0,level=0).sum()
-#        
-#        cmdt = []
-#        for i in range(len(com_pr)):
-#            cmdt.append('commodity')
-#        
-#        inds = []
-#        for i in range(len(ind_pr)):
-#            inds.append('industry')    
-#            
-#        new_x = pd.concat([com_pr,ind_pr],axis = 0)
-#        new_x_index = [cmdt+inds,com_pr.index + ind_pr.index]
-#        new_x.index = new_x_index
-#        
-#        self.x_agg = new_x
+        # Aggregation of x Matrix
+        com_pr = self.x.loc['commodity']
+        com_pr.index = com_pr.index.get_level_values(3)
+        com_pr = com_pr.groupby(axis=0,level=0).sum()
+        
+        ind_pr = self.x.loc['industry']
+        ind_pr.index = ind_pr.index.get_level_values(3)
+        ind_pr = ind_pr.groupby(axis=0,level=0).sum()
+        
+        cmdt = []
+        for i in range(len(com_pr)):
+            cmdt.append('commodity')
+        
+        inds = []
+        for i in range(len(ind_pr)):
+            inds.append('industry')    
+            
+        new_x = pd.concat([com_pr,ind_pr],axis = 0)
+        new_x_index = [cmdt+inds,com_pr.index.to_list() + ind_pr.index.to_list()]
+        new_x.index = new_x_index
+        
+        self.x_agg = new_x
 
 
+        # Aggregation of VA Matrix
+        com_va = self.VA['commodity']
+        com_va.columns = com_va.T.index.get_level_values(3)
+        com_va = com_va.groupby(axis=1,level=0).sum()
+        
+        ind_va = self.VA['industry']
+        ind_va.columns = ind_va.T.index.get_level_values(3)
+        ind_va = ind_va.groupby(axis=1,level=0).sum()
+        
+
+        new_va = pd.concat([com_va,ind_va],axis = 1)
+        new_va.columns = new_x_index
+        
+        self.VA_agg = new_va
     
 
-      
+        # Aggregation of IMP Matrix
+        com_im = self.IMP['commodity']
+        com_im.columns = com_im.T.index.get_level_values(3)
+        com_im = com_im.groupby(axis=1,level=0).sum()
+        
+        ind_im = self.IMP['industry']
+        ind_im.columns = ind_im.T.index.get_level_values(3)
+        ind_im = ind_im.groupby(axis=1,level=0).sum()
+        
+
+        new_im = pd.concat([com_im,ind_im],axis = 1)
+        new_im.columns = new_x_index
+        
+        self.IMP_agg = new_im      
       
 
     

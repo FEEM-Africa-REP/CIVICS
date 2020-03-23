@@ -3,7 +3,7 @@
 
 import civivs_sut as cvx
 #%%        
-negar=cvx.C_SUT(r'Database\Kenya_2014_SAM_0.xlsx')
+negar=cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
 #%%
 negar.parse()
 #%%
@@ -15,6 +15,8 @@ VA_old=negar.VA
 IMP_old=negar.IMP
 INV_old=negar.INV
 A_old=negar.A
+x_agg_old = negar.x_agg
+VA_agg = negar.VA_agg
 #%%
 # Implementing the shock: Pulping machine
 # Investment
@@ -61,10 +63,12 @@ VA_new=negar.VA
 IMP_new=negar.IMP
 INV_new=negar.INV
 A_new=negar.A
+x_agg_new = negar.x_agg
+VA_agg_new = negar.VA_agg
 #%%
 #Impelementing the shock: Shading tree Managment    
-    
-
+negar.plot_dx(x_agg_old,x_agg_new,level=False,Type='bar')   
+negar.plot_dv(VA_agg.loc['taxes'],VA_agg_new.loc['taxes'],level='commodity',Type='bar') 
       
       
 
