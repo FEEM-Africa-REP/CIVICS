@@ -1,0 +1,296 @@
+
+# In this file, the locations and the type of the connections between the 
+# new power plants and the mills will be defined:
+
+locations:
+
+################# Mills in MTKR #####################
+
+    M1:
+        coordinates:
+            lat: 0.3390
+            lon: 37.9372
+    M2:
+        coordinates:
+            lat: 0.0414
+            lon: 37.6582
+    M3:
+        coordinates:
+            lat: -0.2191
+            lon: 37.7318
+    M4:
+        coordinates:
+            lat: -0.4399
+            lon: 36.9177
+    M5:
+        coordinates:
+            lat: -0.4909
+            lon: 37.1045
+    M6:
+        coordinates:
+            lat: -0.5484
+            lon: 36.9445
+    M7:
+        coordinates:
+            lat: -0.5663
+            lon: 37.0166
+            
+            
+################# Mills in NBOR #####################            
+
+    M8:
+        coordinates:
+            lat: -1.0522
+            lon: 37.0934
+    M9:
+        coordinates:
+            lat: -1.1640
+            lon: 36.9524
+    M10:
+        coordinates:
+            lat: -1.1402
+            lon: 36.7900
+    M11:
+        coordinates:
+            lat: -1.1640
+            lon: 36.9524
+    M12:
+        coordinates:
+            lat: -1.2513
+            lon: 36.9092
+    M13:
+        coordinates:
+            lat: -1.5200
+            lon: 37.2696
+            
+            
+            
+################# Mills in WSTR #####################             
+            
+    M14:
+        coordinates:
+            lat: 0.5159
+            lon: 35.2883
+    M15:
+        coordinates:
+            lat: -0.2009
+            lon: 35.3492
+    M16:
+        coordinates:
+            lat: -0.6815
+            lon: 34.7765           
+            
+##############################################################
+
+# To model the cost for the transportation of the coffee, a new transmission 
+# technology should be introduced
+
+techs:
+
+    biofuel_transmission:
+    
+        essentials:
+            name: 'Coffee Transmission'
+            color: '#FF1493'
+            parent: transmission
+            carrier: biofuel
+        constraints:
+            energy_cap_max: inf
+            energy_eff: 1.0          
+
+
+# Introducing the technology to convert biofuel into biogas
+    biogas_producer:
+    
+        essentials:
+            color: '#592400'
+            name: 'Biomass Coffee Power Plant'
+            parent: conversion
+            carrier_in: biofuel               
+            carrier_out: biogas                    
+                
+        constraints:
+            energy_eff: 0.5          # thermodynamic efficiency of the machine                                        
+            lifetime: 25                                  
+        
+        costs:
+            monetary:  
+                energy_cap: 1100
+                om_annual: 40                  
+                om_prod: 0.016                    
+                om_con: 0.0                      
+                interest_rate: 0.10 
+
+#### Defining the connections between the mills and the power plant
+
+links:                             
+# Free Transmission:
+# Here we can limit the amount of biomass available per every mill              
+                
+    M1,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+                        
+    M2,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+
+    M3,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+                        
+    M4,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+
+    M5,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+                        
+    M6,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+
+    M7,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+                        
+    M8,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+
+    M9,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+                        
+    M10,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+
+    M11,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+                        
+    M12,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+
+    M13,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+                        
+    M14,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+
+    M15,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+                        
+    M16,NBOR:
+        techs:
+            free_transmission:
+                constraints:   
+                    energy_cap_equals: inf                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.1
+
+
+
+
+            
+            
+            
+            
