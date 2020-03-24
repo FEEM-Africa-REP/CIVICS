@@ -17,6 +17,7 @@ INV_old=negar.INV
 A_old=negar.A
 x_agg_old = negar.x_agg
 VA_agg = negar.VA_agg
+
 #%%
 # Implementing the shock: Pulping machine
 # Investment

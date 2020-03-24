@@ -135,7 +135,7 @@ class C_SUT:
         self.x   = pd.DataFrame(self.L @ self.Y.values,index = self.Z.index,columns = ['Total Production'])
         self.VA  = pd.DataFrame(self.va.values @ (self.x.values  * np.identity(len(self.x))),index = self.VA_ind,columns =  self.Z.columns)
         self.IMP = pd.DataFrame(self.imp.values @ (self.x.values  * np.identity(len(self.x))),index = self.IMP_ind,columns =  self.Z.columns)
-        self.E   = pd.DataFrame(self.e @ (self.x.values * np.identity(len(self.x))),index = self.E_ind , columns = self.Z.columns)
+        self.E   = pd.DataFrame(self.e.values @ (self.x.values * np.identity(len(self.x))),index = self.E_ind , columns = self.Z.columns)
         
         # Aggregating Results
         # Aggregation of x Matrix
