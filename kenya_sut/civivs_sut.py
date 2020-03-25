@@ -15,14 +15,14 @@ class C_SUT:
         self.path = path
         
         sut = pd.read_excel(self.path,index_col = [0,1,2,3,4] , header = [0,1,2,3,4])
-        Z=sut.loc[['commodity','activities'],['commodity','activities']] 
-        F=sut.loc[['commodity','activities'],'final demand']
-        INV=sut.loc[['commodity','activities'],'investment']
-        EXP=sut.loc[['commodity','activities'],'export']
-        IMP = sut.loc['import', ['commodity','activities']]
-        VA = sut.loc['value added',['commodity','activities']]
+        Z=sut.loc[['commodity','activity'],['commodity','activity']] 
+        F=sut.loc[['commodity','activity'],'final demand']
+        INV=sut.loc[['commodity','activity'],'investment']
+        EXP=sut.loc[['commodity','activity'],'export']
+        IMP = sut.loc['import', ['commodity','activity']]
+        VA = sut.loc['value added',['commodity','activity']]
         x_p   = F.sum(axis=1)+INV.sum(axis=1)+EXP.sum(axis=1)+Z.sum(axis=1)
-        E = sut.loc['environment',['commodity','activities']]
+        E = sut.loc['environment',['commodity','activity']]
         
         self.VA_ind = VA.index
         self.IMP_ind = IMP.index
@@ -44,13 +44,13 @@ class C_SUT:
         import numpy as np
         
         sut = pd.read_excel(self.path,index_col = [0,1,2,3,4] , header = [0,1,2,3,4])
-        self.Z = sut.loc[['commodity','activities'],['commodity','activities']]
+        self.Z = sut.loc[['commodity','activity'],['commodity','activity']]
         # local final demand
-        self.F   = sut.loc[['commodity','activities'],'final demand']
+        self.F   = sut.loc[['commodity','activity'],'final demand']
         # exports
-        self.EXP = sut.loc[['commodity','activities'],'export']
+        self.EXP = sut.loc[['commodity','activity'],'export']
         # investments
-        self.INV = sut.loc[['commodity','activities'],'investment']
+        self.INV = sut.loc[['commodity','activity'],'investment']
         # Import on final demand 
         self.IMP_fd = sut.loc['import','final demand']
         self.IMP_inv = sut.loc['import','investment']
@@ -144,7 +144,7 @@ class C_SUT:
         com_pr.index = com_pr.index.get_level_values(3)
         com_pr = com_pr.groupby(axis=0,level=0).sum()
         
-        ind_pr = self.x.loc['activities']
+        ind_pr = self.x.loc['activity']
         ind_pr.index = ind_pr.index.get_level_values(3)
         ind_pr = ind_pr.groupby(axis=0,level=0).sum()
         
@@ -154,7 +154,7 @@ class C_SUT:
         
         inds = []
         for i in range(len(ind_pr)):
-            inds.append('activities')    
+            inds.append('activity')    
             
         new_x = pd.concat([com_pr,ind_pr],axis = 0)
         new_x_index = [cmdt+inds,com_pr.index.to_list() + ind_pr.index.to_list()]
@@ -168,7 +168,7 @@ class C_SUT:
         com_va.columns = com_va.T.index.get_level_values(3)
         com_va = com_va.groupby(axis=1,level=0).sum()
         
-        ind_va = self.VA['activities']
+        ind_va = self.VA['activity']
         ind_va.columns = ind_va.T.index.get_level_values(3)
         ind_va = ind_va.groupby(axis=1,level=0).sum()
         
@@ -184,7 +184,7 @@ class C_SUT:
         com_im.columns = com_im.T.index.get_level_values(3)
         com_im = com_im.groupby(axis=1,level=0).sum()
         
-        ind_im = self.IMP['activities']
+        ind_im = self.IMP['activity']
         ind_im.columns = ind_im.T.index.get_level_values(3)
         ind_im = ind_im.groupby(axis=1,level=0).sum()
         
