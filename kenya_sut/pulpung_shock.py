@@ -36,25 +36,25 @@ negar.INV.loc[('commodity','Transport (commodity)'),'General investment saving']
 # Use side
 #  a)coffe commodity into high rainfall (increase in productivity)
 prod_coef=0.98
-negar.A.loc[('commodity','Coffee (commodity)'),('industry','High Rainfall (commercial production)')] = \
-      negar.A.loc[('commodity','Coffee (commodity)'),('industry','High Rainfall (commercial production)')].values*prod_coef
+negar.A.loc[('commodity','Coffee (commodity)'),('activities','High Rainfall (commercial production)')] = \
+      negar.A.loc[('commodity','Coffee (commodity)'),('activities','High Rainfall (commercial production)')].values*prod_coef
       #%%
 #  b)Use of diesel (petroleum commodity)
 diesel_coef=0.01 #MSh
-negar.A.loc[('commodity','Petroleum (commodity)'),('industry','High Rainfall (commercial production)')] = \
-      negar.A.loc[('commodity','Petroleum (commodity)'),('industry','High Rainfall (commercial production)')].values+diesel_coef*Num_machine
+negar.A.loc[('commodity','Petroleum (commodity)'),('activities','High Rainfall (commercial production)')] = \
+      negar.A.loc[('commodity','Petroleum (commodity)'),('activities','High Rainfall (commercial production)')].values+diesel_coef*Num_machine
       #%%
 #value added
 # Unskilled labour reduction
 lab_coef=0.7
-negar.va.loc[('value added0','Unskilled labour 0 High Rainfall'),('industry','High Rainfall (commercial production)')] = \
-    negar.va.loc[('value added0','Unskilled labour 0 High Rainfall'),('industry','High Rainfall (commercial production)')].values*lab_coef
+negar.va.loc[('value added0','Unskilled labour 0 High Rainfall'),('activities','High Rainfall (commercial production)')] = \
+    negar.va.loc[('value added0','Unskilled labour 0 High Rainfall'),('activities','High Rainfall (commercial production)')].values*lab_coef
     #%%
 #environmental effect
 #water footprint reduction
 WFN_coef=0.15
-negar.e.loc[('WaterFootprintNetwork','WFN: Total water footprint (Mm3/yr) - Blue'),('industry','High Rainfall (commercial production)')] = \
-    negar.e.loc[('WaterFootprintNetwork','WFN: Total water footprint (Mm3/yr) - Blue'),('industry','High Rainfall (commercial production)')].values*WFN_coef
+negar.e.loc[('WaterFootprintNetwork','WFN: Total water footprint (Mm3/yr) - Blue'),('activities','High Rainfall (commercial production)')] = \
+    negar.e.loc[('WaterFootprintNetwork','WFN: Total water footprint (Mm3/yr) - Blue'),('activities','High Rainfall (commercial production)')].values*WFN_coef
 #%%
 negar.calc_all()
 #%%
