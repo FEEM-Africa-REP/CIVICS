@@ -127,7 +127,7 @@ class C_SUT:
                 plt.legend(loc=1,bbox_to_anchor = (1.5,1))
                 plt.show()    
         
-            
+                
     def calc_all(self):        
         import pandas as pd
         import numpy as np
@@ -195,11 +195,52 @@ class C_SUT:
         self.IMP_agg = new_im      
       
 
+    def shock(self, path , sensitivity = False,Y= False , E = False , A= False , VA = False):
+        import pandas as pd
+        
+        if Y:
+            Y_m = pd.read_excel(path, sheet_name = 'Y', index_col = [0] , header = [0])
+            
+            header = Y_m.columns.to_list()
+            for i in range(len(Y_m)):   
+                
+                self.Y.loc[['commodity',Y_m.loc[str(i+1),header[0]]]] = \
+                           self.Y.loc[['commodity',Y_m.loc[str(i+1),header[0]]]] + Y_m.loc[str(i+1),header[1]].values
+            
+        if A:
+            A_m = pd.read_excel(path, sheet_name = 'A', index_col = [0] , header = [0])
+            
+            header = A_m.columns.to_list()
+            
+            for i in range(len(A_m)):  
+                
+                if A_m.loc[str(i+1),header[4]] == 'Percentage':
+                    
+                    if A_m.loc[str(i+1),header[5]].values < 1.0 :
+                        coeff = A_m.loc[str(i+1),header[5]].values
+                    else:
+                        coeff = A_m.loc[str(i+1),header[5]].values / 100.0
+                
+                    self.A.loc[[A_m.loc[str(i+1),header[0]]],A_m.loc[str(i+1),header[1]],[A_m.loc[str(i+1),header[2]]],A_m.loc[str(i+1),header[3]]] = \
+                        self.A.loc[[A_m.loc[str(i+1),header[0]]],A_m.loc[str(i+1),header[1]],[A_m.loc[str(i+1),header[2]]],A_m.loc[str(i+1),header[3]]] \
+                            * (1 + coeff )      
+                    
+                
+        if VA:
+            VA_m = pd.read_excel(path, sheet_name = 'VA', index_col = [0] , header = [0])
+            header = VA_m.columns.to_list()
+            
+            for i in range(len(VA_m)):  
+            
+            
+        
+        
+        
+        
     
     
     
-    
-    
+        
     
     
     
