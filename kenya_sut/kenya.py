@@ -17,7 +17,10 @@ IN = kenya.IN
 X = kenya.X
 
 #%%
-# kenya.calc_all()
-VA_r = VA.sum(axis=0)
-Z_r = Z.sum(axis=0)
-ROW = VA_r + Z_r
+kenya.parse()
+#%%
+kenya.shock(r'Database\Shock.xlsx' , Y= True )
+#%%kenya.calc_all()
+Y_new = kenya.Y
+#%%
+a = Y.index.get_index_level(0)
