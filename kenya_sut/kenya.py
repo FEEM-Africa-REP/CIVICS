@@ -17,8 +17,8 @@ IN = kenya.IN
 X = kenya.X
 
 #%%
-
-kenya.parse()
+a = kenya.VA
+my_E = kenya.S
 #%%
 kenya.shock(r'Database\Shock.xlsx' , Y= True )
 #%%kenya.calc_all()

@@ -10,6 +10,8 @@ class C_SUT:
     
     def __init__(self,path):
         
+        print('CIVCS SUT: A python Class for SUT Input Output Analysis Developed in Fondazione Eni Enrico Mattei')
+        
         import pandas as pd
         import numpy as np
         self.path = path
@@ -133,14 +135,15 @@ class C_SUT:
         import pandas as pd
         import numpy as np
         
-        self.l = np.linalg.inv(np.identity(len(self.z)) - self.z)
+        
         try:
-
-            self.X_c = pd.DataFrame(self.l @ self.Y_c.values , index - self.X.index , columns = self.X.columns)
+            
+            self.l_c = np.linalg.inv(np.identity(len(self.z_c)) - self.z_c)
+            self.X_c = pd.DataFrame(self.l @ self.Y_c.values , index = self.X.index , columns = self.X.columns)
             # re-computing flow matrices
-            self.VA_c = pd.DataFrame(self.va.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.VA_ind,columns =  self.Z.columns)
-            self.IMP_c = pd.DataFrame(self.imp.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
-            self.E_c = pd.DataFrame(self.e.values @ (self.X_c.values * np.identity(len(self.X))),index = self.E_ind , columns = self.Z.columns)
+            self.VA_c = pd.DataFrame(self.va_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.VA_ind,columns =  self.Z.columns)
+            self.IMP_c = pd.DataFrame(self.imp_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
+            self.S_c = pd.DataFrame(self.s_c.values @ (self.X_c.values * np.identity(len(self.X))),index = self.S_ind , columns = self.Z.columns)
             
         except:
             raise ValueError('No Shock is Implemented Yet!')
@@ -158,7 +161,7 @@ class C_SUT:
 
       
 
-    def shock(self, path , sensitivity = False,Y= False , E = False , Z= False , VA = False):
+    def shock(self, path , sensitivity = False,Y= False , S = False , Z= False , VA = False):
         import pandas as pd
         
         # Take a copy of all the things that can change to keep the original 
@@ -166,7 +169,7 @@ class C_SUT:
         self.Y_c   = self.Y.copy()
         self.va_c  = self.va.copy()
         self.imp_c = self.imp.copy()
-        self.e_c   = self.e.copy()
+        self.s_c   = self.s.copy()
         
         if Y:
             Y_m = pd.read_excel(path, sheet_name = 'Y', index_col = [0] , header = [0])
@@ -193,10 +196,50 @@ class C_SUT:
                 
                 # for every step, we should check if the changes should be
                 # on the coefficients or the flow
+                
                 if Z_m.loc[index[i],header[4]] == 'Percentage':
-                    self.z.loc[(),()]
+                    
+                    self.z_c.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
+                        self.z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
+                            * ( 1 +  Z_m.loc[index[i],header[5]] )
+                            
+                        
                     
                     
+        if VA:
+            
+            VA_m = pd.read_excel(path, sheet_name = 'VA', index_col = [0] , header = [0])
+            
+            header = VA_m.columns.to_list()
+            index  = VA_m.index.to_list()
+
+            
+            for i in range(len(VA_m)): 
+                
+                if VA_m.loc[index[i],header[3]] == 'Percentage':
+                    
+                    self.va_c.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
+                        self.va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
+                            * ( 1 + VA_m.loc[index[i],header[4]])
+                        
+        if S:
+            
+            S_m = pd.read_excel(path, sheet_name = 'S', index_col = [0] , header = [0])
+            
+            header = S_m.columns.to_list()
+            index  = S_m.index.to_list()
+
+            
+            for i in range(len(S_m)): 
+                
+                if S_m.loc[index[i],header[2]] == 'Percentage':
+                    
+                    self.s_c.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])] = \
+                        self.s.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])].values \
+                            * ( 1 + S_m.loc[index[i],header[3]])
+                    
+              
+
 
 
         
