@@ -42,6 +42,15 @@ class C_SUT:
         # computing total production vector (X)
         self.X = pd.DataFrame(self.Y.sum(axis=1) + self.Z.sum(axis=1), index=self.Z.index, columns=['Total Production'])
         
+        # creating indexes
+        self.VA_ind = self.VA.index
+        self.S_ind = self.S.index
+
+        # computing matrices of coefficients
+        self.z = pd.DataFrame(self.Z.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.Z.index, columns=self.Z.columns)
+        self.va = pd.DataFrame(self.VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
+        self.s = pd.DataFrame(self.S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns)
+        
 # Probably I would delete this function...       
     def parse(self):
         
@@ -124,34 +133,40 @@ class C_SUT:
         import pandas as pd
         import numpy as np
         
-        # creating indexes
-        self.VA_ind = self.VA.index
-        self.S_ind = self.S.index
+        self.l = np.linalg.inv(np.identity(len(self.z)) - self.z)
+        try:
 
-        # computing matrices of coefficients
-        self.z = pd.DataFrame(self.Z.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.Z.index, columns=self.Z.columns)
-        self.va = pd.DataFrame(self.VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
-        self.s = pd.DataFrame(self.S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns)
-
-        # re-computing flow matrices
-        self.VA_c = pd.DataFrame(self.va.values @ (self.X.values  * np.identity(len(self.X))),index = self.VA_ind,columns =  self.Z.columns)
-        self.IMP_c = pd.DataFrame(self.imp.values @ (self.X.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
-        self.E_c = pd.DataFrame(self.e.values @ (self.X.values * np.identity(len(self.X))),index = self.E_ind , columns = self.Z.columns)
-        
+            self.X_c = pd.DataFrame(self.l @ self.Y_c.values , index - self.X.index , columns = self.X.columns)
+            # re-computing flow matrices
+            self.VA_c = pd.DataFrame(self.va.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.VA_ind,columns =  self.Z.columns)
+            self.IMP_c = pd.DataFrame(self.imp.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
+            self.E_c = pd.DataFrame(self.e.values @ (self.X_c.values * np.identity(len(self.X))),index = self.E_ind , columns = self.Z.columns)
+            
+        except:
+            raise ValueError('No Shock is Implemented Yet!')
         
 # NG: I think we can more easly build a new function (aggregate) that ask for the level and simply use groupby for every objects returning aggregated version of objects
 # like this:
         
     def aggregate(self, level=4):
         
-        self.X = self.X.groupby(level=level).sum() #and so on
+        self.X_agg = self.X.groupby(level=level).sum() #and so on
+        self.VA_agg = self.VA.groupby(level=level).sum() #and so on
+        self.Z_agg = self.VA.groupby(level=level).sum() #and so on
 
 
 
       
 
-    def shock(self, path , sensitivity = False,Y= False , E = False , A= False , VA = False):
+    def shock(self, path , sensitivity = False,Y= False , E = False , Z= False , VA = False):
         import pandas as pd
+        
+        # Take a copy of all the things that can change to keep the original 
+        # information and the shocked one
+        self.Y_c   = self.Y.copy()
+        self.va_c  = self.va.copy()
+        self.imp_c = self.imp.copy()
+        self.e_c   = self.e.copy()
         
         if Y:
             Y_m = pd.read_excel(path, sheet_name = 'Y', index_col = [0] , header = [0])
@@ -167,6 +182,7 @@ class C_SUT:
             
 
         if Z:
+            
             Z_m = pd.read_excel(path, sheet_name = 'Z', index_col = [0] , header = [0])
 
             header = Z_m.columns.to_list()
@@ -178,6 +194,9 @@ class C_SUT:
                 # for every step, we should check if the changes should be
                 # on the coefficients or the flow
                 if Z_m.loc[index[i],header[4]] == 'Percentage':
+                    self.z.loc[(),()]
+                    
+                    
 
 
         
