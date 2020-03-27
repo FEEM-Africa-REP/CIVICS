@@ -21,6 +21,6 @@ kenya.parse()
 #%%
 kenya.shock(r'Database\Shock.xlsx' , Y= True )
 #%%kenya.calc_all()
-Y_new = kenya.Y
+Y_new = kenya.Y_c
 #%%
-a = Y.index.get_index_level(0)
+a = Y.loc[('Commodities','Maize (home consumed)'),slice(None)]

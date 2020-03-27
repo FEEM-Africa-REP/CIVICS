@@ -179,7 +179,7 @@ class C_SUT:
         
 
 
-    def shock(self, path , sensitivity = False,Y= False , E = False , A= False , VA = False):
+    def shock(self, path , sensitivity = False,Y= False , E = False , Z= False , VA = False):
         import pandas as pd
         # In order to keep the original Y, a copy of that will be used for the case
         # that a shock is going to be implemented
@@ -192,18 +192,28 @@ class C_SUT:
 
             header = Y_m.columns.to_list()
             index  = Y_m.index.to_list()
-            print(Y_m)
-            
-            for i in range(len(Y_m)): 
-                
-              
-                            
-                self.Y_c.loc[['Commodities',Y_m.loc[i+1,header[0]]],'Total final demand'] = \
-                            self.Y_c.loc[['Commodities',Y_m.loc[i+1,header[0]]],'Total final demand'] + Y_m.loc[i+1,header[1]]
-            
 
             
-        
+            for i in range(len(Y_m)): 
+
+                self.Y_c.loc[('Commodities',Y_m.loc[index[i],header[0]]),'Total final demand'] = \
+                            self.Y_c.loc[('Commodities',Y_m.loc[index[i],header[0]]),'Total final demand'].values + Y_m.loc[index[i],header[1]]
+            
+
+        if Z:
+            Z_m = pd.read_excel(path, sheet_name = 'Z', index_col = [0] , header = [0])
+
+            header = Z_m.columns.to_list()
+            index  = Z_m.index.to_list()
+
+            
+            for i in range(len(Z_m)): 
+                
+                # for every step, we should check if the changes should be
+                # on the coefficients or the flow
+                if Z_m.loc[index[i],header[4]] == 'Percentage':
+
+
         
         
         
