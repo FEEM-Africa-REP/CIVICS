@@ -28,3 +28,5 @@ X_new = kenya.X_c
 kenya.calc_all()
 #%%
 kenya.aggregate()
+#%%
+kenya.plot_dx(aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None)

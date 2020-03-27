@@ -209,10 +209,10 @@ class C_SUT:
 
         
         # To check if the shock is implemented or not
-        try:
-            hasattr('C_SUT', 'x_c')
-        except AttributeError:
-            print('This function can not be used if no shock is impemented')
+        # try:
+        #     hasattr('C_SUT', 'X_c')
+        # except AttributeError:
+        #     print('This function can not be used if no shock is impemented')
             
         # Checking the unit that user want to use for doing graphs
         if Unit == 'M KSH':
@@ -224,13 +224,15 @@ class C_SUT:
         
         # Finding if the graphs should be aggregated or not
         if aggregation: 
+            print('aggregation 1 ')
             
             try:
+                print('aggregation 2 ')
                 old = self.X_agg
-                new = self.X_agg_c
-            
+                print('aggregation 3 ')
+                new = self.X_c_agg
             except: 
-                raise ValueError('There is no aggregated function of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
+                raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
                 
         elif aggregation == False:
             
