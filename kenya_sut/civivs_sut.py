@@ -42,11 +42,6 @@ class C_SUT:
         # computing total production vector (X)
         self.X = pd.DataFrame(self.Y.sum(axis=1) + self.Z.sum(axis=1), index=self.Z.index, columns=['Total Production'])
         
-        # computing matrices of coefficients
-        self.z = pd.DataFrame(self.Z.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.Z.index, columns=self.Z.columns)
-        self.va = pd.DataFrame(self.VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
-        self.s = pd.DataFrame(self.S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns) 
-        
 # Probably I would delete this function...       
     def parse(self):
         
@@ -123,18 +118,9 @@ class C_SUT:
                 plt.ylabel('M Ksh')
                 plt.legend(loc=1,bbox_to_anchor = (1.5,1))
                 plt.show()    
- 
-
-      
-# This function will calculate all the flows with new names in a way after
-# implementing a shock, the user can have access to all the information before 
-# and after shock impelementation.
-
-
-
-    def calc_all(self):
-
+        
                 
+    def calc_all(self):        
         import pandas as pd
         import numpy as np
         
@@ -142,54 +128,34 @@ class C_SUT:
         self.VA_ind = self.VA.index
         self.S_ind = self.S.index
 
-        try:
-            # computing The New X_c
-            self.X_c = pd.DataFrame(self.l @ self.Y_c.values , index = self.X.index , columns = self.X.columns)
-            # re-computing flow matrices
-            self.VA_c = pd.DataFrame(self.va.values @ (self.X_c.values  * np.identity(len(self.X_c))),index = self.VA_ind,columns =  self.Z.columns)
-            self.IMP_c = pd.DataFrame(self.imp.values @ (self.X_c.values  * np.identity(len(self.X_c))),index = self.IMP_ind,columns =  self.Z.columns)
-            self.E_c = pd.DataFrame(self.e.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.E_ind , columns = self.Z.columns)
-            self.Z_c = pd.DataFrame(self.z.values @  (self.X_c.values * np.identity(len(self.X_c))),index = self.Z.index , columns = self.Z.columns)
-            
-        except:
-            raise ValueError('A shock should be Implemented to calculate the new matrices!')
-        
-        
+        # computing matrices of coefficients
+        self.z = pd.DataFrame(self.Z.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.Z.index, columns=self.Z.columns)
+        self.va = pd.DataFrame(self.VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
+        self.s = pd.DataFrame(self.S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns)
 
+        # re-computing flow matrices
+        self.VA_c = pd.DataFrame(self.va.values @ (self.X.values  * np.identity(len(self.X))),index = self.VA_ind,columns =  self.Z.columns)
+        self.IMP_c = pd.DataFrame(self.imp.values @ (self.X.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
+        self.E_c = pd.DataFrame(self.e.values @ (self.X.values * np.identity(len(self.X))),index = self.E_ind , columns = self.Z.columns)
+        
+        
+# NG: I think we can more easly build a new function (aggregate) that ask for the level and simply use groupby for every objects returning aggregated version of objects
+# like this:
         
     def aggregate(self, level=4):
         
-        # To consider the case that the user did not calculate the new matrices
-        try:
-            self.X_agg   = self.X.groupby(level=level,sort = False).sum()
-            self.X_c_agg = self.X_c.groupby(level=level,sort = False).sum()
-            
-            self.VA_agg  = self.VA.groupby(level=level,sort = False).sum()
-            self.VA_c_agg= self.VA_c.groupby(level=level,sort = False).sum()
-            
-            self.Z_agg  = self.Z.groupby(level=level,sort = False).sum()
-            self.Z_c_agg= self.Z_c.groupby(level=level,sort = False).sum()
-            
-        except:
-            
-            self.X_agg   = self.X.groupby(level=level,sort = False).sum()           
-            self.VA_agg  = self.VA.groupby(level=level,sort = False).sum()           
-            self.Z_agg  = self.Z.groupby(level=level,sort = False).sum()
-            
-        
+        self.X = self.X.groupby(level=level).sum() #and so on
 
 
-    def shock(self, path , sensitivity = False,Y= False , E = False , Z= False , VA = False):
+
+      
+
+    def shock(self, path , sensitivity = False,Y= False , E = False , A= False , VA = False):
         import pandas as pd
-        # In order to keep the original Y, a copy of that will be used for the case
-        # that a shock is going to be implemented
-        
-        
-        self.Y_c = self.Y.copy()
         
         if Y:
             Y_m = pd.read_excel(path, sheet_name = 'Y', index_col = [0] , header = [0])
-
+            
             header = Y_m.columns.to_list()
             index  = Y_m.index.to_list()
 
