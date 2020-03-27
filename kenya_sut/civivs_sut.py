@@ -52,6 +52,7 @@ class C_SUT:
         self.z = pd.DataFrame(self.Z.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.Z.index, columns=self.Z.columns)
         self.va = pd.DataFrame(self.VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
         self.s = pd.DataFrame(self.S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns)
+        #self.imp = pd.DataFrame(self.IM.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.IM.index, columns=self.IM.columns)
         
 # Probably I would delete this function...       
     def parse(self):
@@ -66,97 +67,49 @@ class C_SUT:
         self.l = np.linalg.inv(np.identity(len(self.z)) - self.z)
 
 
-    def plot_dx(self, old_x,new_x,level=False,Type='bar',Unit = 'M Ksh'):
-        import matplotlib.pyplot as plt
-        import numpy as np
-        
-        fig, ax = plt.subplots()
-        
-        dx = new_x-old_x
-        my_title = Unit
-        
-        if Type == 'bar':
-            if level == False:
-                
-                y_pos = np.arange(len(dx))
-                dx = dx.values.reshape((len(dx),))
-                
-                ax.barh(y_pos,dx,align='center')
-                ax.set_yticks(y_pos)
-                ax.set_yticklabels(new_x.index)
-                ax.invert_yaxis()
-                ax.set_xlabel('M Ksh')
-                ax.set_title('Production Change')
-                plt.show()
-                
-            else:
-                
-                dx = dx.loc[level]
-                
-                y_pos = np.arange(len(dx))
-                dx = dx.values.reshape((len(dx),))
-                
-                ax.barh(y_pos,dx,align='center')
-                ax.set_yticks(y_pos)
-                ax.set_yticklabels(new_x.loc[level].index)
-                ax.invert_yaxis()
-                ax.set_xlabel('M Ksh')
-                ax.set_title(level + ' Production Change')
-                plt.show()
-        
-        
-    def plot_dv(self, old_v,new_v,level=False,Type='bar'):
-        import matplotlib.pyplot as plt
-        import numpy as np
-
-        dv = new_v-old_v
-        dv.index = dv.index.get_level_values(0)
-        
-        if Type == 'bar':
-            if level == False:
-                
-                dv.plot(kind='bar')
-                plt.title('Value Added')
-                plt.ylabel('M Ksh')
-                plt.legend(loc=1,bbox_to_anchor = (1.5,1))
-                plt.show()
-                
-            else:
-                
-                dv = dv[level]
-                dv.plot(kind='bar')
-                plt.title('Value Added')
-                plt.ylabel('M Ksh')
-                plt.legend(loc=1,bbox_to_anchor = (1.5,1))
-                plt.show()    
-        
-                
     def calc_all(self):        
         import pandas as pd
         import numpy as np
         
         
+        
         try:
             
             self.l_c = np.linalg.inv(np.identity(len(self.z_c)) - self.z_c)
-            self.X_c = pd.DataFrame(self.l @ self.Y_c.values , index = self.X.index , columns = self.X.columns)
-            # re-computing flow matrices
-            self.VA_c = pd.DataFrame(self.va_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.VA_ind,columns =  self.Z.columns)
-            self.IMP_c = pd.DataFrame(self.imp_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
-            self.S_c = pd.DataFrame(self.s_c.values @ (self.X_c.values * np.identity(len(self.X))),index = self.S_ind , columns = self.Z.columns)
+            self.X_c = pd.DataFrame(self.l_c @ self.Y_c.values , index = self.X.index , columns = self.X.columns)
+                    # re-computing flow matrices
+            self.VA_c = pd.DataFrame(self.va_c.values @ (self.X_c.values  * np.identity(len(self.X_c))),index = self.VA_ind,columns =  self.Z.columns)
+                    #self.IMP_c = pd.DataFrame(self.imp_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
+            self.S_c = pd.DataFrame(self.s_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.S_ind , columns = self.Z.columns)
             
         except:
             raise ValueError('No Shock is Implemented Yet!')
+        
         
 # NG: I think we can more easly build a new function (aggregate) that ask for the level and simply use groupby for every objects returning aggregated version of objects
 # like this:
         
     def aggregate(self, level=4):
         
-        self.X_agg = self.X.groupby(level=level).sum() #and so on
-        self.VA_agg = self.VA.groupby(level=level).sum() #and so on
-        self.Z_agg = self.VA.groupby(level=level).sum() #and so on
+        try:
+            self.X_agg = self.X.groupby(level=level).sum() #and so on
+            # self.VA_agg = self.VA.groupby(level=level).sum() #and so on
+            # self.Z_agg = self.Z.groupby(level=level).sum() #and so on
+            
+            self.X_c_agg = self.X_c.groupby(level=level).sum() #and so on
+            # self.VA__cagg = self.VA_c.groupby(level=level).sum() #and so on
+            # self.Z_c_agg = self.Z_c.groupby(level=level).sum() #and so on            
+            print('Both baseline and shocked results are aggregated')
+            
+            
+            
+        except:            
 
+        
+            self.X_agg = self.X.groupby(level=level).sum() #and so on
+            # self.VA_agg = self.VA.groupby(level=level).sum() #and so on
+            # self.Z_agg = self.Z.groupby(level=level).sum() #and so on
+            print("Attention: As there is no shock, only the baseline matrices are aggregated")
 
 
       
@@ -168,8 +121,9 @@ class C_SUT:
         # information and the shocked one
         self.Y_c   = self.Y.copy()
         self.va_c  = self.va.copy()
-        self.imp_c = self.imp.copy()
+        #self.imp_c = self.imp.copy()
         self.s_c   = self.s.copy()
+        self.z_c   = self.z.copy()
         
         if Y:
             Y_m = pd.read_excel(path, sheet_name = 'Y', index_col = [0] , header = [0])
@@ -242,13 +196,100 @@ class C_SUT:
 
 
 
+#In this part of the code new functions for doing graphs will be added:
+#the graphs will be divided into two different categories:
+#    1. Shock graphs in which the user can do the graphs automatically for the 
+#        baseline and the shock different
+#    2. A general graph function in which user can choose what to graph        
+    
+
+
+    def plot_dx(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None):
+        import matplotlib.pyplot as plt
+
+        
+        # To check if the shock is implemented or not
+        try:
+            hasattr('C_SUT', 'x_c')
+        except AttributeError:
+            print('This function can not be used if no shock is impemented')
+            
+        # Checking the unit that user want to use for doing graphs
+        if Unit == 'M KSH':
+            ex_rate = 1.0
+        elif Unit == 'M USD':
+            ex_rate = 2.0
+        elif Unit !='M KSH' or 'M USD' :
+            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD'))
+        
+        # Finding if the graphs should be aggregated or not
+        if aggregation: 
+            
+            try:
+                old = self.X_agg
+                new = self.X_agg_c
+            
+            except: 
+                raise ValueError('There is no aggregated function of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
+                
+        elif aggregation == False:
+            
+            old = self.X
+            new = self.X_c
+            
+        if level == None:
+            old = old
+            new = new
+        
+        elif level == 'Activities' or 'Commodities':
+            
+            old = old.loc[level]
+            new = new.loc[level]
+            
+        elif level == None or 'Activities' or 'Commodities':
+            
+            raise ValueError('The level should be {}, {} or {}'.format('None','Activities','Commodities'))
         
         
+        dx = (new - old) * ex_rate
         
+        dx.plot(kind = Kind , stacked = stacked)
+        plt.title('Production Change')
+        plt.ylabel(Unit)
+        plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
+        plt.show()
+        
+  
+        
+    # def plot_dv(self, old_v,new_v,level=False,Type='bar'):
+    #     import matplotlib.pyplot as plt
+    #     import numpy as np
+
+    #     dv = new_v-old_v
+    #     dv.index = dv.index.get_level_values(0)
+        
+    #     if Type == 'bar':
+    #         if level == False:
+                
+    #             dv.plot(kind='bar')
+    #             plt.title('Value Added')
+    #             plt.ylabel('M Ksh')
+    #             plt.legend(loc=1,bbox_to_anchor = (1.5,1))
+    #             plt.show()
+                
+    #         else:
+                
+    #             dv = dv[level]
+    #             dv.plot(kind='bar')
+    #             plt.title('Value Added')
+    #             plt.ylabel('M Ksh')
+    #             plt.legend(loc=1,bbox_to_anchor = (1.5,1))
+    #             plt.show()           
     
     
     
-        
+#%%
+
     
     
     

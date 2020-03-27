@@ -17,9 +17,14 @@ IN = kenya.IN
 X = kenya.X
 
 #%%
+
 a = kenya.VA
 my_E = kenya.S
 #%%
-kenya.shock(r'Database\Shock.xlsx' , Y= True )
+kenya.shock(path = r'Database\Shock.xlsx' , Y = True )
 #%%kenya.calc_all()
-Y_new = kenya.Y_c
+X_new = kenya.X_c
+#%%
+kenya.calc_all()
+#%%
+kenya.aggregate()
