@@ -16,17 +16,14 @@ HH = kenya.HH
 IN = kenya.IN
 X = kenya.X
 
-#%%
 
-a = kenya.VA
-my_E = kenya.S
 #%%
 kenya.shock(path = r'Database\Shock.xlsx' , Y = True )
-#%%kenya.calc_all()
-X_new = kenya.X_c
 #%%
 kenya.calc_all()
 #%%
 kenya.aggregate()
 #%%
-kenya.plot_dx(aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None)
+kenya.plot_dv(aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = 'Activities')
+#%%
+a= a.values
