@@ -84,12 +84,10 @@ class C_SUT:
             self.S_c = pd.DataFrame(self.s_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.S_ind , columns = self.Z.columns)
             self.Z_c = pd.DataFrame(self.z_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.Z.index , columns = self.Z.columns)
             self.p_c=pd.DataFrame(self.va_c.sum().values.reshape(1,len(self.va_c.columns)) @ self.l_c, index=['Price'], columns=self.VA_c.columns)
+            p_0 = self.p_c.values @ self.Y_c.values
+            p_1 = self.va_c.sum().values.reshape(1,len(self.va_c.columns)) @ self.X_c.values
             
-            if self.p_c.values @ self.Y_c.values == self.va_c.sum().values.reshape(1,len(self.va_c.columns)) @ self.X_c.values:
-                
-                print('{} equal {} , Balance is resepected according to Leontief price model'.format(self.p_c.values @ self.Y_c.values,self.va_c.sum().values @ self.X_c.values))
-            else:
-                print('SUT is not balanced')
+            print('vx = {}, pY= {} '.format(p_0,p_1))
             
         except:
             raise ValueError('No Shock is Implemented Yet!')
@@ -146,8 +144,8 @@ class C_SUT:
         if Y:
             Y_m = pd.read_excel(path, sheet_name = 'Y', index_col = [0] , header = [0])
             
-            header = Y_m.columns.to_list()
-            index  = Y_m.index.to_list()
+            header = list(Y_m.columns)
+            index  = list(Y_m.index)
 
             
             for i in range(len(Y_m)): 
@@ -160,8 +158,8 @@ class C_SUT:
             
             Z_m = pd.read_excel(path, sheet_name = 'Z', index_col = [0] , header = [0])
 
-            header = Z_m.columns.to_list()
-            index  = Z_m.index.to_list()
+            header = list(Z_m.columns)
+            index  = list(Z_m.index)
 
             
             for i in range(len(Z_m)): 
@@ -182,8 +180,8 @@ class C_SUT:
             
             VA_m = pd.read_excel(path, sheet_name = 'VA', index_col = [0] , header = [0])
             
-            header = VA_m.columns.to_list()
-            index  = VA_m.index.to_list()
+            header = list(VA_m.columns)
+            index  = list(VA_m.index)
 
             
             for i in range(len(VA_m)): 
@@ -198,8 +196,8 @@ class C_SUT:
             
             S_m = pd.read_excel(path, sheet_name = 'S', index_col = [0] , header = [0])
             
-            header = S_m.columns.to_list()
-            index  = S_m.index.to_list()
+            header = list(S_m.columns)
+            index  = list(S_m.index)
 
             
             for i in range(len(S_m)): 
@@ -329,6 +327,7 @@ class C_SUT:
         
         dv = (new - old) * ex_rate
         dv = dv.drop(drop)
+        dv=dv.T
         
         dv.plot(kind = Kind , stacked = stacked)
         plt.title('Value Added Change')
@@ -370,8 +369,8 @@ class C_SUT:
         
         elif level == 'Activities' or 'Commodities':
             
-            old = old[level]
-            new = new[level]
+            old = old.loc[level]
+            new = new.loc[level]
             
         elif level != None or 'Activities' or 'Commodities':
             
@@ -379,8 +378,9 @@ class C_SUT:
         
         
         dp = new/old
+        dp = dp.T
         
-        dp.plot(kind = Kind , stacked = stacked)
+        dp.plot(kind = Kind )
         plt.title('Price Change')
         plt.ylabel('price ratio')
         plt.legend(loc = 1,bbox_to_anchor = (1.5,1))

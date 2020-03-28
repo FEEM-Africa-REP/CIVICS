@@ -24,6 +24,9 @@ kenya.calc_all()
 #%%
 kenya.aggregate()
 #%%
-kenya.plot_dv(aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = 'Activities')
+kenya.plot_dv()
 #%%
-a= a.values
+a=kenya.p*4
+b=kenya.p_c*2
+#%%
+c=a/b
