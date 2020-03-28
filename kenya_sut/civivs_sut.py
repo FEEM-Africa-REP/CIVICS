@@ -53,6 +53,9 @@ class C_SUT:
         self.va = pd.DataFrame(self.VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
         self.s = pd.DataFrame(self.S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns)
         #self.imp = pd.DataFrame(self.IM.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.IM.index, columns=self.IM.columns)
+        self.l = np.linalg.inv(np.identity(len(self.z)) - self.z)
+        #leontief price model
+        self.p=pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l, index=['Price'], columns=self.VA.columns)
         
 # Probably I would delete this function...       
     def parse(self):
@@ -63,8 +66,6 @@ class C_SUT:
         # Import on final demand 
         self.IM_fd = self.SUT.loc['Rest of the World', 'Households']
         self.IM_inv = self.SUT.loc['Rest of the World', 'Savings-Investment']
-
-        self.l = np.linalg.inv(np.identity(len(self.z)) - self.z)
 
 
     def calc_all(self):        
@@ -82,6 +83,13 @@ class C_SUT:
                     #self.IMP_c = pd.DataFrame(self.imp_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
             self.S_c = pd.DataFrame(self.s_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.S_ind , columns = self.Z.columns)
             self.Z_c = pd.DataFrame(self.z_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.Z.index , columns = self.Z.columns)
+            self.p_c=pd.DataFrame(self.va_c.sum().values.reshape(1,len(self.va_c.columns)) @ self.l_c, index=['Price'], columns=self.VA_c.columns)
+            
+            if self.p_c.values @ self.Y_c.values == self.va_c.sum().values.reshape(1,len(self.va_c.columns)) @ self.X_c.values:
+                
+                print('{} equal {} , Balance is resepected according to Leontief price model'.format(self.p_c.values @ self.Y_c.values,self.va_c.sum().values @ self.X_c.values))
+            else:
+                print('SUT is not balanced')
             
         except:
             raise ValueError('No Shock is Implemented Yet!')
