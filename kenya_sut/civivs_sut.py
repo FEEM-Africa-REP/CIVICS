@@ -81,34 +81,38 @@ class C_SUT:
             self.VA_c = pd.DataFrame(self.va_c.values @ (self.X_c.values  * np.identity(len(self.X_c))),index = self.VA_ind,columns =  self.Z.columns)
                     #self.IMP_c = pd.DataFrame(self.imp_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
             self.S_c = pd.DataFrame(self.s_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.S_ind , columns = self.Z.columns)
+            self.Z_c = pd.DataFrame(self.z_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.Z.index , columns = self.Z.columns)
             
         except:
             raise ValueError('No Shock is Implemented Yet!')
         
-        
-# NG: I think we can more easly build a new function (aggregate) that ask for the level and simply use groupby for every objects returning aggregated version of objects
-# like this:
-        
-    def aggregate(self, level=4):
+  
+    def aggregate(self, level_x= [0,4] , level_va = 3 , sort = False):
+
         
         try:
-            self.X_agg = self.X.groupby(level=level).sum() #and so on
-            # self.VA_agg = self.VA.groupby(level=level).sum() #and so on
-            # self.Z_agg = self.Z.groupby(level=level).sum() #and so on
             
-            self.X_c_agg = self.X_c.groupby(level=level).sum() #and so on
-            # self.VA__cagg = self.VA_c.groupby(level=level).sum() #and so on
-            # self.Z_c_agg = self.Z_c.groupby(level=level).sum() #and so on            
+            self.X_agg = self.X.groupby(level=level_x , sort = sort).sum()
+            self.X_c_agg = self.X_c.groupby(level=level_x , sort = sort).sum()
+            
+            self.Z_agg = self.Z.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort)
+            self.Z_c_agg = self.Z_c.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort)
+                      
+            self.VA_agg = self.VA.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
+            self.VA_c_agg = self.VA_c.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
+
             print('Both baseline and shocked results are aggregated')
             
             
             
         except:            
 
-        
-            self.X_agg = self.X.groupby(level=level).sum() #and so on
-            # self.VA_agg = self.VA.groupby(level=level).sum() #and so on
-            # self.Z_agg = self.Z.groupby(level=level).sum() #and so on
+            self.X_agg = self.X.groupby(level=level_x , sort = sort).sum()
+            
+            self.Z_agg = self.Z.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort)
+            
+            self.VA_agg = self.VA.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
+
             print("Attention: As there is no shock, only the baseline matrices are aggregated")
 
 
@@ -209,10 +213,11 @@ class C_SUT:
 
         
         # To check if the shock is implemented or not
-        # try:
-        #     hasattr('C_SUT', 'X_c')
-        # except AttributeError:
-        #     print('This function can not be used if no shock is impemented')
+        try:
+            a = self.X_c
+        except:
+            raise ValueError('This function can not be used if no shock is impemented')
+
             
         # Checking the unit that user want to use for doing graphs
         if Unit == 'M KSH':
@@ -224,12 +229,9 @@ class C_SUT:
         
         # Finding if the graphs should be aggregated or not
         if aggregation: 
-            print('aggregation 1 ')
             
             try:
-                print('aggregation 2 ')
                 old = self.X_agg
-                print('aggregation 3 ')
                 new = self.X_c_agg
             except: 
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
@@ -248,7 +250,7 @@ class C_SUT:
             old = old.loc[level]
             new = new.loc[level]
             
-        elif level == None or 'Activities' or 'Commodities':
+        elif level != None or 'Activities' or 'Commodities':
             
             raise ValueError('The level should be {}, {} or {}'.format('None','Activities','Commodities'))
         
@@ -262,32 +264,64 @@ class C_SUT:
         plt.show()
         
   
+    def plot_dv(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,drop='unused'):
         
-    # def plot_dv(self, old_v,new_v,level=False,Type='bar'):
-    #     import matplotlib.pyplot as plt
-    #     import numpy as np
+        import matplotlib.pyplot as plt
+        
+        # To check if the shock is implemented or not
+        try:
+            a = self.X_c
+        except:
+            raise ValueError('This function can not be used if no shock is impemented')
+            
+        # Checking the unit that user want to use for doing graphs
+        if Unit == 'M KSH':
+            ex_rate = 1.0
+        elif Unit == 'M USD':
+            ex_rate = 2.0
+        elif Unit !='M KSH' or 'M USD' :
+            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD'))
+        
+        # Finding if the graphs should be aggregated or not
+        if aggregation: 
 
-    #     dv = new_v-old_v
-    #     dv.index = dv.index.get_level_values(0)
+            
+            try:
+
+                old = self.VA_agg
+
+                new = self.VA_c_agg
+            except: 
+                raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
+                
+        elif aggregation == False:
+            
+            old = self.VA
+            new = self.VA_c
+            
+        if level == None:
+            old = old
+            new = new
         
-    #     if Type == 'bar':
-    #         if level == False:
-                
-    #             dv.plot(kind='bar')
-    #             plt.title('Value Added')
-    #             plt.ylabel('M Ksh')
-    #             plt.legend(loc=1,bbox_to_anchor = (1.5,1))
-    #             plt.show()
-                
-    #         else:
-                
-    #             dv = dv[level]
-    #             dv.plot(kind='bar')
-    #             plt.title('Value Added')
-    #             plt.ylabel('M Ksh')
-    #             plt.legend(loc=1,bbox_to_anchor = (1.5,1))
-    #             plt.show()           
-    
+        elif level == 'Activities' or 'Commodities':
+            
+            old = old[level]
+            new = new[level]
+            
+        elif level != None or 'Activities' or 'Commodities':
+            
+            raise ValueError('The level should be {}, {} or {}'.format('None','Activities','Commodities'))
+        
+        
+        dv = (new - old) * ex_rate
+        dv = dv.drop(drop)
+        
+        dv.plot(kind = Kind , stacked = stacked)
+        plt.title('Value Added Change')
+        plt.ylabel(Unit)
+        plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
+        plt.show()        
+
     
     
 #%%
