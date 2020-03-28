@@ -108,6 +108,10 @@ class C_SUT:
                       
             self.VA_agg = self.VA.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
             self.VA_c_agg = self.VA_c.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
+            
+            self.p_agg= self.p.groupby(axis=1, level=level_x, sort=sort).sum()
+            self.p_c_agg= self.p_c.groupby(axis=1, level=level_x, sort=sort).sum()
+         
 
             print('Both baseline and shocked results are aggregated')
             
@@ -120,6 +124,8 @@ class C_SUT:
             self.Z_agg = self.Z.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort)
             
             self.VA_agg = self.VA.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
+            
+            self.p_agg= self.p.groupby(axis=1, level=level_x, sort=sort).sum()
 
             print("Attention: As there is no shock, only the baseline matrices are aggregated")
 
@@ -331,9 +337,54 @@ class C_SUT:
         plt.show()        
 
     
-    
-#%%
+    def plot_dp(self,aggregation = True, Kind = 'bar',stacked=True , level = None):
+        
+        import matplotlib.pyplot as plt
+        
+        # To check if the shock is implemented or not
+        try:
+            a = self.X_c
+        except:
+            raise ValueError('This function can not be used if no shock is impemented')
+            
+        # Finding if the graphs should be aggregated or not
+        if aggregation: 
 
+            
+            try:
+
+                old = self.p_agg
+
+                new = self.p_c_agg
+            except: 
+                raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
+                
+        elif aggregation == False:
+            
+            old = self.p
+            new = self.p_c
+            
+        if level == None:
+            old = old
+            new = new
+        
+        elif level == 'Activities' or 'Commodities':
+            
+            old = old[level]
+            new = new[level]
+            
+        elif level != None or 'Activities' or 'Commodities':
+            
+            raise ValueError('The level should be {}, {} or {}'.format('None','Activities','Commodities'))
+        
+        
+        dp = new/old
+        
+        dp.plot(kind = Kind , stacked = stacked)
+        plt.title('Price Change')
+        plt.ylabel('price ratio')
+        plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
+        plt.show()    
     
     
     
