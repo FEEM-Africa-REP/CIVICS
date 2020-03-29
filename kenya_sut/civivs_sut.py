@@ -31,15 +31,17 @@ class C_SUT:
         self.IN = self.SUT.loc[['Commodities','Activities'], 'Savings-Investment']
         self.GO = self.SUT.loc[['Commodities','Activities'], 'Government']
         self.EX = self.SUT.loc[['Commodities','Activities'], 'Rest of the World']
+        self.Y_M = self.SUT.loc[['Commodities','Activities'], 'Margins']
         
-        self.Y = pd.DataFrame(self.HH.sum(axis=1) + self.IN.sum(axis=1) + self.GO.sum(axis=1) + self.EX.sum(axis=1), index=self.HH.index, columns=['Total final demand'])
+        self.Y = pd.DataFrame(self.HH.sum(axis=1) + self.IN.sum(axis=1) + self.GO.sum(axis=1) + self.EX.sum(axis=1) + self.Y_M.sum(axis=1), index=self.HH.index, columns=['Total final demand'])
         
-        # computing total value added (VA) by importing factors of production (F), taxes (T) and import (IM)
+        # computing total value added (VA) by importing factors of production (F), taxes (T), import (IM) and margins as factor (F_M)
         self.F = self.SUT.loc['Factors', ['Commodities', 'Activities']]
         self.T = self.SUT.loc['Government', ['Commodities','Activities']]
         self.IM = self.SUT.loc['Rest of the World', ['Commodities','Activities']]
+        self.F_M = self.SUT.loc['Margins', ['Commodities','Activities']]
         
-        self.VA = self.F.append(self.T.append(self.IM))
+        self.VA = self.F.append(self.T.append(self.IM.append(self.F_M)))
         
         # computing total production vector (X)
         self.X = pd.DataFrame(self.Y.sum(axis=1) + self.Z.sum(axis=1), index=self.Z.index, columns=['Total Production'])
@@ -101,8 +103,10 @@ class C_SUT:
             self.X_agg = self.X.groupby(level=level_x , sort = sort).sum()
             self.X_c_agg = self.X_c.groupby(level=level_x , sort = sort).sum()
             
-            self.Z_agg = self.Z.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort)
-            self.Z_c_agg = self.Z_c.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort)
+            self.Y_agg = self.Y.groupby(level=level_x, sort=sort).sum()
+            
+            self.Z_agg = self.Z.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort).sum()
+            self.Z_c_agg = self.Z_c.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort).sum()
                       
             self.VA_agg = self.VA.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
             self.VA_c_agg = self.VA_c.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
@@ -119,7 +123,9 @@ class C_SUT:
 
             self.X_agg = self.X.groupby(level=level_x , sort = sort).sum()
             
-            self.Z_agg = self.Z.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort)
+            self.Y_agg = self.Y.groupby(level=level_x, sort=sort).sum()
+            
+            self.Z_agg = self.Z.groupby(level = level_x,sort=sort).sum().groupby(axis = 1 , level = level_x , sort = sort).sum()
             
             self.VA_agg = self.VA.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
             
