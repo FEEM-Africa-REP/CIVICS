@@ -87,15 +87,44 @@ Visualizing Results:
     all the parameters can be visualized easily.
     
     1. plot_dx = plotting the change of production. Parameters are:
-        aggregation = True
-        Kind = 'bar' 
-        , Unit = 'M KSH',stacked=True , level = None)
+        aggregation --> a.True: aggregated results will be represented b.False: complete results will be shown
+        Kind --> 'bar' 
+        Unit -->  a.'M KSH': monetary values in Million Kenyan Shelings , b. 'M USD': monetary values in Million US Dollars 
+        stacked --> True 
+        level --> a. None: both activities and commodities, b. Activities , c. Commoditites
         
+    2. plot_dv = plotting the change of value added. Parameters are:
+        aggregation --> a.True: aggregated results will be represented b.False: complete results will be shown
+        Kind --> 'bar' 
+        Unit -->  a.'M KSH': monetary values in Million Kenyan Shelings , b. 'M USD': monetary values in Million US Dollars 
+        stacked --> True 
+        level --> a. None: both activities and commodities, b. Activities , c. Commoditites   
+        drop --> a.'unused': remove unused from the results, b.None: keep all the information
+
+    3. plot_dp = plotting the change of prices. Parameters are:
+        aggregation --> a.True: aggregated results will be represented b.False: complete results will be shown
+        level --> a. None: both activities and commodities, b. Activities , c. Commoditites   
+
+"""
+kenya.plot_dv()
+kenya.plot_dx()
+kenya.plot_dp()
+#%%
+"""
+Saving Results in form of excel files:
     
+    for this purpose, you can use the function of: Save_all. Parameters are:
+        1. path: specifies the path you want to save the results
+        2. level: a. None: both baseline and shock , b. baseline, c. shock
+        3. drop: a. None: saving all the results, b. 'unused: remove the unused results'
+"""
+kenya.Save_all(path=r'C:\Users\Amin\Documents\GitHub\My Kenya\kenya_sut\Result')
+#%%
+"""
+At the end, you can have a database of results :-)
     
-
-
-
+"""
+database = kenya.database
 
 
 

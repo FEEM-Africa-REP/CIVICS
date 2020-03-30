@@ -508,7 +508,7 @@ class C_SUT:
         plt.show()        
 
     
-    def plot_dp(self,aggregation = True, Kind = 'bar',stacked=True , level = None):
+    def plot_dp(self,aggregation = True,level = None):
         
         import matplotlib.pyplot as plt
         import seaborn as sns        
