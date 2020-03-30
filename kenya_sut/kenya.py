@@ -34,7 +34,11 @@ ROW = Z.sum(axis=1) + VA.sum(axis=1)
 kenya.Save_all(path=r'C:\Users\Amin\Documents\GitHub\My Kenya\kenya_sut\Result')
 #%%
 
-a=kenya.S
-b=kenya.S_c_agg
+kenya.add_dict()
 #%%
-S = b.drop('unused')
+
+data = kenya.database
+#%%
+my_dic['Z_0'] = Z*2
+#%%
+my_dic['Z_'+str(2)] = Z*3
