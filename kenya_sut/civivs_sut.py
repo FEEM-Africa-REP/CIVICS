@@ -10,7 +10,7 @@ class C_SUT:
     
     def __init__(self,path):
         
-        print('CIVCS SUT: A python Class for SUT Input Output Analysis Developed in Fondazione Eni Enrico Mattei')
+        print('CIVICS SUT: A python Class for SUT Input Output Analysis Developed in Fondazione Eni Enrico Mattei')
         
         import pandas as pd
         import numpy as np
@@ -83,6 +83,7 @@ class C_SUT:
             
             self.l_c = np.linalg.inv(np.identity(len(self.z_c)) - self.z_c)
             self.X_c = pd.DataFrame(self.l_c @ self.Y_c.values , index = self.X.index , columns = self.X.columns)
+            
                     # re-computing flow matrices
             self.VA_c = pd.DataFrame(self.va_c.values @ (self.X_c.values  * np.identity(len(self.X_c))),index = self.VA_ind,columns =  self.Z.columns)
                     #self.IMP_c = pd.DataFrame(self.imp_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
@@ -391,7 +392,7 @@ class C_SUT:
     
 
 
-    def plot_dx(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None):
+    def plot_dx(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,percent = False):
         import matplotlib.pyplot as plt
 
         
@@ -437,8 +438,13 @@ class C_SUT:
             
             raise ValueError('The level should be {}, {} or {}'.format('None','Activities','Commodities'))
         
-        
-        dx = (new - old) * ex_rate
+        if percent:
+            dx = (new - old)/old
+            Unit = '%'
+            
+        if percent == False:
+            dx = (new - old) * ex_rate
+            
         
         dx.plot(kind = Kind , stacked = stacked)
         plt.title('Production Change')
@@ -447,7 +453,7 @@ class C_SUT:
         plt.show()
         
   
-    def plot_dv(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,drop='unused'):
+    def plot_dv(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,drop='unused',percent=False):
         
         import matplotlib.pyplot as plt
 
@@ -496,8 +502,13 @@ class C_SUT:
             
             raise ValueError('The level should be {}, {} or {}'.format('None','Activities','Commodities'))
         
-        
-        dv = (new - old) * ex_rate
+        if percent:
+            dv = (new - old) / old
+            Unit = '%'
+            
+        if percent == False:
+            dv = (new - old) * ex_rate
+            
         dv = dv.drop(drop)
         dv=dv.T
         
