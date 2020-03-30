@@ -19,7 +19,7 @@ GVA = kenya.F.sum().sum()
 Margins = kenya.F_M
 
 #%%
-kenya.shock(path = r'Database\Shock.xlsx' , Y = True )
+kenya.shock(path = r'Database\Shock.xlsx' , Z = False,Y=True )
 #%%
 kenya.calc_all()
 #%%
@@ -31,9 +31,10 @@ Z = kenya.Z_agg
 
 ROW = Z.sum(axis=1) + VA.sum(axis=1)
 #%%
-kenya.plot_dv()
+kenya.Save_all(path=r'C:\Users\Amin\Documents\GitHub\My Kenya\kenya_sut\Result')
 #%%
-a=kenya.p*4
-b=kenya.p_c*2
+
+a=kenya.S
+b=kenya.S_c_agg
 #%%
-c=a/b
+S = b.drop('unused')
