@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Mar  6 12:56:55 2020
-
-@author: negar & amin
+CIVICS_SUT: A Tool for Input Output Analysis with Supply and Use Format 
+@ FEEM: Fondazione Eni Enrico Mattei 
+@authors: 1. Negar Namazifard , Nicolo Golinucci, Mohammad Amin Tahavori
 """
 
 class C_SUT:
@@ -58,6 +58,9 @@ class C_SUT:
         self.l = np.linalg.inv(np.identity(len(self.z)) - self.z)
         #leontief price model
         self.p=pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l, index=['Price'], columns=self.VA.columns)
+        
+        self.database = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p}
+        self.counter = 1
         
 # Probably I would delete this function...       
     def parse(self):
@@ -328,7 +331,7 @@ class C_SUT:
         elif level=='baseline':
 
     
-            with pd.ExcelWriter(path + 'Baseline_agg_flows.xlsx') as writer:
+            with pd.ExcelWriter(path + '\ Baseline_agg_flows.xlsx') as writer:
                 
                 self.Z_agg.to_excel(writer,sheet_name='Z')
                 self.X_agg.to_excel(writer,sheet_name='X')
@@ -336,13 +339,13 @@ class C_SUT:
                 S_agg.to_excel(writer,sheet_name='S')
                 self.Y_agg.to_excel(writer,sheet_name='Y')
                 
-            with pd.ExcelWriter(path + 'Baseline_coeff.xlsx') as writer:
+            with pd.ExcelWriter(path + '\ Baseline_coeff.xlsx') as writer:
                 
                 self.z.to_excel(writer,sheet_name='z')
                 va.to_excel(writer,sheet_name='va')
                 s.to_excel(writer,sheet_name='s')
 
-            with pd.ExcelWriter(path + 'Baseline_flows.xlsx') as writer:
+            with pd.ExcelWriter(path + '\ Baseline_flows.xlsx') as writer:
                 
                 self.Z.to_excel(writer,sheet_name='Z')
                 self.X.to_excel(writer,sheet_name='X')
@@ -353,7 +356,7 @@ class C_SUT:
               
         elif level=='shock':
             
-            with pd.ExcelWriter(path + 'Shock_agg_flows.xlsx') as writer:
+            with pd.ExcelWriter(path + '\ Shock_agg_flows.xlsx') as writer:
                 
                 self.Z_c_agg.to_excel(writer,sheet_name='Z')
                 self.X_c_agg.to_excel(writer,sheet_name='X')
@@ -361,14 +364,14 @@ class C_SUT:
                 S_c_agg.to_excel(writer,sheet_name='S')
                 self.Y_c_agg.to_excel(writer,sheet_name='Y')
                 
-            with pd.ExcelWriter(path + 'Shock_coeff.xlsx') as writer:
+            with pd.ExcelWriter(path + '\ Shock_coeff.xlsx') as writer:
                 
                 self.z_c.to_excel(writer,sheet_name='z')
                 va_c.to_excel(writer,sheet_name='va')
                 s_c.to_excel(writer,sheet_name='s')
 
                 
-            with pd.ExcelWriter(path + 'Shock_flows.xlsx') as writer:
+            with pd.ExcelWriter(path + '\ Shock_flows.xlsx') as writer:
                 
                 self.Z_c.to_excel(writer,sheet_name='Z')
                 self.X_c.to_excel(writer,sheet_name='X')
@@ -612,21 +615,17 @@ class C_SUT:
 
         plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
         plt.show()      
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+    def add_dict(self):
+        
+        
+        self.database['Z_' + str(self.counter)]= self.Z_c
+        self.database['X_' + str(self.counter)]= self.X_c
+        self.database['VA_'+ str(self.counter)]= self.VA_c
+        self.database['p_' + str(self.counter)]= self.p_c
+        self.database['Y_' + str(self.counter)]= self.Y_c
+        
+        self.counter += 1
+        
+        
