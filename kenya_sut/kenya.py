@@ -16,6 +16,10 @@ HH = kenya.HH
 IN = kenya.IN
 X = kenya.X
 GVA = kenya.F.sum().sum()
+Taxes = kenya.T.sum().sum()
+GDP = GVA + Taxes
+GFC = Y.sum().sum()
+p = kenya.p
 Margins = kenya.F_M
 
 #%%

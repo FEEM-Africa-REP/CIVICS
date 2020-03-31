@@ -7,7 +7,7 @@ Created on Mon Mar 30 11:28:09 2020
 """
 import civivs_sut as cvx
 
-kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM_0.xlsx')
+kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
 #%%
 #step1: Investment
 kenya.shock(path = r'Database\Shock_shading.xlsx' , Y = True)
@@ -33,13 +33,13 @@ S_1_agg = kenya.S_c_agg
 Y_1_agg = kenya.Y_c_agg
 Z_1_agg = kenya.Z_c_agg
 #%%
-kenya.plot_dv(level='Activities',percent=False)
-kenya.plot_dx(level='Commodities',percent=True)
-kenya.plot_dp(level='Commodities')
+kenya.plot_dv(level='Commodities', percent=False)
+kenya.plot_dx(level='Commodities', percent=False)
+kenya.plot_dp(level='Activities')
 #%%
 
 #step2: benefit
-kenya.shock(path = r'Database\Shock_shading.xlsx' , Z=True)
+kenya.shock(path = r'Database\Shock_shading.xlsx' , Z = True)
 
 kenya.calc_all()
 kenya.add_dict()
@@ -63,9 +63,10 @@ S_2_agg = kenya.S_c_agg
 Y_2_agg = kenya.Y_c_agg
 Z_2_agg = kenya.Z_c_agg
 
-kenya.plot_dv(level='Commodities')
+kenya.plot_dv(level='Activities')
 kenya.plot_dx(level='Commodities')
 kenya.plot_dp(level='Commodities')
+
 #%%
 database = kenya.database
 
