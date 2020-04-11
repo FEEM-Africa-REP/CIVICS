@@ -9,58 +9,58 @@ Created on Sat Apr 11 11:15:35 2020
 import civivs_sut as cvx
 kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
 
-kenya.shock(path = r'Database\Shock.xlsx' , Y = True )
-kenya.calc_all()
-kenya.add_dict()
 kenya.shock(path = r'Database\Shock.xlsx' , Z = True )
 kenya.calc_all()
 kenya.add_dict()
 results = kenya.results
 #%%
 import cvxpy as cp
-#%%
-VA = results['VA']
-my_VA = VA.sum(axis=1)
-
-my_Fin = results['Y']
-
-#%%
-VA = results['VA_2']
-Yoo_VA = VA.sum(axis=1)
-
-Yoo_Fin = results['Y_2']
-small_va = results['va_2']
-#%%
-
-an = small_va.values @ my_Fin.values
-
-
-#%%
-
-
-## Findin the shares
-shares = my_Fin.copy()
-summ = my_Fin.sum().values
-shares = shares / summ
-new_z = results['z_2']
-#%%
-x = cp.Variable(my_Fin.shape,nonneg=True)
-new_VA = small_va.values @ x  # Constraint
 import numpy as np
-newfd = (np.identity(len(new_z)) - new_z.values) @ x # constraint and obj
+import pandas as pd
 
-obj = newfd.atoms.affine.sum.sum()
+VA_const = results['VA'].sum(axis=1).values.reshape(len(results['VA']),1)
 
-fdconst = my_Fin.copy()
-fdconst = fdconst * obj
-fdconst = fdconst.values
+shares = results['Y'].values / results['Y'].sum().values
+#%%
 
-internal = new_z.values @ x
+va = results['va_1'].values
+z  = results['z_1'].values
 
-constraints = []
-constraints.append(new_VA=my_VA.values)
-constraints.append(newfd=fdconst)
-objective = cp.Minimize(obj)
+
+x = cp.Variable(shares.shape,nonneg=True)
+
+VA = va @ x
+
+L = np.identity(len(z))-z
+Y  = L @ x 
+
+obj = cp.atoms.affine.sum.sum(Y)
+
+
+
+objective= cp.Maximize(obj)
+
+Y_const = cp.atoms.affine.binary_operators.multiply(shares,obj)
+
+constraints = [VA == VA_const,Y>=Y_const,Y>=0]
+
 problem = cp.Problem(objective,constraints)
 
+result = problem.solve(verbose=True)
 
+Y_old = kenya.Y
+X_old = kenya.X
+new_Y = pd.DataFrame(Y.value,index=Y_old.index,columns = Y_old.columns)
+new_X = pd.DataFrame(x.value,index=X_old.index,columns = X_old.columns)
+
+my_VA = VA.value
+
+
+
+#%%
+
+delta_x = new_X - X_old
+delta_Y = new_Y - Y_old
+delta_VA = VA_const - my_VA
+#%%
+shares_1 =new_Y.values / new_Y.sum().values
