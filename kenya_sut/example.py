@@ -55,7 +55,7 @@ FUNCTION:
 Now suppose that we want to impelement a shock on the final demand:
 """
 # Now the shock is implemented
-kenya.shock(path = r'Database\Shock.xlsx' , Y = True )
+kenya.shock(path = r'Database\Shock_pulp.xlsx' , VA = True )
 
 # in the next step we need to calculate all the other information after shock.
 # for this reason, we just need to run the following function:
@@ -104,7 +104,7 @@ FUNCTION:
 Now suppose that we want to impelement a shock on the final demand:
 """
 # Now the shock is implemented
-kenya.shock(path = r'Database\Shock.xlsx' , Z = True )
+kenya.shock(path = r'Database\Shock_pulp.xlsx' , VA = True )
 
 # in the next step we need to calculate all the other information after shock.
 # for this reason, we just need to run the following function:
