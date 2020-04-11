@@ -151,6 +151,7 @@ class C_SUT:
 
     def shock(self, path , sensitivity = False,Y= False , S = False , Z= False , VA = False):
         import pandas as pd
+        import numpy as np
         
         # Take a copy of all the things that can change to keep the original 
         # information and the shocked one
@@ -192,7 +193,17 @@ class C_SUT:
                         self.z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
                             * ( 1 +  Z_m.loc[index[i],header[5]] )
                             
-                        
+                if Z_m.loc[index[i],header[4]] == 'Absolute':
+                    
+                    my_Z=self.Z.copy()
+                    
+                    my_Z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
+                        my_Z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
+                            + Z_m.loc[index[i],header[5]]
+                            
+                    my_z= pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
+                    self.z_c.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
+                         my_z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values
                     
                     
         if VA:
@@ -210,7 +221,19 @@ class C_SUT:
                     self.va_c.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
                         self.va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
                             * ( 1 + VA_m.loc[index[i],header[4]])
-                        
+                            
+                if VA_m.loc[index[i],header[3]] == 'Absolute':
+                    
+                    my_VA= self.VA.copy()
+                    
+                    my_VA.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
+                        my_VA.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
+                            + VA_m.loc[index[i],header[4]]
+                    my_va= pd.DataFrame(my_VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
+
+                    self.va_c.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
+                        my_va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
+                    
         if S:
             
             S_m = pd.read_excel(path, sheet_name = 'S', index_col = [0] , header = [0])
