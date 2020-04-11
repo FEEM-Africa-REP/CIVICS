@@ -16,7 +16,7 @@ class C_SUT:
         import numpy as np
         self.path = path
         
-        # importing the whole database (SUT)       
+        # importing the whole Database (SUT)       
         self.SUT = pd.read_excel(self.path, index_col=[0,1,2,3,4], header = [0,1,2,3,4])
 
         # importing use (U), supply (V), supply-use together (Z) and satellite accounts (S)
@@ -59,7 +59,7 @@ class C_SUT:
         #leontief price model
         self.p=pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l, index=['Price'], columns=self.VA.columns)
         
-        self.database = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p}
+        self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'va':self.va,'z':self.z}
         self.counter = 1
         
 # Probably I would delete this function...       
@@ -631,11 +631,13 @@ class C_SUT:
     def add_dict(self):
         
         
-        self.database['Z_' + str(self.counter)]= self.Z_c
-        self.database['X_' + str(self.counter)]= self.X_c
-        self.database['VA_'+ str(self.counter)]= self.VA_c
-        self.database['p_' + str(self.counter)]= self.p_c
-        self.database['Y_' + str(self.counter)]= self.Y_c
+        self.results['Z_' + str(self.counter)]= self.Z_c
+        self.results['X_' + str(self.counter)]= self.X_c
+        self.results['VA_'+ str(self.counter)]= self.VA_c
+        self.results['p_' + str(self.counter)]= self.p_c
+        self.results['Y_' + str(self.counter)]= self.Y_c
+        self.results['va_' + str(self.counter)]= self.va_c
+        self.results['z_' + str(self.counter)]= self.z_c
         
         self.counter += 1
         

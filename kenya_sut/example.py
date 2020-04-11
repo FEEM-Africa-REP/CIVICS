@@ -79,7 +79,45 @@ kenya.aggregate()
 
 X_agg = kenya.X_agg
 X_c_agg = kenya.X_c_agg
+#%%
+"""
+Implementing a shock:
+    
+    In order to implement a shock, you just need to fill an excel file with
+    a precise format and shape.
+    
+    After that, you need to call a function to impelent the shock.
+    
+Note: for every single shock, the shock will be implemented regarding the baseline
 
+FUNCTION:
+    shock(path,Y,S,VA,Z)
+    
+    path = specifies the path of the excel file
+    
+    all the other parameters shows that if you want to implement a shock on the 
+    specific matrix or not. For example:
+        Y = True means that the shock will be implemented in final demand
+    default situation is False meaning that if you do not make the differenet 
+    parameters True, the code will take it False(no shock will be impelemted)
+    
+Now suppose that we want to impelement a shock on the final demand:
+"""
+# Now the shock is implemented
+kenya.shock(path = r'Database\Shock.xlsx' , Z = True )
+
+# in the next step we need to calculate all the other information after shock.
+# for this reason, we just need to run the following function:
+kenya.calc_all()
+#%%
+"""
+Storing results in a dictionary:
+    You can save the results in every step into a dictionary so you can track
+    all the results step by step. The results will be saved on a parameter named:
+        database
+The following fucntion should be used.
+"""
+kenya.add_dict()
 #%%
 """
 Visualizing Results:
@@ -124,8 +162,10 @@ kenya.Save_all(path=r'C:\Users\Amin\Documents\GitHub\My Kenya\kenya_sut\Result')
 At the end, you can have a database of results :-)
     
 """
-database = kenya.database
-
+database = kenya.results
+#%%
+import cvxpy as opt
+#%%
 
 
 
