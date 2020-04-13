@@ -674,8 +674,8 @@ class C_SUT:
         
         shares = self.Y.values / self.Y.sum().values
         
-        va = results['va_'+ str(scenario)].values
-        z  = results['z_' + str(scenario)].values
+        va = self.results['va_'+ str(scenario)].values
+        z  = self.results['z_' + str(scenario)].values
         
         
         x = cp.Variable(shares.shape,nonneg=True)
