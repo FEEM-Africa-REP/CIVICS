@@ -665,7 +665,7 @@ class C_SUT:
         self.counter += 1
         
         
-    def optimize(scenario):
+    def optimize(self,scenario):
         import cvxpy as cp
         import numpy as np
         import pandas as pd
