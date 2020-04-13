@@ -665,3 +665,58 @@ class C_SUT:
         self.counter += 1
         
         
+    def optimize(scenario):
+        import cvxpy as cp
+        import numpy as np
+        import pandas as pd
+        
+        VA_const = self.VA.sum(axis=1).values.reshape(len(self.VA),1)
+        
+        shares = self.Y.values / self.Y.sum().values
+        
+        va = results['va_'+ str(scenario)].values
+        z  = results['z_' + str(scenario)].values
+        
+        
+        x = cp.Variable(shares.shape,nonneg=True)
+        
+        VA = va @ x
+        
+        L = np.identity(len(z))-z
+        Y  = L @ x 
+        
+        obj = cp.atoms.affine.sum.sum(Y)
+        
+        
+        
+        objective= cp.Maximize(obj)
+        
+        Y_const = cp.atoms.affine.binary_operators.multiply(shares,obj)
+        
+        constraints = [VA == VA_const,Y>=Y_const,Y>=0]
+        
+        problem = cp.Problem(objective,constraints)
+        
+        result = problem.solve(verbose=True)
+        
+
+        self.Y_opt = pd.DataFrame(Y.value,index=self.Y.index,columns = self.Y.columns)
+        self.X_opt = pd.DataFrame(x.value,index=self.X.index,columns = self.X.columns)        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
