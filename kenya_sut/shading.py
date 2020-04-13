@@ -23,3 +23,7 @@ kenya.plot_dv()
 kenya.plot_dx()
 kenya.plot_dp()
 #%%
+kenya.optimize(scenario=2)
+#%%
+X_opt = kenya.X_opt
+Y_opt = kenya.Y_opt

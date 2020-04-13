@@ -13,6 +13,9 @@ kenya.shock(path = r'Database\Shock.xlsx' , Z = True )
 kenya.calc_all()
 kenya.add_dict()
 results = kenya.results
+kenya.optimize(scenario=1)
+X_opt =kenya.X_opt
+
 #%%
 import cvxpy as cp
 import numpy as np

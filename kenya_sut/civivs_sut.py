@@ -693,7 +693,9 @@ class C_SUT:
         
         Y_const = cp.atoms.affine.binary_operators.multiply(shares,obj)
         
-        constraints = [VA == VA_const,Y>=Y_const,Y>=0]
+        Y_const_2 = Y_const + z @ x - x
+        
+        constraints = [VA-VA_const<=0 ,Y_const_2 <= 0]
         
         problem = cp.Problem(objective,constraints)
         
