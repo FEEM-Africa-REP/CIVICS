@@ -187,24 +187,48 @@ class C_SUT:
                 # for every step, we should check if the changes should be
                 # on the coefficients or the flow
                 
-                if Z_m.loc[index[i],header[4]] == 'Percentage':
+                # IF the changes are going to be imposed on unaggregated levels
+                if Z_m.loc[index[i],header[-1]] == 'No':
+                
+                    if Z_m.loc[index[i],header[4]] == 'Percentage':
+                        
+                        self.z_c.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
+                            self.z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
+                                * ( 1 +  Z_m.loc[index[i],header[5]] )
+                                
+                    if Z_m.loc[index[i],header[4]] == 'Absolute':
+                        
+                        my_Z=self.Z.copy()
+                        
+                        my_Z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
+                            my_Z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
+                                + Z_m.loc[index[i],header[5]]
+                                
+                        my_z= pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
+                        self.z_c.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
+                             my_z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values
+                
+                
+                # If changes are going to implemented on the aggregated level
+                elif  Z_m.loc[index[i],header[-1]] == 'Yes': 
                     
-                    self.z_c.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
-                        self.z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
-                            * ( 1 +  Z_m.loc[index[i],header[5]] )
+                    try:
+                    
+                        if Z_m.loc[index[i],header[4]] == 'Percentage':
                             
-                if Z_m.loc[index[i],header[4]] == 'Absolute':
-                    
-                    my_Z=self.Z.copy()
-                    
-                    my_Z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
-                        my_Z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
-                            + Z_m.loc[index[i],header[5]]
+                            self.z_c.loc[(Z_m.loc[index[i],header[0]],slice(None),slice(None),slice(None),Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
+                                self.z.loc[(Z_m.loc[index[i],header[0]],slice(None),slice(None),slice(None),Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
+                                    * ( 1 +  Z_m.loc[index[i],header[5]] )  
                             
-                    my_z= pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
-                    self.z_c.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
-                         my_z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values
+
+                    except:
                     
+                        if Z_m.loc[index[i],header[4]] == 'Percentage':
+                            
+                            self.z_c.loc[Z_m.loc[index[i],header[0]],(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
+                                self.z.loc[Z_m.loc[index[i],header[0]],(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
+                                    * ( 1 +  Z_m.loc[index[i],header[5]] )                              
+
                     
         if VA:
             
