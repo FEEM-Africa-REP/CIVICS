@@ -238,25 +238,41 @@ class C_SUT:
             index  = list(VA_m.index)
 
             
-            for i in range(len(VA_m)): 
+            for i in range(len(VA_m)):
                 
-                if VA_m.loc[index[i],header[3]] == 'Percentage':
-                    
-                    self.va_c.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
-                        self.va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
-                            * ( 1 + VA_m.loc[index[i],header[4]])
-                            
-                if VA_m.loc[index[i],header[3]] == 'Absolute':
-                    
-                    my_VA= self.VA.copy()
-                    
-                    my_VA.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
-                        my_VA.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
-                            + VA_m.loc[index[i],header[4]]
-                    my_va= pd.DataFrame(my_VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
+                # IF the changes are going to be imposed on unaggregated levels
+                if VA_m.loc[index[i],header[-1]] == 'No':
 
-                    self.va_c.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
-                        my_va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
+                
+                    if VA_m.loc[index[i],header[3]] == 'Percentage':
+                        
+                        self.va_c.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
+                            self.va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
+                                * ( 1 + VA_m.loc[index[i],header[4]])
+                                
+                    if VA_m.loc[index[i],header[3]] == 'Absolute':
+                        
+                        my_VA= self.VA.copy()
+                        
+                        my_VA.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
+                            my_VA.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
+                                + VA_m.loc[index[i],header[4]]
+                        my_va= pd.DataFrame(my_VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
+    
+                        self.va_c.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
+                            my_va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
+                                
+                # If changes are going to implemented on the aggregated level
+                elif  VA_m.loc[index[i],header[-1]] == 'Yes':
+                    
+
+                    if VA_m.loc[index[i],header[3]] == 'Percentage':
+                        
+                        self.va_c.loc[(slice(None), slice(None), slice(None), VA_m.loc[index[i],header[0]]),(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
+                            self.va.loc[(slice(None), slice(None), slice(None),VA_m.loc[index[i],header[0]]),(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
+                                * ( 1 + VA_m.loc[index[i],header[4]])
+                        
+                        
                     
         if S:
             
