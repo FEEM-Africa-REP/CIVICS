@@ -14,15 +14,16 @@ kenya.aggregate()
 kenya.plot_dv()
 kenya.plot_dx()
 kenya.plot_dp()
+Investment=kenya.Y_c.sum().sum()-kenya.Y.sum().sum()
 #%%
-kenya.shock(path = r'Database\Shock_shading.xlsx' , Z=True ,VA = True )
+kenya.shock(path = r'Database\Shock_shading.xlsx' , Z=True ,VA = True)
 kenya.calc_all()
 kenya.add_dict()
 kenya.aggregate()
 kenya.plot_dv()
 kenya.plot_dx()
 kenya.plot_dp()
-#%%
+Savings=kenya.VA_c.sum().sum()-kenya.VA.sum().sum()
 kenya.optimize(scenario=2)
 #%%
 X_opt = kenya.X_opt
