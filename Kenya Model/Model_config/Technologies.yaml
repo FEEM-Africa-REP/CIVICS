@@ -171,13 +171,13 @@ techs:
     biodigestor:
 
         essentials:
-            color: '#592400'
+            color: '#f30016'
             name: "Anaerobic Digestor and Upgrader"
-            parent: supply_plus
+            parent: conversion
+            carrier_in: biomass
             carrier_out: biogas
 
         constraints:
-            resource_eff: 10           # LHV of bio-methane 10 kWh/Nm3  -  the input file will be in Nm3
             lifetime: 25
 
         costs: 
@@ -190,7 +190,7 @@ techs:
     BiogasStorage:
 
         essentials:
-            color: '#592400'
+            color: '#f3dd00'
             name: "Biogas Storage Tank"
             parent: storage
             carrier: biogas
