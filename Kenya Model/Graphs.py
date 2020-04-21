@@ -340,7 +340,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly=False,pie_values='share'):
                               loc='right',
                              rowLoc ='center',
                              colLoc='center',
-                             cellLoc='center',bbox=(1.25,0.2,0.1,0.5)) 
+                             cellLoc='center',bbox=(1.4,0.2,0.1,0.5)) 
         the_table.auto_set_font_size(False)
         the_table.set_fontsize(15)
         
