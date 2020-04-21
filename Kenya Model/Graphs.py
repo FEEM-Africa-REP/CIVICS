@@ -525,6 +525,7 @@ def Dispatch_sys(model,sp_tech,weekly=False):
         fig.savefig(r'Graphs\ ' +  sp_tech + ' Vs System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
         
         my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
+        #my_pie = my_pie.sort_values(by=['Share'],ascending=False)
         ind = my_pie.index.to_list()
         pie_pps = []
         pie_cols = []
@@ -533,24 +534,29 @@ def Dispatch_sys(model,sp_tech,weekly=False):
             pie_pps.append(Colors.loc[ind[i],'Name'])
             pie_cols.append(Colors.loc[ind[i],'Color'])
 
-        plt.figure(figsize=(15,10))
-        
+        plt.figure(figsize=(10,10))
+        plt.title('System Energy Mix',fontname="Times New Roman",fontweight="bold",fontsize=24)
         plt.pie(my_pie.values,
                 shadow=False, startangle=90,colors=pie_cols)
         
-        plt.legend(pie_pps,
-                  title="Power Plants",
-                  loc="center left",
-                  bbox_to_anchor=(1, 0, 0.5, 1))
-        # Add a table at the bottom of the axes
-        the_table = plt.table(cellText=my_pie.values.T,
-                              colColours=pie_cols ,
-                              rowLabels='%',
-                              loc='bottom',
+        
+        #Add a table at the bottom of the axes
+        the_table = plt.table(cellText=my_pie.values,
+                              rowColours=pie_cols,
+                              rowLabels= pie_pps,
+                              colLabels = '%',
+                              loc='right',
                              rowLoc ='center',
                              colLoc='center',
-                             cellLoc='center')            
-        plt.savefig(r'Graphs\Pie_System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
+                             cellLoc='center',bbox=(1.25,0.2,0.1,0.5)) 
+        the_table.auto_set_font_size(False)
+        the_table.set_fontsize(15)
+        
+        #the_table[(2, 0)].get_text().set_fontsize(12)
+        #the_table[(2, 0)].get_text().set_color('red')
+        plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)
+        
+        return my_pie,pie_pps,pie_cols
 
         
         
