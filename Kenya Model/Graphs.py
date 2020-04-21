@@ -5,7 +5,7 @@ Created on Mon Dec  2 21:42:53 2019
 @author: Amin
 
 """
-def Dispatch_reg(model,sp_tech,sp_reg,weekly):
+def Dispatch_reg(model,sp_tech,sp_reg,weekly=False,pie_values='share'):
     
     
     mnth=['Jan',
@@ -167,7 +167,8 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly):
         for i in range (len(full_prod_list)-1):
             prod_cum[full_prod_list[i+1]] = prod_cum[full_prod_list[i]].values + prod_cum[full_prod_list[i+1]].values
     
-        exp_cum = Exp_to.copy()  
+        exp_cum = Exp_to.copy()
+        exp_pie = Exp_to.copy()
         for i in range (len(exp_list)-1):
             exp_cum[exp_list[i+1]] = exp_cum[exp_list[i]].values + exp_cum[exp_list[i+1]].values
  
@@ -304,7 +305,71 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly):
               
             fig.savefig(r'Graphs\ ' + region + '_Result.svg', dpi=fig.dpi,bbox_inches='tight')
             
+        if pie_values=='share':
+            my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
+            my_pie1 = pd.DataFrame(((exp_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
             
+        elif pie_values == 'value':
+            my_pie = pd.DataFrame((prod_pie.sum().values).round(1),index=prod_pie.columns.to_list(),columns=['GWh'])
+            my_pie1 = pd.DataFrame((exp_pie.sum().values).round(1),index=prod_pie.columns.to_list(),columns=['GWh'])
+          
+            
+
+        elif pie_values != 'share' or pie_values != 'value':
+            raise ValueError('the pie_values should be **share** or **value** ')
+            
+        ind = my_pie.index.to_list()
+        pie_pps = []
+        pie_cols = []
+        
+        for i in range(len(ind)):
+            pie_pps.append(Colors.loc[ind[i],'Name'])
+            pie_cols.append(Colors.loc[ind[i],'Color'])
+
+        plt.figure(figsize=(10,10))
+        plt.title('System Energy Mix',fontname="Times New Roman",fontweight="bold",fontsize=24)
+        plt.pie(my_pie.values,
+                shadow=False, startangle=90,colors=pie_cols)
+        
+        
+        #Add a table at the bottom of the axes
+        the_table = plt.table(cellText=my_pie.values,
+                              rowColours=pie_cols,
+                              rowLabels= pie_pps,
+                              colLabels = my_pie.columns,
+                              loc='right',
+                             rowLoc ='center',
+                             colLoc='center',
+                             cellLoc='center',bbox=(1.25,0.2,0.1,0.5)) 
+        the_table.auto_set_font_size(False)
+        the_table.set_fontsize(15)
+        
+
+        plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)         
+        plt.savefig(r'Graphs\ ' + region + 'pie_production_Result.svg', dpi=fig.dpi,bbox_inches='tight')
+        
+        ## Cxport
+        plt.figure(figsize=(10,10))
+        plt.title('System Energy Mix',fontname="Times New Roman",fontweight="bold",fontsize=24)
+        plt.pie(my_pie.values,
+                shadow=False, startangle=90,colors=pie_cols)
+        
+        
+        #Add a table at the bottom of the axes
+        the_table = plt.table(cellText=my_pie.values,
+                              rowColours=pie_cols,
+                              rowLabels= pie_pps,
+                              colLabels = my_pie.columns,
+                              loc='right',
+                             rowLoc ='center',
+                             colLoc='center',
+                             cellLoc='center',bbox=(1.25,0.2,0.1,0.5)) 
+        the_table.auto_set_font_size(False)
+        the_table.set_fontsize(15)
+        
+
+        plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)         
+        plt.savefig(r'Graphs\ ' + region + 'pie_production_Result.svg', dpi=fig.dpi,bbox_inches='tight')            
 def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share'):
     mnth=['Jan',
  'Jan0',
@@ -526,10 +591,10 @@ def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share'):
         
         if pie_values=='share':
             my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
-            my_col = '%'
+
         elif pie_values == 'value':
             my_pie = pd.DataFrame((prod_pie.sum().values).round(1),index=prod_pie.columns.to_list(),columns=['GWh'])
-            my_col = 'GWh'          
+          
             
 
         elif pie_values != 'share' or pie_values != 'value':
@@ -553,7 +618,7 @@ def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share'):
         the_table = plt.table(cellText=my_pie.values,
                               rowColours=pie_cols,
                               rowLabels= pie_pps,
-                              colLabels = my_col,
+                              colLabels = my_pie.columns,
                               loc='right',
                              rowLoc ='center',
                              colLoc='center',
@@ -564,6 +629,7 @@ def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share'):
 
         plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)         
         plt.savefig(r'Graphs\Pie_System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
+
         
 
 
