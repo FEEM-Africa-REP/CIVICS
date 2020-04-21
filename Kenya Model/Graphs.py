@@ -163,6 +163,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly):
     
         # Making Cummulative Production And Consumption
         prod_cum = production.copy()
+        prod_pie = production.copy()
         for i in range (len(full_prod_list)-1):
             prod_cum[full_prod_list[i+1]] = prod_cum[full_prod_list[i]].values + prod_cum[full_prod_list[i+1]].values
     
@@ -304,7 +305,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly):
             fig.savefig(r'Graphs\ ' + region + '_Result.svg', dpi=fig.dpi,bbox_inches='tight')
             
             
-def Dispatch_sys(model,sp_tech,weekly):
+def Dispatch_sys(model,sp_tech,weekly=False):
     mnth=['Jan',
  'Jan0',
  'Jan1',
@@ -409,6 +410,7 @@ def Dispatch_sys(model,sp_tech,weekly):
     
     # Building the Cummulative Production
     prod_cum = production.copy()
+    prod_pie = production.copy()
     for i in range (len(Pps_list)-1):
         prod_cum[Pps_list[i+1]] = prod_cum[Pps_list[i]].values + prod_cum[Pps_list[i+1]].values
     
@@ -521,6 +523,38 @@ def Dispatch_sys(model,sp_tech,weekly):
             #plt.xticks(rotation=70)
             axs[1].set_xticks([mnth[0],mnth[5],mnth[9],mnth[13],mnth[17],mnth[22],mnth[26],mnth[30],mnth[35],mnth[39],mnth[43],mnth[47]])          
         fig.savefig(r'Graphs\ ' +  sp_tech + ' Vs System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
+        
+        my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
+        ind = my_pie.index.to_list()
+        pie_pps = []
+        pie_cols = []
+        
+        for i in range(len(ind)):
+            pie_pps.append(Colors.loc[ind[i],'Name'])
+            pie_cols.append(Colors.loc[ind[i],'Color'])
+
+        plt.figure(figsize=(15,10))
+        
+        plt.pie(my_pie.values,
+                shadow=False, startangle=90,colors=pie_cols)
+        
+        plt.legend(pie_pps,
+                  title="Power Plants",
+                  loc="center left",
+                  bbox_to_anchor=(1, 0, 0.5, 1))
+        # Add a table at the bottom of the axes
+        the_table = plt.table(cellText=my_pie.values.T,
+                              colColours=pie_cols ,
+                              rowLabels='%',
+                              loc='bottom',
+                             rowLoc ='center',
+                             colLoc='center',
+                             cellLoc='center')            
+        plt.savefig(r'Graphs\Pie_System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
+
+        
+        
+        
 
 
         
