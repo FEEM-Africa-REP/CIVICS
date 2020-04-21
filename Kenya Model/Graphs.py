@@ -305,7 +305,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly):
             fig.savefig(r'Graphs\ ' + region + '_Result.svg', dpi=fig.dpi,bbox_inches='tight')
             
             
-def Dispatch_sys(model,sp_tech,weekly=False):
+def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share'):
     mnth=['Jan',
  'Jan0',
  'Jan1',
@@ -524,8 +524,17 @@ def Dispatch_sys(model,sp_tech,weekly=False):
             axs[1].set_xticks([mnth[0],mnth[5],mnth[9],mnth[13],mnth[17],mnth[22],mnth[26],mnth[30],mnth[35],mnth[39],mnth[43],mnth[47]])          
         fig.savefig(r'Graphs\ ' +  sp_tech + ' Vs System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
         
-        my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
-        #my_pie = my_pie.sort_values(by=['Share'],ascending=False)
+        if pie_values=='share':
+            my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
+            my_col = '%'
+        elif pie_values == 'value':
+            my_pie = pd.DataFrame((prod_pie.sum().values).round(1),index=prod_pie.columns.to_list(),columns=['GWh'])
+            my_col = 'GWh'          
+            
+
+        elif pie_values != 'share' or pie_values != 'value':
+            raise ValueError('the pie_values should be **share** or **value** ')
+            
         ind = my_pie.index.to_list()
         pie_pps = []
         pie_cols = []
@@ -544,7 +553,7 @@ def Dispatch_sys(model,sp_tech,weekly=False):
         the_table = plt.table(cellText=my_pie.values,
                               rowColours=pie_cols,
                               rowLabels= pie_pps,
-                              colLabels = '%',
+                              colLabels = my_col,
                               loc='right',
                              rowLoc ='center',
                              colLoc='center',
@@ -552,11 +561,11 @@ def Dispatch_sys(model,sp_tech,weekly=False):
         the_table.auto_set_font_size(False)
         the_table.set_fontsize(15)
         
-        #the_table[(2, 0)].get_text().set_fontsize(12)
-        #the_table[(2, 0)].get_text().set_color('red')
-        plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)
+
+        plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)         
+        plt.savefig(r'Graphs\Pie_System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
         
-        return my_pie,pie_pps,pie_cols
+
 
         
         
