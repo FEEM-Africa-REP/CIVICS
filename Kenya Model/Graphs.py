@@ -97,6 +97,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly=False,pie_values='share'):
     Demand_c = Demand_c / cf
     Demand_c_cop = Demand_c.copy()
     tot_loc = Nodes['Location'].tolist()
+    
     for i in range(len(tot_loc)):
         region = tot_loc[i]
         Demand = Demand_c_cop
@@ -108,6 +109,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly=False,pie_values='share'):
         for i in range (len(Pps_tech)):
             Prod[Pps_tech.values[i,0]] = model.get_formatted_array('carrier_prod').loc[{'techs':Pps_tech.values[i,0],'carriers':Dem_tech.values[0,1],'locs':[region]}].sum('locs').to_pandas().T
     
+        prod_pie = Prod.copy()
         # Make a copy of nodes because we will remove 1 node in every graph
         New_Nodes = Nodes.copy()
         New_Nodes = New_Nodes['Location'].tolist()
@@ -163,7 +165,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly=False,pie_values='share'):
     
         # Making Cummulative Production And Consumption
         prod_cum = production.copy()
-        prod_pie = production.copy()
+
         for i in range (len(full_prod_list)-1):
             prod_cum[full_prod_list[i+1]] = prod_cum[full_prod_list[i]].values + prod_cum[full_prod_list[i+1]].values
     
@@ -327,7 +329,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly=False,pie_values='share'):
             pie_cols.append(Colors.loc[ind[i],'Color'])
 
         plt.figure(figsize=(10,10))
-        plt.title('{} Energy Mix'.format(region),fontname="Times New Roman",fontweight="bold",fontsize=24)
+        plt.title('{} Production Mix'.format(region),fontname="Times New Roman",fontweight="bold",fontsize=24)
         plt.pie(my_pie.values,
                 shadow=False, startangle=90,colors=pie_cols)
         
@@ -347,7 +349,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly=False,pie_values='share'):
 
         plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)         
         plt.savefig(r'Graphs\ ' + region + 'pie_production_Result.svg', dpi=fig.dpi,bbox_inches='tight')
-        
+
         ## Cxport
         # plt.figure(figsize=(10,10))
         # plt.title('System Energy Mix',fontname="Times New Roman",fontweight="bold",fontsize=24)
