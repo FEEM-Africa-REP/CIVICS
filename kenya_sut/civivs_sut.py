@@ -122,7 +122,7 @@ class C_SUT:
             self.p_c_agg= self.p_c.groupby(axis=1, level=level_x, sort=sort).sum()
             
             self.S_agg = self.S.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()
-            self.S_c_agg = self.S.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()            
+            self.S_c_agg = self.S_c.groupby(level=level_va,sort = sort).sum().groupby(axis = 1 , level=level_x,sort = sort).sum()            
          
 
             print('Both baseline and shocked results are aggregated')
@@ -637,7 +637,7 @@ class C_SUT:
         plt.show()    
     
     
-    def plot_dS(self,aggregation = True, Kind = 'bar',stacked=True , level = None,drop='unused'):
+    def plot_dS(self,details = True, Kind = 'bar', stacked=True , indicator='CO2' ,Type = 'percentage'):
         
         import matplotlib.pyplot as plt
 
@@ -649,46 +649,105 @@ class C_SUT:
             raise ValueError('This function can not be used if no shock is impemented')
             
 
+        check = 0
+        S_list = self.S_agg.index.to_list()
         
+        for i in S_list:
+            if indicator == i :
+                check = 1
+                break
+            else:
+                check = 0
+        
+        if check == 0:
+            raise ValueError('indicator {} does not exist in the indictors'.format(indicator))
+            
         # Finding if the graphs should be aggregated or not
-        if aggregation: 
+        if details: 
+            
+            old = self.S.loc[(slice(None),slice(None),slice(None),indicator),'Activities'].groupby(axis=1,level=3).sum()
+            new = self.S_c.loc[(slice(None),slice(None),slice(None),indicator),'Activities'].groupby(axis=1,level=3).sum()
+            
+            old.index = old.index.get_level_values(0)
+            new.index = old.index
 
+
+        elif details == False:
             try:
-
                 old = self.S_agg
-    
                 new = self.S_c_agg
-            except: 
+                old = old.loc[indicator,'Activities']
+                new = new.loc[indicator,'Activities']
+            except:
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
-                
-        elif aggregation == False:
-            
-            old = self.S
-            new = self.S_c
-            
-        if level == None:
-            old = old
-            new = new
-        
-        elif level == 'Activities' or 'Commodities':
-            
-            old = old[level]
-            new = new[level]
-            
-        elif level != None or 'Activities' or 'Commodities':
-            
-            raise ValueError('The level should be {}, {} or {}'.format('None','Activities','Commodities'))
-        
-        
-        dS = new  - old
-        dS = dS.drop(drop)
-        dS=dS.T
-        
-        dS.plot(kind = Kind , stacked = stacked)
-        plt.title('Change in Environmental Factors')
 
-        plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
+        # To Take the unit
+        
+        if Type == 'percentage':
+            
+            Unit = "%"
+            
+            dS = (new  - old) / old * 100
+            dS=dS.T
+            
+            if details:
+                dS.plot(kind = Kind , stacked = stacked)
+                plt.title('Change in {}'.format(indicator))     
+                plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
+                plt.ylabel(Unit)
+                
+            if details == False:
+                dS.plot(kind = Kind , stacked = stacked,legend=False)
+                plt.title('Change in {}'.format(indicator))  
+                plt.ylabel(Unit)
+                
+        if Type == 'absolute':
+            
+            Unit = "?"
+            
+            
+            dS = (new  - old) 
+            
+            dS=dS.T
+            
+            if details:
+                dS.plot(kind = Kind , stacked = stacked)
+                plt.title('Change in {}'.format(indicator))     
+                plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
+                plt.ylabel(Unit)
+            if details == False:
+                dS.plot(kind = Kind , stacked = stacked,legend=False)
+                plt.title('Change in {}'.format(indicator))  
+                plt.ylabel(Unit)
+                
+        if Type == 'change':
+            
+            Unit = "?"
+            
+            coffee = new['HIGH RAINFALL (CP)'] + new['COFFEE PROD']
+            print(coffee)
+            dS = (new  - old)  / coffee.values
+            print(dS)
+            dS=dS.T
+            
+            if details:
+                dS.plot(kind = Kind , stacked = stacked)
+                plt.title('Change in {}'.format(indicator))     
+                plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
+                plt.ylabel(Unit)
+            if details == False:
+                dS.plot(kind = Kind , stacked = stacked,legend=False)
+                plt.title('Change in {}'.format(indicator))  
+                plt.ylabel(Unit)           
         plt.show()      
+
+
+
+
+
+
+
+
 
 
     def add_dict(self):
@@ -703,7 +762,11 @@ class C_SUT:
         self.results['z_' + str(self.counter)]= self.z_c
         
         self.counter += 1
-        
+  
+
+
+
+      
         
     def optimize(self,scenario):
         import cvxpy as cp

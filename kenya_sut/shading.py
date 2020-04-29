@@ -15,7 +15,8 @@ kenya.aggregate()
 kenya.plot_dv()
 kenya.plot_dx()
 kenya.plot_dp()
-kenya.plot_dS()
+kenya.plot_dS(indicator='CO2')
+#%%
 env1=kenya.S_c
 Investment=kenya.Y_c.sum().sum()-kenya.Y.sum().sum()
 #%%
@@ -39,3 +40,7 @@ results= kenya.results
 env_del1 = env2 - env0
 change = env_del1 / env0 * 100
 
+#%%
+
+#%%
+kenya.plot_dS(indicator='Energy',details=True,Type='change')
