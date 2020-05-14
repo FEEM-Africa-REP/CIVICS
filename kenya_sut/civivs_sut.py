@@ -14,6 +14,7 @@ class C_SUT:
         
         import pandas as pd
         import numpy as np
+        import pymrio
         self.path = path
         
         # importing the whole Database (SUT)       
@@ -23,7 +24,7 @@ class C_SUT:
         self.U = self.SUT.loc['Commodities','Activities']
         self.V = self.SUT.loc['Activities','Commodities']
         self.Z = self.SUT.loc[['Commodities','Activities'], ['Commodities','Activities']]
-        self.S = self.SUT.loc['EORA Satellite Accounts',['Commodities','Activities']]
+        self.S = self.SUT.loc['Satellite Accounts',['Commodities','Activities']]
         
         
         # computing total final demand (Y) by importing households (HH), investment (IN), government (GO) and export (EX) 
@@ -51,13 +52,13 @@ class C_SUT:
         self.S_ind = self.S.index
 
         # computing matrices of coefficients
-        self.z = pd.DataFrame(self.Z.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.Z.index, columns=self.Z.columns)
-        self.va = pd.DataFrame(self.VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
-        self.s = pd.DataFrame(self.S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns)
+        self.z = pymrio.calc_A(self.Z, self.X)
+        self.va = pymrio.calc_S(self.VA, self.X)
+        self.s = pymrio.calc_S(self.S, self.X)
         #self.imp = pd.DataFrame(self.IM.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.IM.index, columns=self.IM.columns)
-        self.l = np.linalg.inv(np.identity(len(self.z)) - self.z)
+        self.l = pymrio.calc_L(self.z)
         #leontief price model
-        self.p=pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l, index=['Price'], columns=self.VA.columns)
+        self.p = pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l, index=['Price'], columns=self.VA.columns)
         
         self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'va':self.va,'z':self.z}
         self.counter = 1
