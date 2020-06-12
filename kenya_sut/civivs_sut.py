@@ -472,8 +472,14 @@ class C_SUT:
             ex_rate = 1.0
         elif Unit == 'M USD':
             ex_rate = 0.00939548
-        elif Unit !='M KSH' or 'M USD' :
-            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD'))
+        elif Unit == 'K USD':
+            ex_rate = 0.00939548*1000
+        elif Unit = 'K EUR':
+            ex_rate = 0.00833961*1000
+            
+            
+        elif Unit !='M KSH' or 'M USD','K USD','K EUR' :
+            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD','K USD','K EUR'))
         
         # Finding if the graphs should be aggregated or not
         if aggregation: 
@@ -533,8 +539,14 @@ class C_SUT:
             ex_rate = 1.0
         elif Unit == 'M USD':
             ex_rate = 0.00939548
-        elif Unit !='M KSH' or 'M USD' :
-            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD'))
+        elif Unit == 'K USD':
+            ex_rate = 0.00939548*1000
+        elif Unit = 'K EUR':
+            ex_rate = 0.00833961*1000
+            
+            
+        elif Unit !='M KSH' or 'M USD','K USD','K EUR' :
+            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD','K USD','K EUR'))
         
         # Finding if the graphs should be aggregated or not
         if aggregation: 
