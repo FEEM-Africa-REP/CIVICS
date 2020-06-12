@@ -471,7 +471,7 @@ class C_SUT:
         if Unit == 'M KSH':
             ex_rate = 1.0
         elif Unit == 'M USD':
-            ex_rate = 2.0
+            ex_rate = 0.00939548
         elif Unit !='M KSH' or 'M USD' :
             raise ValueError('The unit should be {} or {}'.format('M KSH','M USD'))
         
@@ -532,7 +532,7 @@ class C_SUT:
         if Unit == 'M KSH':
             ex_rate = 1.0
         elif Unit == 'M USD':
-            ex_rate = 2.0
+            ex_rate = 0.00939548
         elif Unit !='M KSH' or 'M USD' :
             raise ValueError('The unit should be {} or {}'.format('M KSH','M USD'))
         
