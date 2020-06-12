@@ -63,15 +63,14 @@ S_2_agg = kenya.S_c_agg
 Y_2_agg = kenya.Y_c_agg
 Z_2_agg = kenya.Z_c_agg
 
-kenya.plot_dv(level='Activities')
-kenya.plot_dx(level='Commodities', Unit='M USD')
-kenya.plot_dp(level='Commodities')
-kenya.plot_dS(indicator='Green Water')
+# kenya.plot_dv(level='Activities')
+kenya.plot_dx(level='Commodities', Unit='RII')
+# kenya.plot_dp(level='Commodities')
+# kenya.plot_dS(indicator='Green Water')
 
 #%%
 database = kenya.database
 
 #%%
-base_S = kenya.S_agg
-#%%
-D_S = base_S -S_1_agg
+kenya.Int_Ass(inv_sen=1, sav_sen=2)
+

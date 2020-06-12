@@ -474,11 +474,11 @@ class C_SUT:
             ex_rate = 0.00939548
         elif Unit == 'K USD':
             ex_rate = 0.00939548*1000
-        elif Unit = 'K EUR':
+        elif Unit == 'K EUR':
             ex_rate = 0.00833961*1000
             
             
-        elif Unit !='M KSH' or 'M USD','K USD','K EUR' :
+        elif Unit !='M KSH' or 'M USD'or'K USD'or'K EUR' :
             raise ValueError('The unit should be {} or {}'.format('M KSH','M USD','K USD','K EUR'))
         
         # Finding if the graphs should be aggregated or not
@@ -541,12 +541,12 @@ class C_SUT:
             ex_rate = 0.00939548
         elif Unit == 'K USD':
             ex_rate = 0.00939548*1000
-        elif Unit = 'K EUR':
+        elif Unit == 'K EUR':
             ex_rate = 0.00833961*1000
             
             
-        elif Unit !='M KSH' or 'M USD','K USD','K EUR' :
-            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD','K USD','K EUR'))
+        elif Unit !='M KSH' or 'M USD'or'K USD'or'K EUR' :
+            raise ValueError('The unit should be {} , {},{} or {}'.format('M KSH','M USD','K USD','K EUR'))
         
         # Finding if the graphs should be aggregated or not
         if aggregation: 
@@ -773,12 +773,33 @@ class C_SUT:
         self.results['Y_' + str(self.counter)]= self.Y_c
         self.results['va_' + str(self.counter)]= self.va_c
         self.results['z_' + str(self.counter)]= self.z_c
+        self.results['S_' + str(self.counter)]= self.S_c
         
         self.counter += 1
   
 
 
-
+    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'optimization\optimization.xlsx'):
+        import pandas as pd
+        
+        OPT = pd.read_excel(directory,sheet_name='input',index_col=[0],header=[0])
+        
+        
+        INV = self.results['VA_'+ str(inv_sen)].values.sum().sum() - self.VA.sum().sum()
+        SAV = self.results['VA_'+ str(sav_sen)].values.sum().sum() - self.VA.sum().sum()
+        #W_S = self.results['S_'+ str(sav_sen)].values - self.S
+        
+        ROI = INV/SAV
+        
+        OPT.loc[OPT.index,'ROI']=ROI
+        OPT.loc[OPT.index,'Saving']=SAV 
+        
+       
+        
+        with pd.ExcelWriter(r'optimization\optimization_0.xlsx') as writer:
+            OPT.to_excel(writer)
+            
+        
       
         
     def optimize(self,scenario):
