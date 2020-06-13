@@ -1,0 +1,335 @@
+techs:
+
+    biomass_transmission:
+    
+        essentials:
+            name: 'Coffee Transmission'
+            color: '#FF1493'
+            parent: transmission
+            carrier: biomass
+        constraints:
+            energy_cap_max: 10000000000000.0
+            energy_eff: 1.0  
+            lifetime: 1.0
+            
+        costs:
+            monetary:
+                interest_rate: 0.1
+
+
+    supply_biomass:
+        essentials:
+            name: 'Biomass Production'
+            color: '#C98AAD'
+            parent: supply
+            carrier: biomass
+        constraints:
+            lifetime: 1
+        costs:
+            monetary:
+                interest_rate: 0.0
+                energy_cap: 0.0
+                om_con: 0.00          
+
+locations:
+
+################# Mills in MTKR #####################
+
+    M1:
+        coordinates:
+            lat: 0.3390
+            lon: 37.9372
+            
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M1               
+                    resource_unit: energy          
+                                
+    M2:
+        coordinates:
+            lat: 0.0414
+            lon: 37.6582
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M2               
+                    resource_unit: energy    
+
+    M3:
+        coordinates:
+            lat: -0.2191
+            lon: 37.7318
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M3               
+                    resource_unit: energy       
+                    
+    M4:
+        coordinates:
+            lat: -0.4399
+            lon: 36.9177
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M4               
+                    resource_unit: energy    
+                 
+    M5:
+        coordinates:
+            lat: -0.4909
+            lon: 37.1045
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M5               
+                    resource_unit: energy    
+                 
+    M6:
+        coordinates:
+            lat: -0.5484
+            lon: 36.9445
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M6               
+                    resource_unit: energy    
+                 
+    M7:
+        coordinates:
+            lat: -0.5663
+            lon: 37.0166
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M7               
+                    resource_unit: energy                
+                           
+################# Mills in NBOR #####################            
+
+    M8:
+        coordinates:
+            lat: -1.0522
+            lon: 37.0934
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M8               
+                    resource_unit: energy    
+                           
+    M9:
+        coordinates:
+            lat: -1.1640
+            lon: 36.9524
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M9               
+                    resource_unit: energy    
+               
+    M10:
+        coordinates:
+            lat: -1.1402
+            lon: 36.7900
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M10               
+                    resource_unit: energy    
+               
+    M11:
+        coordinates:
+            lat: -1.1640
+            lon: 36.9524
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M11               
+                    resource_unit: energy    
+               
+    M12:
+        coordinates:
+            lat: -1.2513
+            lon: 36.9092
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M12               
+                    resource_unit: energy    
+               
+    M13:
+        coordinates:
+            lat: -1.5200
+            lon: 37.2696
+            
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M13               
+                    resource_unit: energy               
+                           
+################# Mills in WSTR #####################             
+            
+    M14:
+        coordinates:
+            lat: 0.5159
+            lon: 35.2883
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M14               
+                    resource_unit: energy    
+               
+    M15:
+        coordinates:
+            lat: -0.2009
+            lon: 35.3492
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M15               
+                    resource_unit: energy    
+               
+    M16:
+        coordinates:
+            lat: -0.6815
+            lon: 34.7765   
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M16               
+                    resource_unit: energy             
+               
+                       
+links:                             
+# Free Transmission:
+# Here we can limit the amount of biomass available per every mill              
+                
+    M1,NBOR:
+        techs:
+            biomass_transmission:  
+                         
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+                        
+    M2,NBOR:
+        techs:
+            biomass_transmission:               
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+
+    M3,NBOR:
+        techs:
+            biomass_transmission:            
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+                        
+    M4,NBOR:
+        techs:
+            biomass_transmission:                
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+
+    M5,NBOR:
+        techs:
+            biomass_transmission:                
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+                        
+    M6,NBOR:
+        techs:
+            biomass_transmission:               
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+
+    M7,NBOR:
+        techs:
+            biomass_transmission:                
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+                        
+    M8,NBOR:
+        techs:
+            biomass_transmission:               
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+
+    M9,NBOR:
+        techs:
+            biomass_transmission:              
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+                        
+    M10,NBOR:
+        techs:
+            biomass_transmission:                
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+
+    M11,NBOR:
+        techs:
+            biomass_transmission:                
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+                        
+    M12,NBOR:
+        techs:
+            biomass_transmission:                 
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+
+    M13,NBOR:
+        techs:
+            biomass_transmission:                 
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+                        
+    M14,NBOR:
+        techs:
+            biomass_transmission:                
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+
+    M15,NBOR:
+        techs:
+            biomass_transmission:                  
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+                        
+    M16,NBOR:
+        techs:
+            biomass_transmission:                
+                
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0  
