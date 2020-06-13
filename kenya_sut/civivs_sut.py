@@ -786,7 +786,7 @@ class C_SUT:
         
         
         INV = self.results['VA_'+ str(inv_sen)].values.sum().sum() - self.VA.sum().sum()
-        SAV = self.results['VA_'+ str(sav_sen)].values.sum().sum() - self.VA.sum().sum()
+        SAV = -self.results['VA_'+ str(sav_sen)].values.sum().sum() + self.VA.sum().sum()
         #W_S = self.results['S_'+ str(sav_sen)].values - self.S
         
         ROI = INV/SAV
