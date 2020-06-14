@@ -774,30 +774,51 @@ class C_SUT:
         self.results['va_' + str(self.counter)]= self.va_c
         self.results['z_' + str(self.counter)]= self.z_c
         self.results['S_' + str(self.counter)]= self.S_c
+        self.results['S_agg' + str(self.counter)]= self.S_c_agg
+        
         
         self.counter += 1
   
 
 
-    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'optimization\optimization.xlsx'):
+    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'optimization\optimization.xlsx',w_ext=['Green Water'],em_ext=['CO2']):
         import pandas as pd
         
-        OPT = pd.read_excel(directory,sheet_name='input',index_col=[0],header=[0])
+        #try : 
+           
+        OPT = pd.read_excel(directory,sheet_name='input',index_col=[0,1],header=[0,1])
         
-        
+         # Calculateing different invoces using dictionaries and the number of senarios
         INV = self.results['VA_'+ str(inv_sen)].values.sum().sum() - self.VA.sum().sum()
         SAV = -self.results['VA_'+ str(sav_sen)].values.sum().sum() + self.VA.sum().sum()
-        #W_S = self.results['S_'+ str(sav_sen)].values - self.S
+        W_I =  self.results['S_agg' + str(inv_sen)].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
+        W_S = -self.results['S_agg' + str(sav_sen)].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
+
+        E_I =  self.results['S_agg' + str(inv_sen)].loc[em_ext].sum() .sum()- self.S_agg.loc[em_ext].sum().sum()
+        E_S = -self.results['S_agg' + str(sav_sen)].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum()  .sum()         
+        
         
         ROI = INV/SAV
         
-        OPT.loc[OPT.index,'ROI']=ROI
-        OPT.loc[OPT.index,'Saving']=SAV 
+        # Writing the results on the data frame
+        OPT.loc[OPT.index,('ROI','kSh/FU')]=ROI
+        OPT.loc[OPT.index,('Saving','kSh/FU')]=SAV 
         
+        OPT.loc[OPT.index,('Water Saving','m3/FU')]=W_S 
+        OPT.loc[OPT.index,('Water Consumption','m3/FU')]=W_I
+        
+        OPT.loc[OPT.index,('Emission Saving','ton/FU')]=E_S 
+        OPT.loc[OPT.index,('Emission Consumption','ton/FU')]=E_I           
+        
+        
+        sce_name = OPT.index.get_level_values(0).to_list()
        
-        
-        with pd.ExcelWriter(r'optimization\optimization_0.xlsx') as writer:
+        save_dir = r'optimization\ ' + sce_name[0] + '.xlsx'
+        with pd.ExcelWriter(save_dir) as writer:
             OPT.to_excel(writer)
+            
+        # except:
+        #     raise ValueError('Please Use Aggregation Function and Add to dictionary function for every step')
             
         
       
