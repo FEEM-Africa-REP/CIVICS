@@ -1,4 +1,4 @@
-def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share'):
+def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1,font=15):
     
     
     mnth=['Jan',
@@ -301,10 +301,14 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share'):
         
         # Pie Chart
         if pie_values=='share':
-            my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
+            my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(rnd),index=prod_pie.columns.to_list(),columns=['Share'])
 
         elif pie_values == 'value':
-            my_pie = pd.DataFrame((prod_pie.sum().values).round(1),index=prod_pie.columns.to_list(),columns=['GWh'])
+            if Unit== 'GWh':
+                my_pie = pd.DataFrame((prod_pie.sum().values).round(rnd),index=prod_pie.columns.to_list(),columns=['GWh'])
+            elif Unit =='TWh':
+                my_pie = pd.DataFrame((prod_pie.sum().values/1000.0).round(rnd),index=prod_pie.columns.to_list(),columns=['TWh'])                
+            
           
             
 
@@ -335,13 +339,13 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share'):
                               colLoc='center',
                               cellLoc='center',bbox=(1.25,0.2,0.1,0.5)) 
         the_table.auto_set_font_size(False)
-        the_table.set_fontsize(15)
+        the_table.set_fontsize(font)
         
         fig.savefig(r'Graphs\ ' + region + 'pie_Result.svg', dpi=fig.dpi,bbox_inches='tight')  
         
 
         
-def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share'):
+def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share',Unit='GWh',rnd=1,font=15):
     mnth=['Jan',
  'Jan0',
  'Jan1',
@@ -561,11 +565,13 @@ def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share'):
         fig.savefig(r'Graphs\ ' +  sp_tech + ' Vs System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
         
     if pie_values=='share':
-        my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(1),index=prod_pie.columns.to_list(),columns=['Share'])
+        my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(rnd),index=prod_pie.columns.to_list(),columns=['Share'])
     
     elif pie_values == 'value':
-        my_pie = pd.DataFrame((prod_pie.sum().values).round(1),index=prod_pie.columns.to_list(),columns=['GWh'])
-      
+            if Unit== 'GWh':
+                my_pie = pd.DataFrame((prod_pie.sum().values).round(rnd),index=prod_pie.columns.to_list(),columns=['GWh'])
+            elif Unit =='TWh':
+                my_pie = pd.DataFrame((prod_pie.sum().values/1000.0).round(rnd),index=prod_pie.columns.to_list(),columns=['TWh'])         
         
     
     elif pie_values != 'share' or pie_values != 'value':
@@ -594,8 +600,9 @@ def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share'):
                          rowLoc ='center',
                          colLoc='center',
                          cellLoc='center',bbox=(1.25,0.2,0.1,0.5)) 
+
     the_table.auto_set_font_size(False)
-    the_table.set_fontsize(15)
+    the_table.set_fontsize(font)
     
 
     plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)         
