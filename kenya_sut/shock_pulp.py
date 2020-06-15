@@ -16,15 +16,20 @@ kenya.calc_all()
 kenya.aggregate()
 kenya.add_dict()
 
+kenya.plot_dx(Unit = 'K EUR')
+kenya.plot_dv(Unit = 'K EUR')
+kenya.plot_dS(indicator='Green Water')
 #%%
-#step2: benefit
+#step2: Benefit
 kenya.shock(path = r'Database\Shock_pulp.xlsx' , VA=True, S=True, Z=True)
 
 kenya.calc_all()
 kenya.aggregate()
 kenya.add_dict()
 
-
+kenya.plot_dx(Unit = 'K EUR')
+kenya.plot_dv(Unit = 'K EUR')
+kenya.plot_dS(indicator='CO2')
 #%%
 results = kenya.results
 

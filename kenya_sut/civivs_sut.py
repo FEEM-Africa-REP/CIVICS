@@ -458,6 +458,7 @@ class C_SUT:
 
     def plot_dx(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,percent = False):
         import matplotlib.pyplot as plt
+        plt.style.use(['ggplot'])
 
         
         # To check if the shock is implemented or not
@@ -526,7 +527,7 @@ class C_SUT:
     def plot_dv(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,drop='unused',percent=False):
         
         import matplotlib.pyplot as plt
-
+        plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
         try:
@@ -598,7 +599,8 @@ class C_SUT:
     def plot_dp(self,aggregation = True,level = None):
         
         import matplotlib.pyplot as plt
-        import seaborn as sns        
+        import seaborn as sns
+        plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
         try:
@@ -653,7 +655,7 @@ class C_SUT:
     def plot_dS(self,details = True, Kind = 'bar', stacked=True , indicator='CO2' ,Type = 'percentage'):
         
         import matplotlib.pyplot as plt
-
+        plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
         try:
