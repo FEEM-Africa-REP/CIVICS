@@ -14,6 +14,7 @@ class C_SUT:
         
         import pandas as pd
         import numpy as np
+        import pymrio
         self.path = path
         
         # importing the whole Database (SUT)       
@@ -23,7 +24,7 @@ class C_SUT:
         self.U = self.SUT.loc['Commodities','Activities']
         self.V = self.SUT.loc['Activities','Commodities']
         self.Z = self.SUT.loc[['Commodities','Activities'], ['Commodities','Activities']]
-        self.S = self.SUT.loc['EORA Satellite Accounts',['Commodities','Activities']]
+        self.S = self.SUT.loc['Satellite Accounts',['Commodities','Activities']]
         
         
         # computing total final demand (Y) by importing households (HH), investment (IN), government (GO) and export (EX) 
@@ -51,13 +52,13 @@ class C_SUT:
         self.S_ind = self.S.index
 
         # computing matrices of coefficients
-        self.z = pd.DataFrame(self.Z.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.Z.index, columns=self.Z.columns)
-        self.va = pd.DataFrame(self.VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
-        self.s = pd.DataFrame(self.S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns)
+        self.z = pymrio.calc_A(self.Z, self.X)
+        self.va = pymrio.calc_S(self.VA, self.X)
+        self.s = pymrio.calc_S(self.S, self.X)
         #self.imp = pd.DataFrame(self.IM.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.IM.index, columns=self.IM.columns)
-        self.l = np.linalg.inv(np.identity(len(self.z)) - self.z)
+        self.l = pymrio.calc_L(self.z)
         #leontief price model
-        self.p=pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l, index=['Price'], columns=self.VA.columns)
+        self.p = pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l, index=['Price'], columns=self.VA.columns)
         
         self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'va':self.va,'z':self.z}
         self.counter = 1
@@ -457,6 +458,7 @@ class C_SUT:
 
     def plot_dx(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,percent = False):
         import matplotlib.pyplot as plt
+        plt.style.use(['ggplot'])
 
         
         # To check if the shock is implemented or not
@@ -470,9 +472,15 @@ class C_SUT:
         if Unit == 'M KSH':
             ex_rate = 1.0
         elif Unit == 'M USD':
-            ex_rate = 2.0
-        elif Unit !='M KSH' or 'M USD' :
-            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD'))
+            ex_rate = 0.00939548
+        elif Unit == 'K USD':
+            ex_rate = 0.00939548*1000
+        elif Unit == 'K EUR':
+            ex_rate = 0.00833961*1000
+            
+            
+        elif Unit !='M KSH' or 'M USD'or'K USD'or'K EUR' :
+            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD','K USD','K EUR'))
         
         # Finding if the graphs should be aggregated or not
         if aggregation: 
@@ -519,7 +527,7 @@ class C_SUT:
     def plot_dv(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,drop='unused',percent=False):
         
         import matplotlib.pyplot as plt
-
+        plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
         try:
@@ -531,9 +539,15 @@ class C_SUT:
         if Unit == 'M KSH':
             ex_rate = 1.0
         elif Unit == 'M USD':
-            ex_rate = 2.0
-        elif Unit !='M KSH' or 'M USD' :
-            raise ValueError('The unit should be {} or {}'.format('M KSH','M USD'))
+            ex_rate = 0.00939548
+        elif Unit == 'K USD':
+            ex_rate = 0.00939548*1000
+        elif Unit == 'K EUR':
+            ex_rate = 0.00833961*1000
+            
+            
+        elif Unit !='M KSH' or 'M USD'or'K USD'or'K EUR' :
+            raise ValueError('The unit should be {} , {},{} or {}'.format('M KSH','M USD','K USD','K EUR'))
         
         # Finding if the graphs should be aggregated or not
         if aggregation: 
@@ -585,7 +599,8 @@ class C_SUT:
     def plot_dp(self,aggregation = True,level = None):
         
         import matplotlib.pyplot as plt
-        import seaborn as sns        
+        import seaborn as sns
+        plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
         try:
@@ -640,7 +655,7 @@ class C_SUT:
     def plot_dS(self,details = True, Kind = 'bar', stacked=True , indicator='CO2' ,Type = 'percentage'):
         
         import matplotlib.pyplot as plt
-
+        plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
         try:
@@ -760,12 +775,54 @@ class C_SUT:
         self.results['Y_' + str(self.counter)]= self.Y_c
         self.results['va_' + str(self.counter)]= self.va_c
         self.results['z_' + str(self.counter)]= self.z_c
+        self.results['S_' + str(self.counter)]= self.S_c
+        self.results['S_agg' + str(self.counter)]= self.S_c_agg
+        
         
         self.counter += 1
   
 
 
+    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'optimization\optimization.xlsx',w_ext=['Green Water'],em_ext=['CO2']):
+        import pandas as pd
+        
+        #try : 
+           
+        OPT = pd.read_excel(directory,sheet_name='input',index_col=[0,1],header=[0,1])
+        
+         # Calculateing different invoces using dictionaries and the number of senarios
+        INV = self.results['VA_'+ str(inv_sen)].values.sum().sum() - self.VA.sum().sum()
+        SAV = -self.results['VA_'+ str(sav_sen)].values.sum().sum() + self.VA.sum().sum()
+        W_I =  self.results['S_agg' + str(inv_sen)].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
+        W_S = -self.results['S_agg' + str(sav_sen)].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
 
+        E_I =  self.results['S_agg' + str(inv_sen)].loc[em_ext].sum() .sum()- self.S_agg.loc[em_ext].sum().sum()
+        E_S = -self.results['S_agg' + str(sav_sen)].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum()  .sum()         
+        
+        
+        ROI = INV/SAV
+        
+        # Writing the results on the data frame
+        OPT.loc[OPT.index,('ROI','kSh/FU')]=ROI
+        OPT.loc[OPT.index,('Saving','kSh/FU')]=SAV 
+        
+        OPT.loc[OPT.index,('Water Saving','m3/FU')]=W_S 
+        OPT.loc[OPT.index,('Water Consumption','m3/FU')]=W_I
+        
+        OPT.loc[OPT.index,('Emission Saving','ton/FU')]=E_S 
+        OPT.loc[OPT.index,('Emission Consumption','ton/FU')]=E_I           
+        
+        
+        sce_name = OPT.index.get_level_values(0).to_list()
+       
+        save_dir = r'optimization\ ' + sce_name[0] + '.xlsx'
+        with pd.ExcelWriter(save_dir) as writer:
+            OPT.to_excel(writer)
+            
+        # except:
+        #     raise ValueError('Please Use Aggregation Function and Add to dictionary function for every step')
+            
+        
       
         
     def optimize(self,scenario):
