@@ -3,10 +3,10 @@
 
 # In this model, kenya is divided into 4 different regions which are:
 
-        #1. Nayrobi Region: NBOR
-        #2. Coast Region: CSTR 
-        #3. Western Region: WSTR
-        #4. Mont Kenya Region: MTKR
+    #1. Nayrobi Region: NBOR
+    #2. Coast Region: CSTR 
+    #3. Western Region: WSTR
+    #4. Mont Kenya Region: MTKR
 
 # Parameters:
 
@@ -48,16 +48,16 @@ locations:
 
             biodigestor:
                 constraints:
-                    energy_cap_equals: 40000                 # 1000 Nm3/h equals 10000 kWh/h
+                    energy_cap_equals: 4000                # 4000 Nm3/h
 
 
             BiogasStorage:
                 constraints:
-                    storage_cap_equals: 40000000           # 10mln kWh = 1mln Nm3 
+                    storage_cap_equals: 4000000            # 4mln Nm3 
 
             bio_coffee_pp:
                 constraints:
-                    energy_cap_equals: 20000                      
+                    energy_cap_equals: 20000               # 20 MW gas turbine        
                           
             demand_power:
                 constraints:
