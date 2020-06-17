@@ -58,7 +58,7 @@ class C_SUT:
         #self.imp = pd.DataFrame(self.IM.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.IM.index, columns=self.IM.columns)
         self.l = pymrio.calc_L(self.z)
         #leontief price model
-        self.p = pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l, index=['Price'], columns=self.VA.columns)
+        self.p = pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l.values, index=['Price'], columns=self.VA.columns)
         
         self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'va':self.va,'z':self.z}
         self.counter = 1
@@ -708,7 +708,7 @@ class C_SUT:
             if details:
                 dS.plot(kind = Kind , stacked = stacked)
                 plt.title('Change in {}'.format(indicator))     
-                plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
+                plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(Unit)
                 
             if details == False:
@@ -728,7 +728,7 @@ class C_SUT:
             if details:
                 dS.plot(kind = Kind , stacked = stacked)
                 plt.title('Change in {}'.format(indicator))     
-                plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
+                plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(Unit)
             if details == False:
                 dS.plot(kind = Kind , stacked = stacked,legend=False)
