@@ -178,11 +178,12 @@ techs:
             carrier_out: biogas
 
         constraints:
+            energy_eff: 200             # 1 ton of Biomass = 200 Nm3 of Biomethane
             lifetime: 25
 
         costs: 
             monetary:
-                energy_cap: 800       # 8000 $/Nm3/h cost of (Biodigestor + Upgrader) per unit of Flow Rate becomes 800 when considering $/kWh/h
+                energy_cap: 7000       # 7000 $/Nm3/h cost of (Biodigestor + Upgrader) 
                 interest_rate: 0.10  
 
 ############################## New BioGas Storage Tank ##############################
@@ -200,9 +201,11 @@ techs:
 
         costs:
             monetary:
-                storage_cap: 0
+                storage_cap: 0      # missing the cost of methane storage
                 interest_rate: 0.1
+
 ############################## New Coffee Biomass Power Plant ##############################  
+    
     bio_coffee_pp:
     
         essentials:
@@ -213,15 +216,15 @@ techs:
             carrier_out: power                    
                 
         constraints:
-            energy_eff: 0.5          # thermodynamic efficiency of the machine                                        
+            energy_eff: 5           # thermodynamic efficiency of the machine 0.5, times, 10 kWh/Nm3 = 5                                      
             lifetime: 25                                  
         
         costs:
             monetary:  
-                energy_cap: 1100
-                om_annual: 40                  
-                om_prod: 0.016                    
-                om_con: 0.0                      
+                energy_cap: 800
+                om_annual: 36        # Fixed O&M  [USD/kW*yr]        
+                om_prod: 0.005       # Var O&M [USD/kWh]             
+                om_con: 0.0          # the fuel is free            
                 interest_rate: 0.10   
                                          
                 

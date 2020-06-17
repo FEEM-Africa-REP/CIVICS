@@ -341,7 +341,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1
         the_table.auto_set_font_size(False)
         the_table.set_fontsize(font)
         
-        fig.savefig(r'Graphs\ ' + region + 'pie_Result.svg', dpi=fig.dpi,bbox_inches='tight')  
+        plt.savefig(r'Graphs\ ' + region + 'pie_Result.svg', dpi=fig.dpi,bbox_inches='tight')  
         
 
         
@@ -608,20 +608,3 @@ def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share',Unit='GWh',rnd=1,
     plt.subplots_adjust(bottom=0.1, right=0.8, top=0.9)         
     plt.savefig(r'Graphs\Pie_System_Result.svg', dpi=fig.dpi,bbox_inches='tight')
     plt.show()
-
-        
-
-
-        
-        
-        
-
-
-        
-        
-        
-        
-        
-        
-
-       

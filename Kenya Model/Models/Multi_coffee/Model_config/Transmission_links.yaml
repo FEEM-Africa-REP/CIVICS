@@ -47,17 +47,17 @@ techs:
                 om_prod: 0.000120348
 
 ############################### High Voltage(UGA) Grid ############################### 
-    hvdc_import:
-        essentials:
-            name: 'Imports and Exports with UGA'
-            parent: transmission
-            carrier: power
-            color: '#00FF00'
-        constraints:
-            energy_eff_per_distance: 0.995
-        costs:
-            monetary:
-                om_prod: 0.002
+    # hvdc_import:
+    #     essentials:
+    #         name: 'Imports and Exports with UGA'
+    #         parent: transmission
+    #         carrier: power
+    #         color: '#00FF00'
+    #     constraints:
+    #         energy_eff_per_distance: 0.995
+    #     costs:
+    #         monetary:
+    #             om_prod: 0.002
               
                 
 links:                             

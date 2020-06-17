@@ -1,3 +1,5 @@
+
+
 techs:
 
     biomass_transmission:
@@ -8,12 +10,13 @@ techs:
             parent: transmission
             carrier: biomass
         constraints:
-            energy_cap_max: 10000000000000.0
+            # energy_cap_max:               # no limit on the trasnportation capacity
             energy_eff: 1.0  
             lifetime: 1.0
             
         costs:
             monetary:
+                energy_cap_per_distance: 0   # assign price for moving the biomass from mill to central plant
                 interest_rate: 0.1
 
 
@@ -28,8 +31,8 @@ techs:
         costs:
             monetary:
                 interest_rate: 0.0
-                energy_cap: 0.0
-                om_con: 0.00          
+                energy_cap: 0.0         # no need to install anything
+                om_con: 0.00            # the biomass is a waste, has no cost
 
 locations:
 
