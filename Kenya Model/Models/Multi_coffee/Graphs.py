@@ -1,4 +1,4 @@
-def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1,font=15):
+def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1,font=15,rational='prod'):
     
     
     mnth=['Jan',
@@ -58,6 +58,10 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1
     import pandas as pd
     import matplotlib.pyplot as plt
     from matplotlib import gridspec
+    import matplotlib as mpl
+
+
+
     
     # Reading Information from EXCEL File
     
@@ -101,6 +105,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1
         # Filling Production DataFrame With Calliope Results 
         for i in range (len(Pps_tech)):
             Prod[Pps_tech.values[i,0]] = model.get_formatted_array('carrier_prod').loc[{'techs':Pps_tech.values[i,0],'carriers':Dem_tech.values[0,1],'locs':[region]}].sum('locs').to_pandas().T
+        
         prod_pie = Prod.copy()/cf
        
         # Make a copy of nodes because we will remove 1 node in every graph
@@ -144,7 +149,12 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1
     
         # Building The Production and Import DataFrame
         production = pd.DataFrame(0,index = ind , columns =Pps_tech['Tech'].tolist() + imp_list )
-    
+        
+        imp_pie = Imp_from.copy()
+        exp_pie = Exp_to.copy()
+        
+        diff = imp_pie.sum().sum()+exp_pie.sum().sum()
+
         full_prod_list = list(production.columns)
         for i in range (len(full_prod_list)):
             try:
@@ -205,6 +215,7 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1
             fig, (ax1) = plt.subplots(1, figsize=(8,6))
             ax1.margins(x=0)
             ax1.margins(y=0.1)
+
             # Demand Plot
             ax1.plot(Demand[region][day:end].index,Demand[region][day:end].values,'#000000', alpha=0.5, linestyle = '-', label ='Demand')
         
@@ -298,30 +309,105 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1
               
             fig.savefig(r'Graphs\ ' + region + '_Result.svg', dpi=fig.dpi,bbox_inches='tight')  
 
+
+        if rational=='cons':
+
+
+            if diff > 0:
+                
+                    
+                if pie_values == 'value':
+                    
+                    if Unit== 'GWh':
+                        my_ind = prod_pie.columns.to_list() + ['Imports']
+                        my_pie = pd.DataFrame(0,index=my_ind,columns=['GWh'])
+                        a = prod_pie.sum()
+            
+                        for i in range(len(my_ind)-1):
+                            my_pie.loc[my_ind[i],'GWh'] = a[i]
+                            
+                        my_pie.loc['Imports','GWh'] = diff/1000.0                        
+                        
+                    if Unit== 'TWh':
+                        
+                        my_ind = prod_pie.columns.to_list() + ['Imports']
+                        my_pie = pd.DataFrame(0,index=my_ind,columns=['TWh'])
+                        a = prod_pie.sum()
+            
+                        for i in range(len(my_ind)-1):
+                            my_pie.loc[my_ind[i],'TWh'] = a[i]/1000.0
+                            
+                        my_pie.loc['Imports','TWh'] = diff/1000000.0    
+                        
+                elif pie_values=='share':
+                    
+                        my_ind = prod_pie.columns.to_list() + ['Imports']
+                        my_pie0 = pd.DataFrame(0,index=my_ind,columns=['GWh'])
+                        a = prod_pie.sum()
+            
+                        for i in range(len(my_ind)-1):
+                            my_pie0.loc[my_ind[i],'GWh'] = a[i]
+                            
+                        my_pie0.loc['Imports','GWh'] = diff/1000.0 
+                        
+                        my_pie=my_pie0.copy()
+                        tot = my_pie0.sum().sum()
+                        
+                        for i in range(len(my_ind)):
+                            my_pie.loc[my_ind[i],'GWh']=  my_pie0.loc[my_ind[i],'GWh'] / tot*100
+                        
+                        my_pie.columns=['Share']  
+
+                            
+                        
+                        
+                my_pie=my_pie.round(rnd)
+    
+                
+            else:
+    
+                
+                # Pie Chart
+                if pie_values=='share':
+                    my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(rnd),index=prod_pie.columns.to_list(),columns=['Share'])
         
-        # Pie Chart
-        if pie_values=='share':
-            my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(rnd),index=prod_pie.columns.to_list(),columns=['Share'])
-
-        elif pie_values == 'value':
-            if Unit== 'GWh':
-                my_pie = pd.DataFrame((prod_pie.sum().values).round(rnd),index=prod_pie.columns.to_list(),columns=['GWh'])
-            elif Unit =='TWh':
-                my_pie = pd.DataFrame((prod_pie.sum().values/1000.0).round(rnd),index=prod_pie.columns.to_list(),columns=['TWh'])                
-            
-          
+                elif pie_values == 'value':
+                    if Unit== 'GWh':
+                        my_pie = pd.DataFrame((prod_pie.sum().values).round(rnd),index=prod_pie.columns.to_list(),columns=['GWh'])
+                    elif Unit =='TWh':
+                        my_pie = pd.DataFrame((prod_pie.sum().values/1000.0).round(rnd),index=prod_pie.columns.to_list(),columns=['TWh'])                
             
 
-        elif pie_values != 'share' or pie_values != 'value':
-            raise ValueError('the pie_values should be **share** or **value** ')
+
+        if rational=='prod':
+
+            if pie_values=='share':
+                my_pie = pd.DataFrame(((prod_pie.sum().values/prod_pie.sum().sum())*100).round(rnd),index=prod_pie.columns.to_list(),columns=['Share'])
+    
+            elif pie_values == 'value':
+                if Unit== 'GWh':
+                    my_pie = pd.DataFrame((prod_pie.sum().values).round(rnd),index=prod_pie.columns.to_list(),columns=['GWh'])
+                elif Unit =='TWh':
+                    my_pie = pd.DataFrame((prod_pie.sum().values/1000.0).round(rnd),index=prod_pie.columns.to_list(),columns=['TWh'])            
+        # elif pie_values != 'share' or pie_values != 'value':
+        #     raise ValueError('the pie_values should be **share** or **value** ')
             
         myind = my_pie.index.to_list()
         pie_pps = []
         pie_cols = []
         
+
+        
+        
+
+        
         for i in range(len(myind)):
             pie_pps.append(Colors.loc[myind[i],'Name'])
             pie_cols.append(Colors.loc[myind[i],'Color'])
+            
+            
+
+
 
         plt.figure(figsize=(10,10))
         plt.title('{} Production Mix'.format(region),fontname="Times New Roman",fontweight="bold",fontsize=24)
@@ -341,8 +427,12 @@ def Dispatch_reg(model,sp_tech,sp_reg,weekly,pie_values='share',Unit='GWh',rnd=1
         the_table.auto_set_font_size(False)
         the_table.set_fontsize(font)
         
-        plt.savefig(r'Graphs\ ' + region + 'pie_Result.svg', dpi=fig.dpi,bbox_inches='tight')  
         
+        plt.savefig(r'Graphs\ ' + region + 'pie_Result.svg', dpi=500,bbox_inches='tight')  
+        
+
+        
+
 
         
 def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share',Unit='GWh',rnd=1,font=15):
@@ -401,6 +491,7 @@ def Dispatch_sys(model,sp_tech,weekly=False,pie_values='share',Unit='GWh',rnd=1,
     import pandas as pd
     import matplotlib.pyplot as plt
     from matplotlib import gridspec
+
     
     # Reading Information from EXCEL File
     
