@@ -38,6 +38,17 @@ locations:
 
 ################# Mills in MTKR #####################
 
+    M0:
+        coordinates:
+            lat: -0.483448
+            lon: 37.126835
+
+        techs:
+            supply_biomass:
+                constraints:
+                    resource: file=Biomass.csv:M0               
+                    resource_unit: energy  
+    
     M1:
         coordinates:
             lat: 0.3390
@@ -209,6 +220,14 @@ links:
 # Free Transmission:
 # Here we can limit the amount of biomass available per every mill              
                 
+    M0,NBOR:
+        techs:
+            biomass_transmission:  
+                         
+                costs:
+                    monetary:
+                        energy_cap_per_distance: 0.0
+    
     M1,NBOR:
         techs:
             biomass_transmission:  
