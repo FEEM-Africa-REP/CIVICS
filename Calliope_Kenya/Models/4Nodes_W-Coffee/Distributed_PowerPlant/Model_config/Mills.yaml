@@ -220,7 +220,7 @@ links:
 # Free Transmission:
 # Here we can limit the amount of biomass available per every mill              
                 
-M0,MTKR:
+    M0,MTKR:
         techs:
             biomass_transmission:  
                          
