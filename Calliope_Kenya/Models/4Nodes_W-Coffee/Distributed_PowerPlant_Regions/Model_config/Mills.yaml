@@ -209,7 +209,7 @@ links:
 # Free Transmission:
 # Here we can limit the amount of biomass available per every mill              
                 
-    M1,NBOR:
+    M1,MTKR:
         techs:
             biomass_transmission:  
                          
@@ -217,7 +217,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
                         
-    M2,NBOR:
+    M2,MTKR:
         techs:
             biomass_transmission:               
                 
@@ -225,7 +225,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
 
-    M3,NBOR:
+    M3,MTKR:
         techs:
             biomass_transmission:            
                 
@@ -233,7 +233,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
                         
-    M4,NBOR:
+    M4,MTKR:
         techs:
             biomass_transmission:                
                 
@@ -241,7 +241,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
 
-    M5,NBOR:
+    M5,MTKR:
         techs:
             biomass_transmission:                
                 
@@ -249,7 +249,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
                         
-    M6,NBOR:
+    M6,MTKR:
         techs:
             biomass_transmission:               
                 
@@ -257,7 +257,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
 
-    M7,NBOR:
+    M7,MTKR:
         techs:
             biomass_transmission:                
                 
@@ -313,7 +313,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
                         
-    M14,NBOR:
+    M14,WSTR:
         techs:
             biomass_transmission:                
                 
@@ -321,7 +321,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
 
-    M15,NBOR:
+    M15,WSTR:
         techs:
             biomass_transmission:                  
                 
@@ -329,7 +329,7 @@ links:
                     monetary:
                         energy_cap_per_distance: 0.0
                         
-    M16,NBOR:
+    M16,WSTR:
         techs:
             biomass_transmission:                
                 
