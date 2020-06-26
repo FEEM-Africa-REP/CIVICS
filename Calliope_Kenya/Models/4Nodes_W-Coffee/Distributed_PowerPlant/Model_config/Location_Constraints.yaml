@@ -55,7 +55,7 @@ locations:
 
             BiogasStorage:
                 constraints:
-                    storage_cap_equals: 1500000            # 250k x 6 Nm3 
+                    storage_cap_equals: 1800000            # 250k x 6 Nm3 \\ Try to increase storage 300 x 6
 
             bio_coffee_pp:
                 constraints:
@@ -117,7 +117,7 @@ locations:
 
             BiogasStorage:
                 constraints:
-                    storage_cap_equals: 750000            # 250k x 3 Nm3 
+                    storage_cap_equals: 900000            # 250k x 3 Nm3 \\ Try to increase storage 300 x 3
 
             bio_coffee_pp:
                 constraints:
@@ -155,7 +155,7 @@ locations:
 
             BiogasStorage:
                 constraints:
-                    storage_cap_equals: 1750000            # 250k x 7 Nm3 
+                    storage_cap_equals: 2100000            # 250k x 7 Nm3 \\ Try to increase storage 300 x 7
 
             bio_coffee_pp:
                 constraints:
