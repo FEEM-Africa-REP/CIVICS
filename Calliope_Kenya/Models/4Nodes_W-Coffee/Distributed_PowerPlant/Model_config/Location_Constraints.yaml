@@ -146,20 +146,20 @@ locations:
                     energy_cap_equals: 8900 
                     resource: file=Hydro_Small.csv:MTKR   
     
-            # NBOR has 7 Mills
+            # MTKR has 8 Mills
 
             biodigestor:
                 constraints:
-                    energy_cap_equals: 1750                # 250 x 7 Nm3/h
+                    energy_cap_equals: 2000                # 250 x 8 Nm3/h
 
 
             BiogasStorage:
                 constraints:
-                    storage_cap_equals: 2100000            # 250k x 7 Nm3 \\ Try to increase storage 300 x 7
+                    storage_cap_equals: 2400000            # 250k x 8 Nm3 \\ Try to increase storage 300 x 8
 
             bio_coffee_pp:
                 constraints:
-                    energy_cap_equals: 7000               # 1 x 7 MW genset        
+                    energy_cap_equals: 8000               # 1 x 8 MW genset        
 
 
             demand_power:
