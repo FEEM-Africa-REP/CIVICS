@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-CIVICS_SUT: A Tool for Input Output Analysis with Supply and Use Format 
-@ FEEM: Fondazione Eni Enrico Mattei 
+REP CVX: A Tool for Input Output Analysis with Supply and Use Format 
+@ FEEM: Fondazione Eni Enrico Mattei - Africa REP
 @authors: 1. Negar Namazifard , Nicolo Golinucci, Mohammad Amin Tahavori
 """
 
 class C_SUT:
     
-    
     def __init__(self,path):
-        
-        print('CIVICS SUT: A python Class for SUT Input Output Analysis Developed in Fondazione Eni Enrico Mattei')
-        
+
+        print('REP-CVX: A python class for Supply and Use input-output analysis developed in Fondazione Eni Enrico Mattei by Africa REP')
         import pandas as pd
-        import numpy as np
         import pymrio
+        import warnings
+        
         self.path = path
+        warnings.filterwarnings("ignore") 
         
         # importing the whole Database (SUT)       
         self.SUT = pd.read_excel(self.path, index_col=[0,1,2,3,4], header = [0,1,2,3,4])
@@ -63,31 +63,18 @@ class C_SUT:
         self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'va':self.va,'z':self.z}
         self.counter = 1
         
-# Probably I would delete this function...       
-    def parse(self):
-        
-        import pandas as pd
-        import numpy as np
-        
-        # Import on final demand 
-        self.IM_fd = self.SUT.loc['Rest of the World', 'Households']
-        self.IM_inv = self.SUT.loc['Rest of the World', 'Savings-Investment']
-
-
     def calc_all(self):        
+        
         import pandas as pd
         import numpy as np
-        
-        
-        
+               
         try:
-            
             self.l_c = np.linalg.inv(np.identity(len(self.z_c)) - self.z_c)
             self.X_c = pd.DataFrame(self.l_c @ self.Y_c.values , index = self.X.index , columns = self.X.columns)
             
-                    # re-computing flow matrices
+            # re-computing flow matrices
             self.VA_c = pd.DataFrame(self.va_c.values @ (self.X_c.values  * np.identity(len(self.X_c))),index = self.VA_ind,columns =  self.Z.columns)
-                    #self.IMP_c = pd.DataFrame(self.imp_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
+            #self.IMP_c = pd.DataFrame(self.imp_c.values @ (self.X_c.values  * np.identity(len(self.X))),index = self.IMP_ind,columns =  self.Z.columns)
             self.S_c = pd.DataFrame(self.s_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.S_ind , columns = self.Z.columns)
             self.Z_c = pd.DataFrame(self.z_c.values @ (self.X_c.values * np.identity(len(self.X_c))),index = self.Z.index , columns = self.Z.columns)
             self.p_c=pd.DataFrame(self.va_c.sum().values.reshape(1,len(self.va_c.columns)) @ self.l_c, index=['Price'], columns=self.VA_c.columns)
@@ -127,9 +114,7 @@ class C_SUT:
          
 
             print('Both baseline and shocked results are aggregated')
-            
-            
-            
+       
         except:            
 
             self.X_agg = self.X.groupby(level=level_x , sort = sort).sum()
@@ -293,7 +278,7 @@ class C_SUT:
                     
 ##################################################################################################################              
 
-    def Save_all(self, path,level = None,drop='unused'):
+    def Save_all(self, path='Result',level = None,drop='unused'):
         
         import pandas as pd
         import xlsxwriter
@@ -456,7 +441,7 @@ class C_SUT:
     
 
 
-    def plot_dx(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,percent = False):
+    def plot_dx(self, aggregation=True, kind='bar', unit='M KSH', stacked=True, level=None, percent=False):
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
 
@@ -466,20 +451,18 @@ class C_SUT:
             a = self.X_c
         except:
             raise ValueError('This function can not be used if no shock is impemented')
-
             
         # Checking the unit that user want to use for doing graphs
-        if Unit == 'M KSH':
+        if unit == 'M KSH':
             ex_rate = 1.0
-        elif Unit == 'M USD':
+        elif unit == 'M USD':
             ex_rate = 0.00939548
-        elif Unit == 'K USD':
+        elif unit == 'K USD':
             ex_rate = 0.00939548*1000
-        elif Unit == 'K EUR':
+        elif unit == 'K EUR':
             ex_rate = 0.00833961*1000
             
-            
-        elif Unit !='M KSH' or 'M USD'or'K USD'or'K EUR' :
+        elif unit !='M KSH' or 'M USD'or'K USD'or'K EUR' :
             raise ValueError('The unit should be {} or {}'.format('M KSH','M USD','K USD','K EUR'))
         
         # Finding if the graphs should be aggregated or not
@@ -511,20 +494,24 @@ class C_SUT:
         
         if percent:
             dx = (new - old)/old
-            Unit = '%'
+            unit = '%'
             
         if percent == False:
             dx = (new - old) * ex_rate
             
-        
-        dx.plot(kind = Kind , stacked = stacked)
-        plt.title('Production Change')
-        plt.ylabel(Unit)
+        if level == None:
+            title=''
+        else:
+            title=' by '+str(level)
+            
+        dx.plot(kind=kind, stacked=stacked)
+        plt.title('Production Change'+title)
+        plt.ylabel(unit)
         plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
         plt.show()
         
   
-    def plot_dv(self,aggregation = True, Kind = 'bar' , Unit = 'M KSH',stacked=True , level = None,drop='unused',percent=False):
+    def plot_dv(self,aggregation = True, kind = 'bar' , unit = 'M KSH',stacked=True , level = None,drop='unused',percent=False):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
@@ -536,17 +523,17 @@ class C_SUT:
             raise ValueError('This function can not be used if no shock is impemented')
             
         # Checking the unit that user want to use for doing graphs
-        if Unit == 'M KSH':
+        if unit == 'M KSH':
             ex_rate = 1.0
-        elif Unit == 'M USD':
+        elif unit == 'M USD':
             ex_rate = 0.00939548
-        elif Unit == 'K USD':
+        elif unit == 'K USD':
             ex_rate = 0.00939548*1000
-        elif Unit == 'K EUR':
+        elif unit == 'K EUR':
             ex_rate = 0.00833961*1000
             
             
-        elif Unit !='M KSH' or 'M USD'or'K USD'or'K EUR' :
+        elif unit !='M KSH' or 'M USD'or'K USD'or'K EUR' :
             raise ValueError('The unit should be {} , {},{} or {}'.format('M KSH','M USD','K USD','K EUR'))
         
         # Finding if the graphs should be aggregated or not
@@ -581,17 +568,22 @@ class C_SUT:
         
         if percent:
             dv = (new - old) / old
-            Unit = '%'
+            unit = '%'
             
         if percent == False:
             dv = (new - old) * ex_rate
-            
+        
+        if level == None:
+            title=''
+        else:
+            title=' by '+str(level)
+                    
         dv = dv.drop(drop)
         dv=dv.T
         
-        dv.plot(kind = Kind , stacked = stacked)
-        plt.title('Value Added Change')
-        plt.ylabel(Unit)
+        dv.plot(kind = kind , stacked = stacked, colormap='terrain')
+        plt.title('Value Added Change'+title)
+        plt.ylabel(unit)
         plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
         plt.show()        
 
@@ -645,14 +637,14 @@ class C_SUT:
         ax = sns.heatmap(dp , annot=False)
 
         
-        # dp.plot(kind = Kind )
+        # dp.plot(kind = kind )
         # plt.title('Price Change')
         plt.ylabel('price ratio')
         # plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
         plt.show()    
     
     
-    def plot_dS(self,details = True, Kind = 'bar', stacked=True , indicator='CO2' ,Type = 'percentage'):
+    def plot_dS(self,details = True, kind = 'bar', stacked=True , indicator='CO2' ,Type = 'percentage'):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
@@ -700,25 +692,25 @@ class C_SUT:
         
         if Type == 'percentage':
             
-            Unit = "%"
+            unit = "%"
             
             dS = (new  - old) / old * 100
             dS=dS.T
             
             if details:
-                dS.plot(kind = Kind , stacked = stacked)
+                dS.plot(kind = kind , stacked = stacked)
                 plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
-                plt.ylabel(Unit)
+                plt.ylabel(unit)
                 
             if details == False:
-                dS.plot(kind = Kind , stacked = stacked,legend=False)
+                dS.plot(kind = kind , stacked = stacked,legend=False)
                 plt.title('Change in {}'.format(indicator))  
-                plt.ylabel(Unit)
+                plt.ylabel(unit)
                 
         if Type == 'absolute':
             
-            Unit = "?"
+            unit = "?"
             
             
             dS = (new  - old) 
@@ -726,18 +718,18 @@ class C_SUT:
             dS=dS.T
             
             if details:
-                dS.plot(kind = Kind , stacked = stacked)
+                dS.plot(kind = kind , stacked = stacked)
                 plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
-                plt.ylabel(Unit)
+                plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = Kind , stacked = stacked,legend=False)
+                dS.plot(kind = kind , stacked = stacked,legend=False)
                 plt.title('Change in {}'.format(indicator))  
-                plt.ylabel(Unit)
+                plt.ylabel(unit)
                 
         if Type == 'change':
             
-            Unit = "?"
+            unit = "?"
             
             coffee = new['HIGH RAINFALL (CP)'] + new['COFFEE PROD']
             print(coffee)
@@ -746,28 +738,19 @@ class C_SUT:
             dS=dS.T
             
             if details:
-                dS.plot(kind = Kind , stacked = stacked)
+                dS.plot(kind = kind , stacked = stacked)
                 plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
-                plt.ylabel(Unit)
+                plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = Kind , stacked = stacked,legend=False)
+                dS.plot(kind = kind , stacked = stacked,legend=False)
                 plt.title('Change in {}'.format(indicator))  
-                plt.ylabel(Unit)           
+                plt.ylabel(unit)           
         plt.show()      
 
 
-
-
-
-
-
-
-
-
     def add_dict(self):
-        
-        
+                
         self.results['Z_' + str(self.counter)]= self.Z_c
         self.results['X_' + str(self.counter)]= self.X_c
         self.results['VA_'+ str(self.counter)]= self.VA_c
@@ -778,12 +761,9 @@ class C_SUT:
         self.results['S_' + str(self.counter)]= self.S_c
         self.results['S_agg' + str(self.counter)]= self.S_c_agg
         
-        
         self.counter += 1
-  
 
-
-    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'optimization\optimization.xlsx',w_ext=['Green Water'],em_ext=['CO2']):
+    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'Optimization\optimization.xlsx',w_ext=['Green Water'],em_ext=['CO2']):
         import pandas as pd
         
         #try : 
@@ -800,10 +780,10 @@ class C_SUT:
         E_S = -self.results['S_agg' + str(sav_sen)].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum()  .sum()         
         
         
-        ROI = INV/SAV
+        self.ROI = INV/SAV
         
         # Writing the results on the data frame
-        OPT.loc[OPT.index,('ROI','kSh/FU')]=ROI
+        OPT.loc[OPT.index,('ROI','kSh/FU')]=self.ROI
         OPT.loc[OPT.index,('Saving','kSh/FU')]=SAV 
         
         OPT.loc[OPT.index,('Water Saving','m3/FU')]=W_S 
@@ -821,9 +801,6 @@ class C_SUT:
             
         # except:
         #     raise ValueError('Please Use Aggregation Function and Add to dictionary function for every step')
-            
-        
-      
         
     def optimize(self,scenario):
         import cvxpy as cp
@@ -864,21 +841,3 @@ class C_SUT:
 
         self.Y_opt = pd.DataFrame(Y.value,index=self.Y.index,columns = self.Y.columns)
         self.X_opt = pd.DataFrame(x.value,index=self.X.index,columns = self.X.columns)        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        

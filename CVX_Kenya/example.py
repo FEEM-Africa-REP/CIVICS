@@ -9,7 +9,7 @@ Created on Mon Mar 30 14:02:39 2020
 """
 #1. Import the the mode and database
 
-import civivs_sut as cvx
+import REP_CVX as cvx
 kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
 #%%
 # Now You can have access to all the information You want.
