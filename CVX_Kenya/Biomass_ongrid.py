@@ -8,7 +8,7 @@ Created on Mon Apr 13 17:53:57 2020
 import REP_CVX as cvx
 kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
 env0=kenya.S
-kenya.shock(path = r'Interventions\Shading_nets.xlsx' , Y = True )
+kenya.shock(path = r'Interventions\Biomass_ongrid.xlsx' , Y = True )
 
 kenya.calc_all()
 kenya.aggregate()
@@ -20,7 +20,7 @@ kenya.plot_dp()
 
 kenya.plot_dS(indicator='CO2')
 #%%
-kenya.shock(path = r'Interventions\Shading_nets.xlsx' , Z=True ,VA = True, S=True)
+kenya.shock(path = r'Interventions\Biomass_ongrid.xlsx' , Z=True ,VA = True, S=True)
 
 kenya.calc_all()
 kenya.aggregate()

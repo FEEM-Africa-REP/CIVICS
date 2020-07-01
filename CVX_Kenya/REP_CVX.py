@@ -763,7 +763,7 @@ class C_SUT:
         
         self.counter += 1
 
-    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'Optimization\optimization.xlsx',w_ext=['Green Water'],em_ext=['CO2']):
+    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'Optimization\Optimization.xlsx', w_ext=['Green Water'], em_ext=['CO2']):
         import pandas as pd
         
         #try : 
@@ -795,7 +795,7 @@ class C_SUT:
         
         sce_name = OPT.index.get_level_values(0).to_list()
        
-        save_dir = r'optimization\ ' + sce_name[0] + '.xlsx'
+        save_dir = r'Optimization\ ' + sce_name[0] + '.xlsx'
         with pd.ExcelWriter(save_dir) as writer:
             OPT.to_excel(writer)
             

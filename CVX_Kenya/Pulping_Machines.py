@@ -32,3 +32,4 @@ kenya.plot_dS(indicator='Green Water')
 results = kenya.results
 #%%
 kenya.Int_Ass()
+print(kenya.ROI)
