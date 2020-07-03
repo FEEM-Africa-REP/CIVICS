@@ -29,7 +29,7 @@ kenya.add_dict()
 kenya.plot_dv() 
 kenya.plot_dx()
 kenya.plot_dp()
-kenya.plot_dS()
+kenya.plot_dS(Type='absolute')
 #%%
 results= kenya.results
 #%%

@@ -34,4 +34,5 @@ kenya.plot_dS()
 results= kenya.results
 #%%
 kenya.Int_Ass()
-print(kenya.ROI)
+print('ROI = '+str(round(kenya.ROI,4)))
+print('Annual Savings = '+str(round(kenya.SAV,4)))

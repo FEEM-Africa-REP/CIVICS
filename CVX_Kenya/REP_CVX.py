@@ -511,7 +511,7 @@ class C_SUT:
         plt.show()
         
   
-    def plot_dv(self,aggregation = True, kind = 'bar' , unit = 'M KSH',stacked=True , level = None,drop='unused',percent=False):
+    def plot_dv(self,aggregation=True, kind='bar', unit='M KSH', stacked=True, level=None, drop='unused', percent=False, main_title = 'default', color='terrain'):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
@@ -573,16 +573,20 @@ class C_SUT:
         if percent == False:
             dv = (new - old) * ex_rate
         
-        if level == None:
-            title=''
+        if main_title == 'default':        
+            if level == None:
+                title='Value Added Change'
+            else:
+                title='Value Added Change by '+str(level)
+        
         else:
-            title=' by '+str(level)
-                    
+             title = main_title
+        
         dv = dv.drop(drop)
         dv=dv.T
         
-        dv.plot(kind = kind , stacked = stacked, colormap='terrain')
-        plt.title('Value Added Change'+title)
+        dv.plot(kind = kind , stacked = stacked, colormap=color)
+        plt.title(title)
         plt.ylabel(unit)
         plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
         plt.show()        
@@ -644,7 +648,7 @@ class C_SUT:
         plt.show()    
     
     
-    def plot_dS(self,details = True, kind = 'bar', stacked=True , indicator='CO2' ,Type = 'percentage'):
+    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute'):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
@@ -695,7 +699,7 @@ class C_SUT:
             unit = "%"
             
             dS = (new  - old) / old * 100
-            dS=dS.T
+            dS=dS.groupby(level=0).sum().T
             
             if details:
                 dS.plot(kind = kind , stacked = stacked)
@@ -710,12 +714,19 @@ class C_SUT:
                 
         if Type == 'absolute':
             
-            unit = "?"
+            if indicator=='CO2':
+                unit="ton"
+            
+            else:
+                if indicator=='Green Water':
+                    unit='m$^3$'
+                else:                
+                    unit='?'
             
             
-            dS = (new  - old) 
+            dS = (new  - old)*1000 
             
-            dS=dS.T
+            dS=dS.groupby(level=0).sum().T
             
             if details:
                 dS.plot(kind = kind , stacked = stacked)
@@ -763,34 +774,45 @@ class C_SUT:
         
         self.counter += 1
 
-    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'Optimization\Optimization.xlsx', w_ext=['Green Water'], em_ext=['CO2']):
+    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'Optimization\Optimization.xlsx', w_ext=['Green Water'], em_ext=['CO2'], land=['Capital - Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled']):
         import pandas as pd
         
         #try : 
            
         OPT = pd.read_excel(directory,sheet_name='input',index_col=[0,1],header=[0,1])
         
-         # Calculateing different invoces using dictionaries and the number of senarios
+        # Calculateing different invoces using dictionaries and the number of senarios
         INV = self.results['VA_'+ str(inv_sen)].values.sum().sum() - self.VA.sum().sum()
-        SAV = -self.results['VA_'+ str(sav_sen)].values.sum().sum() + self.VA.sum().sum()
+        self.SAV = -self.results['VA_'+ str(sav_sen)].values.sum().sum() + self.VA.sum().sum()
         W_I =  self.results['S_agg' + str(inv_sen)].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
         W_S = -self.results['S_agg' + str(sav_sen)].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
+        E_I =  self.results['S_agg' + str(inv_sen)].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
+        E_S = -self.results['S_agg' + str(sav_sen)].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
+        L_I = self.results['VA_'+ str(inv_sen)].groupby(level=3).sum().loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+        L_S = -self.results['VA_'+ str(sav_sen)].groupby(level=3).sum().loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+        F_I = self.results['VA_'+ str(inv_sen)].groupby(level=3).sum().loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
+        F_S = -self.results['VA_'+ str(sav_sen)].groupby(level=3).sum().loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
 
-        E_I =  self.results['S_agg' + str(inv_sen)].loc[em_ext].sum() .sum()- self.S_agg.loc[em_ext].sum().sum()
-        E_S = -self.results['S_agg' + str(sav_sen)].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum()  .sum()         
         
-        
-        self.ROI = INV/SAV
+        self.ROI = INV/self.SAV
         
         # Writing the results on the data frame
-        OPT.loc[OPT.index,('ROI','kSh/FU')]=self.ROI
-        OPT.loc[OPT.index,('Saving','kSh/FU')]=SAV 
+        OPT.loc[OPT.index,('ROI','years')]=self.ROI
+        OPT.loc[OPT.index,('Saving','M kSh/FU')]=self.SAV
+        
+        OPT.loc[OPT.index,('Investment','M kSh')]=INV
         
         OPT.loc[OPT.index,('Water Saving','m3/FU')]=W_S 
-        OPT.loc[OPT.index,('Water Consumption','m3/FU')]=W_I
+        OPT.loc[OPT.index,('Water Investment','m3/FU')]=W_I
         
-        OPT.loc[OPT.index,('Emission Saving','ton/FU')]=E_S 
-        OPT.loc[OPT.index,('Emission Consumption','ton/FU')]=E_I           
+        OPT.loc[OPT.index,('Emission Saving','kton/FU')]=E_S 
+        OPT.loc[OPT.index,('Emission Investment','kton/FU')]=E_I
+
+        OPT.loc[OPT.index,('Land Saving','M kSh/FU')]=L_S           
+        OPT.loc[OPT.index,('Land Investment','M kSh/FU')]=L_I           
+
+        OPT.loc[OPT.index,('Workforce Saving','M kSh/FU')]=F_S           
+        OPT.loc[OPT.index,('Workforce Investment','M kSh/FU')]=F_I           
         
         
         sce_name = OPT.index.get_level_values(0).to_list()
