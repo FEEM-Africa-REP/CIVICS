@@ -4,9 +4,10 @@ Created on Mon Apr 13 17:53:57 2020
 
 @author: Amin
 """
-
+# Import the library and the database
 import REP_CVX as cvx
 kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
+
 env0=kenya.S
 kenya.shock(path = r'Interventions\Shading_nets.xlsx' , Y = True )
 

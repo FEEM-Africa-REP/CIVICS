@@ -17,8 +17,8 @@ kenya.add_dict()
 
 #%%
 # Focus on labour impact
-kenya.plot_dv(unit='M KSH', main_title='Investment-induced Labour increase by skill and sector for 1 M KSH expenditure in Eco-pulpers', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines'], 
-              color='autumn')
+kenya.plot_dv(unit='M KSH', main_title='Investment-induced Labour increase by skill and sector for 1 M KSH expenditure in Eco-pulpers', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], 
+              color='ocean')
 
 kenya.plot_dS(indicator='Green Water',  Type='percentage', main_title='Decrease in the use of green water', color='ocean')
 #%% Step2: Benefit
