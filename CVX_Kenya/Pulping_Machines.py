@@ -15,18 +15,12 @@ kenya.calc_all()
 kenya.aggregate()
 kenya.add_dict()
 
-kenya.plot_dx(unit='M KSH', level='Activities')
-kenya.plot_dv(unit='M KSH', level='Activities')
 #%%
 # Focus on labour impact
-kenya.plot_dv(unit='M KSH', main_title='Investment-induced Labour increase by skill and sector', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines'], 
-              color='spring')
-#%%
-# Focus on land
-kenya.plot_dv(unit='M KSH', main_title='Investment-induced Capital - Land increase by sector', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins','Labor - Skilled','Labor - Unskilled','Labor - Semi Skilled','Capital - Livestock','Capital - Agriculture','Capital - Machines'], color='spring')
+kenya.plot_dv(unit='M KSH', main_title='Investment-induced Labour increase by skill and sector for 1 M KSH expenditure in Eco-pulpers', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines'], 
+              color='autumn')
 
-
-kenya.plot_dS(indicator='Green Water')
+kenya.plot_dS(indicator='Green Water',  Type='percentage', main_title='Decrease in the use of green water', color='ocean')
 #%% Step2: Benefit
 kenya.shock(path=r'Interventions\Pulping_machines.xlsx', VA=True, S=True, Z=True)
 
@@ -34,9 +28,9 @@ kenya.calc_all()
 kenya.aggregate()
 kenya.add_dict()
 
-kenya.plot_dx(unit='K EUR', level='Activities')
-kenya.plot_dv(unit='K EUR', level='Activities')
-kenya.plot_dS(indicator='Green Water')
+kenya.plot_dv(unit='M KSH', main_title='Annual impact of using more efficient machines', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins'], color='terrain')
+
+kenya.plot_dS(indicator='Green Water',  Type='absolute', main_title='Decrease in the use of green water due to the use of 1 M KSH eco-pulpers with respect to baseline', color='ocean')
 #%%
 results = kenya.results
 #%%

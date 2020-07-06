@@ -648,7 +648,7 @@ class C_SUT:
         plt.show()    
     
     
-    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute'):
+    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute', main_title = 'default', color='terrain'):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
@@ -692,6 +692,12 @@ class C_SUT:
             except:
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
 
+        # Set the title
+        if main_title=='default':
+            title = 'Change in {}'.format(indicator)
+        else:
+            title = main_title
+        
         # To Take the unit
         
         if Type == 'percentage':
@@ -702,14 +708,14 @@ class C_SUT:
             dS=dS.groupby(level=0).sum().T
             
             if details:
-                dS.plot(kind = kind , stacked = stacked)
-                plt.title('Change in {}'.format(indicator))     
+                dS.plot(kind = kind , stacked = stacked, colormap=color)
+                plt.title(title)     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(unit)
                 
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False)
-                plt.title('Change in {}'.format(indicator))  
+                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
+                plt.title(title)     
                 plt.ylabel(unit)
                 
         if Type == 'absolute':
@@ -729,15 +735,15 @@ class C_SUT:
             dS=dS.groupby(level=0).sum().T
             
             if details:
-                dS.plot(kind = kind , stacked = stacked)
-                plt.title('Change in {}'.format(indicator))     
+                dS.plot(kind = kind , stacked = stacked, colormap=color)
+                plt.title(title)     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False)
+                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
                 plt.title('Change in {}'.format(indicator))  
                 plt.ylabel(unit)
-                
+        
         if Type == 'change':
             
             unit = "?"
@@ -750,12 +756,12 @@ class C_SUT:
             
             if details:
                 dS.plot(kind = kind , stacked = stacked)
-                plt.title('Change in {}'.format(indicator))     
+                plt.title(title)     
                 plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
                 plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False)
-                plt.title('Change in {}'.format(indicator))  
+                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
+                plt.title(title)     
                 plt.ylabel(unit)           
         plt.show()      
 
