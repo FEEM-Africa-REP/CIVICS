@@ -441,7 +441,7 @@ class C_SUT:
     
 
 
-    def plot_dx(self, aggregation=True, kind='bar', unit='M KSH', stacked=True, level=None, percent=False):
+    def plot_dx(self, aggregation=True, kind='bar', unit='M USD', stacked=True, level=None, percent=False):
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
 
@@ -511,7 +511,7 @@ class C_SUT:
         plt.show()
         
   
-    def plot_dv(self,aggregation=True, kind='bar', unit='M KSH', stacked=True, level=None, drop='unused', percent=False, main_title = 'default', color='terrain'):
+    def plot_dv(self,aggregation=True, kind='bar', unit='K USD', stacked=True, level=None, drop='unused', percent=False, main_title = 'default', color='terrain'):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
