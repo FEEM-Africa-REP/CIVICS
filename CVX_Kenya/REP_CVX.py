@@ -139,6 +139,8 @@ class C_SUT:
         import pandas as pd
         import numpy as np
         
+        # Loop for the shock
+        
         # Take a copy of all the things that can change to keep the original 
         # information and the shocked one
         self.Y_c   = self.Y.copy()
@@ -827,6 +829,8 @@ class C_SUT:
         with pd.ExcelWriter(save_dir) as writer:
             OPT.to_excel(writer)
             
+        # Save sensitivity scenarios in this intervention-specific excel ^
+        
         # except:
         #     raise ValueError('Please Use Aggregation Function and Add to dictionary function for every step')
         
