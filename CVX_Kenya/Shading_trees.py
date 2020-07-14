@@ -43,3 +43,5 @@ results= kenya.results
 #%%
 kenya.Int_Ass()
 print(kenya.ROI)
+#%%
+am = kenya.X.index.get_level_values(0,1)

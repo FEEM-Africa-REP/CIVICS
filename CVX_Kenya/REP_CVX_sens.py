@@ -952,7 +952,8 @@ class C_SUT:
                     # BIG QUESTION
                     l_s = np.linalg.inv(np.identity(len(my_z))-my_z) 
                     X_s_0 = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(sen_min)])
-                    VA_s_0 = pd.DataFrame(self.va_c.values @ (X_s_0  * np.identity(len(self.X_c))),index = self.VA_ind,columns =  self.Z.columns) 
+                    
+                    VA_s_0 = pd.DataFrame(self.va_c.values @ (X_s_0.values  * np.identity(len(X_s_0.values))),index = self.VA_ind,columns =  self.Z.columns) 
                     VA_s_0 = pd.concat([VA_s_0],keys=[str(sen_min)], names=['Scenario'])
                     
                     j = sen_min + sen_step
@@ -969,15 +970,20 @@ class C_SUT:
                         
                         X_s_0 = pd.concat([X_s_0,X_s],axis=1)
                         
-                        VA_s = pd.DataFrame(self.va_c.values @ (X_s  * np.identity(len(self.X_c))),index = self.VA_ind,columns =  self.Z.columns) 
+                        VA_s = pd.DataFrame(self.va_c.values @ (X_s.values * np.identity(len(X_s.values))),index = self.VA_ind,columns =  self.Z.columns) 
                         
                         VA_s = pd.concat([VA_s],keys=[str(j)], names=['Scenario'])
                         
-                        VA_s_0 = pd.concat([VA_0_s,VA_s])
+                        VA_s_0 = pd.concat([VA_s_0,VA_s])
                         
                         j = j + sen_step
-                        
+                
+
+                    self.X_s = X_s_0
+                    self.VA_s = VA_s_0
+                    
                 if par_4 == 'Percentage': 
+                    
                     my_z = self.z_c.copy()
                     
                     my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z_c.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  sen_min )
@@ -998,7 +1004,7 @@ class C_SUT:
                         X_s_0 = pd.concat([X_s_0,X_s],axis=1)
                         
                         j = j + sen_step
-                                            
+                                           
 
                         
                         

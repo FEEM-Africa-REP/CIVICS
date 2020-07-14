@@ -45,7 +45,7 @@ results= kenya.results
 kenya.Int_Ass()
 print(kenya.ROI)
 #%%
-sens = kenya.X_s.sum().values
-sens0 = kenya.X_s_0.sum().values
+sens = kenya.X_s
+sens0 = kenya.VA_s
 #%%
 

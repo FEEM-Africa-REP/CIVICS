@@ -139,8 +139,6 @@ class C_SUT:
         import pandas as pd
         import numpy as np
         
-        # Loop for the shock
-        
         # Take a copy of all the things that can change to keep the original 
         # information and the shocked one
         self.Y_c   = self.Y.copy()
@@ -443,8 +441,9 @@ class C_SUT:
     
 
 
-    def plot_dx(self, aggregation=True, kind='bar', unit='M USD', stacked=True, level=None, percent=False):
+    def plot_dx(self, aggregation=True, kind='bar', unit='M KSH', stacked=True, level=None, percent=False,ranshow=(0,0)):
         import matplotlib.pyplot as plt
+        import EX_func
         plt.style.use(['ggplot'])
 
         
@@ -480,6 +479,9 @@ class C_SUT:
             
             old = self.X
             new = self.X_c
+            ind=[old.index.get_level_values(0),old.index.get_level_values(1)]
+            old.index=ind
+            new.index=ind
             
         if level == None:
             old = old
@@ -505,7 +507,8 @@ class C_SUT:
             title=''
         else:
             title=' by '+str(level)
-            
+        dx=EX_func.drop_fun(data=dx.T, ranshow=ranshow)
+        dx=dx.T
         dx.plot(kind=kind, stacked=stacked)
         plt.title('Production Change'+title)
         plt.ylabel(unit)
@@ -513,9 +516,10 @@ class C_SUT:
         plt.show()
         
   
-    def plot_dv(self,aggregation=True, kind='bar', unit='K USD', stacked=True, level=None, drop='unused', percent=False, main_title = 'default', color='terrain'):
+    def plot_dv(self,aggregation=True, kind='bar', unit='M KSH', stacked=True, level=None, drop='unused', percent=False, main_title = 'default', color='terrain',ranshow=(0,0)):
         
         import matplotlib.pyplot as plt
+        import EX_func
         plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
@@ -554,6 +558,12 @@ class C_SUT:
             
             old = self.VA
             new = self.VA_c
+            ind=old.index.get_level_values(0)
+            col=[old.columns.get_level_values(0),old.columns.get_level_values(1)]
+            old.index=ind
+            new.index=ind
+            old.columns=col
+            new.columns=col
             
         if level == None:
             old = old
@@ -584,13 +594,17 @@ class C_SUT:
         else:
              title = main_title
         
-        dv = dv.drop(drop)
+        if aggregation == True:
+            dv = dv.drop(drop)
+            
+        dv=EX_func.drop_fun(data=dv,ranshow=ranshow)
         dv=dv.T
+        
         
         dv.plot(kind = kind , stacked = stacked, colormap=color)
         plt.title(title)
         plt.ylabel(unit)
-        plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
+        plt.legend(loc = 1,bbox_to_anchor = (1.8,1))
         plt.show()        
 
     
@@ -650,7 +664,7 @@ class C_SUT:
         plt.show()    
     
     
-    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute', main_title = 'default', color='terrain'):
+    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute'):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
@@ -694,12 +708,6 @@ class C_SUT:
             except:
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
 
-        # Set the title
-        if main_title=='default':
-            title = 'Change in {}'.format(indicator)
-        else:
-            title = main_title
-        
         # To Take the unit
         
         if Type == 'percentage':
@@ -710,14 +718,14 @@ class C_SUT:
             dS=dS.groupby(level=0).sum().T
             
             if details:
-                dS.plot(kind = kind , stacked = stacked, colormap=color)
-                plt.title(title)     
+                dS.plot(kind = kind , stacked = stacked)
+                plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(unit)
                 
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
-                plt.title(title)     
+                dS.plot(kind = kind , stacked = stacked,legend=False)
+                plt.title('Change in {}'.format(indicator))  
                 plt.ylabel(unit)
                 
         if Type == 'absolute':
@@ -737,15 +745,15 @@ class C_SUT:
             dS=dS.groupby(level=0).sum().T
             
             if details:
-                dS.plot(kind = kind , stacked = stacked, colormap=color)
-                plt.title(title)     
+                dS.plot(kind = kind , stacked = stacked)
+                plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
+                dS.plot(kind = kind , stacked = stacked,legend=False)
                 plt.title('Change in {}'.format(indicator))  
                 plt.ylabel(unit)
-        
+                
         if Type == 'change':
             
             unit = "?"
@@ -758,12 +766,12 @@ class C_SUT:
             
             if details:
                 dS.plot(kind = kind , stacked = stacked)
-                plt.title(title)     
+                plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
                 plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
-                plt.title(title)     
+                dS.plot(kind = kind , stacked = stacked,legend=False)
+                plt.title('Change in {}'.format(indicator))  
                 plt.ylabel(unit)           
         plt.show()      
 
@@ -829,8 +837,6 @@ class C_SUT:
         with pd.ExcelWriter(save_dir) as writer:
             OPT.to_excel(writer)
             
-        # Save sensitivity scenarios in this intervention-specific excel ^
-        
         # except:
         #     raise ValueError('Please Use Aggregation Function and Add to dictionary function for every step')
         
