@@ -61,7 +61,8 @@ class C_SUT:
         self.p = pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l.values, index=['Price'], columns=self.VA.columns)
         
         self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'va':self.va,'z':self.z}
-        self.counter = 1
+        self.counter = 1    # A counter for saving the results in a dictionary
+        self.s_counter = 1  # A counter for saving the sensitivity results in the dictionary 
         
     def calc_all(self):        
         
@@ -784,8 +785,10 @@ class C_SUT:
         
         self.counter += 1
 
-    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'Optimization\Optimization.xlsx', w_ext=['Green Water'], em_ext=['CO2'], land=['Capital - Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled']):
+    def Int_Ass(self,inv_sen=1,sens=False,sav_sen=2,directory=r'Optimization\Optimization.xlsx', w_ext=['Green Water'], em_ext=['CO2'], land=['Capital - Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled']):
         import pandas as pd
+        
+        # Let's assume that the inv and sav senario is the same for sensitivity and main results
         
         #try : 
            
@@ -826,6 +829,12 @@ class C_SUT:
         
         
         sce_name = OPT.index.get_level_values(0).to_list()
+        
+        if sens:
+            
+            INV = self.results['VA_'+ str(inv_sen)].values.sum().sum() - self.VA.sum().sum()
+            SAV = -self.results['VA_'+ str(sav_sen)].values.sum().sum() + self.VA.sum().sum()                            
+                
        
         save_dir = r'Optimization\ ' + sce_name[0] + '.xlsx'
         with pd.ExcelWriter(save_dir) as writer:
@@ -880,7 +889,7 @@ class C_SUT:
         
         
         
-    def sensitivity (self,parameter,aggregat=True):
+    def sensitivity (self,parameter,aggregat=True,add_dict=True):
         
         import pandas as pd
         import numpy as np
@@ -917,6 +926,10 @@ class C_SUT:
         sen_max = inp.loc[i,'Max']
         sen_step = inp.loc[i,'Step']
         
+        self.sen_min = sen_min
+        self.sen_max = sen_max
+        
+        
         if parameter == 'Z':
             
             # for the Z matrix:
@@ -933,7 +946,9 @@ class C_SUT:
             par_2 = inp.loc[i,'level_col']            
             par_3 = inp.loc[i,'col']            
             par_4 = inp.loc[i,'type']  
-            par_5 = inp.loc[i,'Aggregated']  
+            par_5 = inp.loc[i,'Aggregated']
+            
+            self.sen_par = '{}, {}: {} , {}: {}'.format('Z',par_0,par_1,par_2,par_3)
             
             # to save the sensitivity results, we need to build a dataframe
             
@@ -1006,13 +1021,162 @@ class C_SUT:
                         j = j + sen_step
                                            
 
+        if parameter == 'Y':
+            
+            # for the Y matrix:
+            # par_0: level_row
+            # par_1: row
+            # par_2: column
+
+            
+            
+            par_0 = 'Commodities'
+            par_1 = inp.loc[i,'row']  
+            par_2 = 'Total final demand'
+
+            
+            # to save the sensitivity results, we need to build a dataframe
+            
+            # Make a copy of the matrix which is going to be changed.
+            
+            my_Y = self.Y_c.copy()
+ 
+            my_Y.loc[(par_0,par_1),par_2] =  self.Y_c.loc[(par_0,par_1),par_2].values + sen_min
+            
+            X_s_0 = pd.DataFrame(self.l_c @ self.Y_c.values,index=self.X.index,columns=[str(sen_min)])
+            
+            VA_s_0 = pd.DataFrame(self.va_c.values @ (X_s_0.values  * np.identity(len(X_s_0.values))),index = self.VA_ind,columns =  self.Z.columns)
+            
+            VA_s_0 = pd.concat([VA_s_0],keys=[str(sen_min)], names=['Scenario'])
+            
+            j = sen_min + sen_step
+            
+            while (j<=sen_max):
+                
+                my_Y.loc[(par_0,par_1),par_2] =  self.Y_c.loc[(par_0,par_1),par_2].values + j
+                
+                X_s = pd.DataFrame(self.l_c @ self.Y_c.values,index=self.X.index,columns=[str(j)])
+                
+                X_s_0 = pd.concat([X_s_0,X_s],axis=1)
+                
+                VA_s = pd.DataFrame(self.va_c.values @ (X_s.values * np.identity(len(X_s.values))),index = self.VA_ind,columns =  self.Z.columns) 
+            
+                VA_s = pd.concat([VA_s],keys=[str(j)], names=['Scenario'])
+                        
+                VA_s_0 = pd.concat([VA_s_0,VA_s])  
+                
+                j = j + sen_step
+    
+
+            self.X_s = X_s_0
+            self.VA_s = VA_s_0
+        
+                    
+                      
+        
+        
+        
+        if parameter == 'VA':
+            
+            # for the VA matrix:
+            # par_0: level_row
+            # par_1: row
+            # par_2: level_col
+            # par_3: col
+            # par_4: type
+            # par_5: Aggregated
+            
+            
+            par_0 = inp.loc[i,'level_row']
+            par_1 = inp.loc[i,'row']            
+            par_2 = inp.loc[i,'level_col']            
+            par_3 = inp.loc[i,'col']            
+            par_4 = inp.loc[i,'type']  
+            par_5 = inp.loc[i,'Aggregated']  
+            
+            # to save the sensitivity results, we need to build a dataframe
+            
+            # Make a copy of the matrix which is going to be changed.
+            
+
+            
+            if par_5 == 'No':
+                
+                if par_4 == 'Absolute': 
+                    
+                    my_VA = self.VA_c.copy()
+                    
+                    # Calculating the first step to form the dataframes
+                    my_VA.loc[(par_0,par_1),(par_2,par_3)] = self.VA_c.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
+                    
+                    my_va = pd.DataFrame(my_VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
+                    
+                    # BIG QUESTION
+                    
+                    VA_s_0 = pd.DataFrame(my_va.values @ (self.X_c.values  * np.identity(len(X_s_0.values))),index = self.VA_ind,columns =  self.Z.columns) 
+                    VA_s_0 = pd.concat([VA_s_0],keys=[str(sen_min)], names=['Scenario'])
+                    
+                    j = sen_min + sen_step
+                    
+                    while (j<=sen_max):
+                        
+                        my_VA.loc[(par_0,par_1),(par_2,par_3)] = self.VA_c.loc[(par_0,par_1),(par_2,par_3)].values + j
+                        
+                        my_va = pd.DataFrame(my_VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
+                        
+                        VA_s = pd.DataFrame(my_va.values @ (self.X_c.values * np.identity(len(self.X_c.values))),index = self.VA_ind,columns =  self.Z.columns) 
+                        
+                        VA_s = pd.concat([VA_s],keys=[str(j)], names=['Scenario'])
+                        
+                        VA_s_0 = pd.concat([VA_s_0,VA_s])
+                        
+                        j = j + sen_step
+                
+
+                    self.VA_s = VA_s_0
+                    
+                if par_4 == 'Percentage': 
+                    
+                    my_va = self.va_c.copy()
+                    
+                    # Calculating the first step to form the dataframes
+                    my_va.loc[(par_0,par_1),(par_2,par_3)] = self.va_c.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
+                    
+                    VA_s_0 = pd.DataFrame(my_va.values @ (self.X_c.values  * np.identity(len(X_s_0.values))),index = self.VA_ind,columns =  self.Z.columns) 
+                    VA_s_0 = pd.concat([VA_s_0],keys=[str(sen_min)], names=['Scenario'])                    
+                    
+                    
+                    j = sen_min + sen_step
+                    
+                    while (j<=sen_max):
+                        
+                        my_va.loc[(par_0,par_1),(par_2,par_3)] = self.va_c.loc[(par_0,par_1),(par_2,par_3)].values + j                       
+
+                        VA_s = pd.DataFrame(my_va.values @ (self.X_c.values * np.identity(len(self.X_c.values))),index = self.VA_ind,columns =  self.Z.columns) 
+                        
+                        VA_s = pd.concat([VA_s],keys=[str(j)], names=['Scenario'])
+                        
+                        VA_s_0 = pd.concat([VA_s_0,VA_s])
+                        
+                        j = j + sen_step
+                
+
+                    self.VA_s = VA_s_0
+                    
+        if add_dict:
+            
+            self.results['X_s' + str(self.s_counter)] = self.X_s
+            self.results['VA_s' + str(self.s_counter)] = self.VA_s
+            
+            self.s_counter += 1
+            
+            
                         
                         
                             
                 
                 
-            
-            
+     
             
             
         

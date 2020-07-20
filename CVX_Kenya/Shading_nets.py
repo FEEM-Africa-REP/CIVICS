@@ -13,6 +13,7 @@ kenya.shock(path = r'Interventions\Shading_nets.xlsx' , Y = True )
 kenya.calc_all()
 kenya.aggregate()
 kenya.add_dict()
+kenya.sensitivity(parameter='Y',aggregat=True,add_dict=True)
 
 #%%
 kenya.plot_dv(unit='M KSH', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
