@@ -470,15 +470,15 @@ class C_SUT:
         if aggregation: 
             
             try:
-                old = self.X_agg
-                new = self.X_c_agg
+                old = self.X_agg.copy()
+                new = self.X_c_agg.copy()
             except: 
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
                 
         elif aggregation == False:
             
-            old = self.X
-            new = self.X_c
+            old = self.X.copy()
+            new = self.X_c.copy()
             ind=[old.index.get_level_values(0),old.index.get_level_values(1)]
             old.index=ind
             new.index=ind
@@ -548,16 +548,16 @@ class C_SUT:
             
             try:
 
-                old = self.VA_agg
+                old = self.VA_agg.copy()
 
-                new = self.VA_c_agg
+                new = self.VA_c_agg.copy()
             except: 
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
                 
         elif aggregation == False:
             
-            old = self.VA
-            new = self.VA_c
+            old = self.VA.copy()
+            new = self.VA_c.copy()
             ind=old.index.get_level_values(0)
             col=[old.columns.get_level_values(0),old.columns.get_level_values(1)]
             old.index=ind
