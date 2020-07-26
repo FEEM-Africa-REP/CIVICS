@@ -15,8 +15,13 @@ kenya.aggregate()
 kenya.add_dict()
 
 #%%
-kenya.plot_dv(unit='M KSH', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
-kenya.plot_dv(unit='M KSH', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Accent')
+kenya.plot_dv(unit='M USD', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
+kenya.plot_dv(unit='M USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Accent')
+
+#%%
+kenya.plot_dv(unit='M USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Pastel1', ranshow=(0.0001,-0.001), aggregation=False)
+
+#%%
 kenya.plot_dx()
 kenya.plot_dp()
 
@@ -27,8 +32,11 @@ kenya.shock(path = r'Interventions\Shading_nets.xlsx' , Z=True ,VA = True, S=Tru
 kenya.calc_all()
 kenya.aggregate()
 kenya.add_dict()
-kenya.plot_dv(unit='M KSH', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
-kenya.plot_dv(unit='M KSH', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Accent')
+kenya.plot_dv(unit='M USD', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
+kenya.plot_dv(unit='M USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Accent')
+
+kenya.plot_dv(unit='M USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Pastel1', ranshow=(0.0001,-0.00001), aggregation=False)
+kenya.plot_dx(unit='M USD', level='Activities', percent=False, ranshow=(0.0001,-0.0001), aggregation=False)
 
 kenya.plot_dv()
 kenya.plot_dx()

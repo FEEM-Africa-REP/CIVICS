@@ -61,7 +61,8 @@ class C_SUT:
         self.p = pd.DataFrame(self.va.sum().values.reshape(1,len(self.va.columns)) @ self.l.values, index=['Price'], columns=self.VA.columns)
         
         self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'va':self.va,'z':self.z}
-        self.counter = 1
+        self.counter = 1    # A counter for saving the results in a dictionary
+        self.s_counter = 1  # A counter for saving the sensitivity results in the dictionary 
         
     def calc_all(self):        
         
@@ -784,8 +785,10 @@ class C_SUT:
         
         self.counter += 1
 
-    def Int_Ass(self,inv_sen=1, sav_sen=2,directory=r'Optimization\Optimization.xlsx', w_ext=['Green Water'], em_ext=['CO2'], land=['Capital - Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled']):
+    def Int_Ass(self,inv_sen=1,sens=False,sav_sen=2,directory=r'Optimization\Optimization.xlsx', w_ext=['Green Water'], em_ext=['CO2'], land=['Capital - Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled']):
         import pandas as pd
+        
+        # Let's assume that the inv and sav senario is the same for sensitivity and main results
         
         #try : 
            
@@ -826,6 +829,12 @@ class C_SUT:
         
         
         sce_name = OPT.index.get_level_values(0).to_list()
+        
+        if sens:
+            
+            INV = self.results['VA_'+ str(inv_sen)].values.sum().sum() - self.VA.sum().sum()
+            SAV = -self.results['VA_'+ str(sav_sen)].values.sum().sum() + self.VA.sum().sum()                            
+                
        
         save_dir = r'Optimization\ ' + sce_name[0] + '.xlsx'
         with pd.ExcelWriter(save_dir) as writer:
@@ -877,10 +886,17 @@ class C_SUT:
         self.X_opt = pd.DataFrame(x.value,index=self.X.index,columns = self.X.columns)     
         
         
+
 ###################################  ###################################      
         # Sensitivity Module
 ###################################  ###################################    
-    def sensitivity (self,parameter,aggregat=True):
+
+
+        
+        
+        
+    def sensitivity (self,parameter,aggregat=True,add_dict=True):
+
         
         import pandas as pd
         import numpy as np
@@ -917,6 +933,10 @@ class C_SUT:
         sen_max = inp.loc[i,'Max']
         sen_step = inp.loc[i,'Step']
         
+        self.sen_min = sen_min
+        self.sen_max = sen_max
+        
+        
         if parameter == 'Z':
             
             # for the Z matrix:
@@ -933,7 +953,9 @@ class C_SUT:
             par_2 = inp.loc[i,'level_col']            
             par_3 = inp.loc[i,'col']            
             par_4 = inp.loc[i,'type']  
-            par_5 = inp.loc[i,'Aggregated']  
+            par_5 = inp.loc[i,'Aggregated']
+            
+            self.sen_par = '{}, {}: {} , {}: {}'.format('Z',par_0,par_1,par_2,par_3)
             
             # to save the sensitivity results, we need to build a dataframe
             
@@ -1007,6 +1029,9 @@ class C_SUT:
                                            
 
         if parameter == 'Y':
+
+            
+
             
             # for the Y matrix:
             # par_0: level_row
@@ -1053,7 +1078,9 @@ class C_SUT:
                 j = j + sen_step
     
 
-        self.X_s = X_s_0
+            self.X_s = X_s_0
+            self.VA_s = VA_s_0
+        
                     
                       
         
@@ -1144,7 +1171,18 @@ class C_SUT:
                         j = j + sen_step
                 
 
-                    self.VA_s = VA_s_0        
+                    self.VA_s = VA_s_0
+                    
+        if add_dict:
+            
+            self.results['X_s' + str(self.s_counter)] = self.X_s
+            self.results['VA_s' + str(self.s_counter)] = self.VA_s
+
+            
+            self.s_counter += 1
+            
+            
+   
         
         
         
