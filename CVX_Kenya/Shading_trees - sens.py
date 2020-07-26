@@ -48,4 +48,4 @@ print(kenya.ROI)
 sens = kenya.X_s
 sens0 = kenya.VA_s
 #%%
-
+a1 = results['S_s_agg_1'].loc['0.06','Energy'].sum().sum()
