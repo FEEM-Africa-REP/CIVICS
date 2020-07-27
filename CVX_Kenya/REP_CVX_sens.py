@@ -820,17 +820,26 @@ class C_SUT:
         # Calculateing different invoces using dictionaries and the number of senarios
             INV = self.results['VA_'+ str(inv_sen[1])].values.sum().sum() - self.VA.sum().sum()
             self.SAV = -self.results['VA_'+ str(sav_sen[1])].values.sum().sum() + self.VA.sum().sum()
+            
             W_I =  self.results['S_agg_' + str(inv_sen[1])].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
             W_S = -self.results['S_agg_' + str(sav_sen[1])].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
+            
             E_I =  self.results['S_agg_' + str(inv_sen[1])].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
-            E_S = -self.results['S_agg_' + str(sav_sen[1])].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
+            E_S = -self.results['S_agg_' + str(sav_sen[1])].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()    
+            
             L_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
             L_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+            
             F_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
             F_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
-            C_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
+            
+            self.an = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[labour]
+            self.go = self.VA.groupby(level=3).sum().loc[labour]
+            
+            C_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() - self.VA.groupby(level=3).sum().loc[capital].sum().sum()
             C_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
-            IM_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum()
+            
+            IM_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
             IM_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum()            
             self.ROI = INV/self.SAV
             # Writing the results on the data frame
@@ -865,12 +874,13 @@ class C_SUT:
             OPT.loc[OPT.index,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
             OPT.loc[OPT.index,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
             
-            self.OPT = OPT
+            
             
             
             
         if inv_sen[0]=='main' and sav_sen[0]=='sensitivity':
-            indeces=list(self.S_s_agg_1.index.get_level_values(0))
+            indeces=list(self.S_s_agg.index.get_level_values(0))
+            indeces = list(dict.fromkeys(indeces))
             
             
             for i in indeces:
@@ -889,11 +899,11 @@ class C_SUT:
                 OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
                 
               
-                SAV = -self.results['VA_s_'+ str(sav_sen[1])].values.sum().sum() + self.VA.sum().sum()
-                W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[(i,w_ext)].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
-                E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[(i,em_ext)].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
-                L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[(i,land)].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-                F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[(i,labour)].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
+                SAV = -self.results['VA_s_'+ str(sav_sen[1])].loc[i].values.sum().sum() + self.VA.sum().sum()
+                W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
+                E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
+                L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+                F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
                     
           
                 OPT.loc[i,('Saving','M kSh/FU')]=SAV
@@ -903,17 +913,18 @@ class C_SUT:
                 OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S           
         
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='main':
-            indeces=list(self.S_s_agg_1.index.get_level_values(0))
+            indeces=list(self.S_s_agg.index.get_level_values(0))
+            indeces = list(dict.fromkeys(indeces))
             
             
             for i in indeces:
                 # Investments 
                 
-                INV = self.results['VA_s_'+ str(inv_sen[1])].values.sum().sum() - self.VA.sum().sum()  
-                W_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[(i,w_ext)].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
-                E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[(i,em_ext)].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
-                L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[(i,land)].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-                F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[(i,labour)].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
+                INV = self.results['VA_s_'+ str(inv_sen[1])].loc[i].values.sum().sum() - self.VA.sum().sum()  
+                W_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
+                E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
+                L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+                F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
                 
                 OPT.loc[i,('Investment','M kSh')]=INV
                 OPT.loc[i,('Water Investment','m3/FU')]=W_I
@@ -936,17 +947,18 @@ class C_SUT:
                 OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S                             
  
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='sensitivity':
-            indeces=list(self.S_s_agg_1.index.get_level_values(0))
+            indeces=list(self.S_s_agg.index.get_level_values(0))
+            indeces = list(dict.fromkeys(indeces))
             
             
             for i in indeces:
                 # Investments 
                 
-                INV = self.results['VA_s_'+ str(inv_sen[1])].values.sum().sum() - self.VA.sum().sum()  
-                W_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[(i,w_ext)].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
-                E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[(i,em_ext)].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
-                L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[(i,land)].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-                F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[(i,labour)].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
+                INV = self.results['VA_s_'+ str(inv_sen[1])].loc[i].values.sum().sum() - self.VA.sum().sum()  
+                W_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
+                E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
+                L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+                F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
                 
                 OPT.loc[i,('Investment','M kSh')]=INV
                 OPT.loc[i,('Water Investment','m3/FU')]=W_I
@@ -955,11 +967,11 @@ class C_SUT:
                 OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
                 
               
-                SAV = -self.results['VA_s_'+ str(sav_sen[1])].values.sum().sum() + self.VA.sum().sum()
-                W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[(i,w_ext)].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
-                E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[(i,em_ext)].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
-                L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[(i,land)].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-                F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[(i,labour)].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
+                SAV = -self.results['VA_s_'+ str(sav_sen[1])].loc[i].values.sum().sum() + self.VA.sum().sum()
+                W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
+                E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
+                L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+                F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
                     
           
                 OPT.loc[i,('Saving','M kSh/FU')]=SAV
@@ -1216,14 +1228,15 @@ class C_SUT:
             par_1 = inp.loc[i,'row']  
             par_2 = 'Total final demand'
 
-            
+            self.sen_par = '{}, {}.'.format('Y',par_1)            
             # to save the sensitivity results, we need to build a dataframe
             
             # Make a copy of the matrix which is going to be changed.
             
             my_Y = self.Y_c.copy()
  
-            my_Y.loc[(par_0,par_1),par_2] =  self.Y_c.loc[(par_0,par_1),par_2].values + sen_min
+            my_Y.loc[(par_0,par_1),par_2] =  sen_min
+            print(my_Y.loc[(par_0,par_1),par_2])
             
             X_s_0 = pd.DataFrame(self.l_c @ my_Y.values,index=self.X.index,columns=[str(sen_min)])
             
@@ -1237,8 +1250,10 @@ class C_SUT:
             j = sen_min + sen_step
             
             while (j<=sen_max):
-                
-                my_Y.loc[(par_0,par_1),par_2] =  self.Y_c.loc[(par_0,par_1),par_2].values + j
+                print(j)
+                print(my_Y.loc[(par_0,par_1),par_2])
+                my_Y.loc[(par_0,par_1),par_2] =  j
+                print(my_Y.loc[(par_0,par_1),par_2])
                 
                 X_s = pd.DataFrame(self.l_c @ my_Y.values,index=self.X.index,columns=[str(round(j,4))])
                 
