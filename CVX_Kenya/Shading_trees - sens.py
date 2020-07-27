@@ -52,6 +52,4 @@ a1 = results['S_s_agg_1'].loc['0.06','Energy'].sum().sum()
 #%%
 labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled']
 #%%
-a=kenya.aa
-b=kenya.Y_c
-c=a-b
+a=kenya.Y_s-kenya.Y

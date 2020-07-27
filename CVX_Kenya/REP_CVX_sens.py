@@ -833,14 +833,12 @@ class C_SUT:
             F_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
             F_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
             
-            self.an = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[labour]
-            self.go = self.VA.groupby(level=3).sum().loc[labour]
-            
             C_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() - self.VA.groupby(level=3).sum().loc[capital].sum().sum()
             C_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
             
             IM_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
-            IM_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum()            
+            IM_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum()   
+            
             self.ROI = INV/self.SAV
             # Writing the results on the data frame
             OPT.loc[OPT.index,('ROI','years')]=self.ROI
@@ -891,26 +889,41 @@ class C_SUT:
                 E_I =  self.results['S_agg_' + str(inv_sen[1])].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
                 L_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
                 F_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
+                C_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() - self.VA.groupby(level=3).sum().loc[capital].sum().sum()            
+                IM_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
                 
                 OPT.loc[i,('Investment','M kSh')]=INV
                 OPT.loc[i,('Water Investment','m3/FU')]=W_I
                 OPT.loc[i,('Emission Investment','kton/FU')]=E_I
                 OPT.loc[i,('Land Investment','M kSh/FU')]=L_I           
                 OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
-                
+                OPT.loc[i,('Capital Investment','M kSh/FU')] = C_I
+                OPT.loc[i,('Import Investment','M kSh/FU')] = IM_I                 
               
                 SAV = -self.results['VA_s_'+ str(sav_sen[1])].loc[i].values.sum().sum() + self.VA.sum().sum()
                 W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
                 E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
                 L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
                 F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
+                C_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
+                IM_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum() 
                     
           
                 OPT.loc[i,('Saving','M kSh/FU')]=SAV
                 OPT.loc[i,('Water Saving','m3/FU')]=W_S                 
                 OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
                 OPT.loc[i,('Land Saving','M kSh/FU')]=L_S           
-                OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S           
+                OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S       
+                OPT.loc[i,('Import Saving','M kSh/FU')] = IM_S
+                OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
+                
+                # Total Impacts
+                OPT.loc[i,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
+                OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
+                OPT.loc[i,('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
+                OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
+                OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
+                OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
         
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='main':
             indeces=list(self.S_s_agg.index.get_level_values(0))
@@ -925,19 +938,24 @@ class C_SUT:
                 E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
                 L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
                 F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
+                C_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[capital].sum().sum() - self.VA.groupby(level=3).sum().loc[capital].sum().sum()            
+                IM_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
                 
                 OPT.loc[i,('Investment','M kSh')]=INV
                 OPT.loc[i,('Water Investment','m3/FU')]=W_I
                 OPT.loc[i,('Emission Investment','kton/FU')]=E_I
                 OPT.loc[i,('Land Investment','M kSh/FU')]=L_I           
                 OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
-                
+                OPT.loc[i,('Capital Investment','M kSh/FU')] = C_I
+                OPT.loc[i,('Import Investment','M kSh/FU')] = IM_I                 
               
                 SAV = -self.results['VA_'+ str(sav_sen[1])].values.sum().sum() + self.VA.sum().sum()
                 W_S = -self.results['S_agg_' + str(sav_sen[1])].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
                 E_S = -self.results['S_agg_' + str(sav_sen[1])].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
                 L_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
                 F_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
+                C_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
+                IM_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum() 
                     
           
                 OPT.loc[i,('Saving','M kSh/FU')]=SAV
@@ -945,41 +963,67 @@ class C_SUT:
                 OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
                 OPT.loc[i,('Land Saving','M kSh/FU')]=L_S           
                 OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S                             
- 
+                OPT.loc[i,('Import Saving','M kSh/FU')] = IM_S
+                OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
+                
+                OPT.loc[i,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
+                OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
+                OPT.loc[i,('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
+                OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
+                OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
+                OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S      
+                
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='sensitivity':
-            indeces=list(self.S_s_agg.index.get_level_values(0))
-            indeces = list(dict.fromkeys(indeces))
+            
+            raise ValueError ("Only one senseitivty parameter can be analyzed!")
+            # indeces=list(self.S_s_agg.index.get_level_values(0))
+            # indeces = list(dict.fromkeys(indeces))
             
             
-            for i in indeces:
-                # Investments 
+            # for i in indeces:
+            #     # Investments 
                 
-                INV = self.results['VA_s_'+ str(inv_sen[1])].loc[i].values.sum().sum() - self.VA.sum().sum()  
-                W_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
-                E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
-                L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-                F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
+            #     INV = self.results['VA_s_'+ str(inv_sen[1])].loc[i].values.sum().sum() - self.VA.sum().sum()  
+            #     W_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
+            #     E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
+            #     L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+            #     F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
+            #     C_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[capital].sum().sum() - self.VA.groupby(level=3).sum().loc[capital].sum().sum()            
+            #     IM_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
                 
-                OPT.loc[i,('Investment','M kSh')]=INV
-                OPT.loc[i,('Water Investment','m3/FU')]=W_I
-                OPT.loc[i,('Emission Investment','kton/FU')]=E_I
-                OPT.loc[i,('Land Investment','M kSh/FU')]=L_I           
-                OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
-                
+            #     OPT.loc[i,('Investment','M kSh')]=INV
+            #     OPT.loc[i,('Water Investment','m3/FU')]=W_I
+            #     OPT.loc[i,('Emission Investment','kton/FU')]=E_I
+            #     OPT.loc[i,('Land Investment','M kSh/FU')]=L_I           
+            #     OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
+            #     OPT.loc[i,('Capital Investment','M kSh/FU')] = C_I
+            #     OPT.loc[i,('Import Investment','M kSh/FU')] = IM_I                 
               
-                SAV = -self.results['VA_s_'+ str(sav_sen[1])].loc[i].values.sum().sum() + self.VA.sum().sum()
-                W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
-                E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
-                L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-                F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
+            #     SAV = -self.results['VA_s_'+ str(sav_sen[1])].loc[i].values.sum().sum() + self.VA.sum().sum()
+            #     W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
+            #     E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
+            #     L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+            #     F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
+            #     C_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
+            #     IM_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum() 
                     
           
-                OPT.loc[i,('Saving','M kSh/FU')]=SAV
-                OPT.loc[i,('Water Saving','m3/FU')]=W_S                 
-                OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
-                OPT.loc[i,('Land Saving','M kSh/FU')]=L_S           
-                OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S               
-       
+            #     OPT.loc[i,('Saving','M kSh/FU')]=SAV
+            #     OPT.loc[i,('Water Saving','m3/FU')]=W_S                 
+            #     OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
+            #     OPT.loc[i,('Land Saving','M kSh/FU')]=L_S           
+            #     OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S               
+            #     OPT.loc[i,('Import Saving','M kSh/FU')] = IM_S
+            #     OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
+                
+            #     OPT.loc[i,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
+            #     OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
+            #     OPT.loc[i,('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
+            #     OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
+            #     OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
+            #     OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S 
+                
+                
         save_dir = r'Optimization\ ' + sce_name + '.xlsx'
         with pd.ExcelWriter(save_dir) as writer:
             OPT.to_excel(writer)
@@ -1118,7 +1162,7 @@ class C_SUT:
                     
                     my_Z = self.Z_c.copy()
                     # Calculating the first step to form the dataframes
-                    my_Z.loc[(par_0,par_1),(par_2,par_3)] = self.Z_c.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
+                    my_Z.loc[(par_0,par_1),(par_2,par_3)] = self.Z.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
                     
                     my_z = pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
                     # BIG QUESTION
@@ -1138,7 +1182,7 @@ class C_SUT:
                     
                     while (j<=sen_max):
                         
-                        my_Z.loc[(par_0,par_1),(par_2,par_3)] =  self.Z_c.loc[(par_0,par_1),(par_2,par_3)].values + j
+                        my_Z.loc[(par_0,par_1),(par_2,par_3)] =  self.Z.loc[(par_0,par_1),(par_2,par_3)].values + j
                                                 
                         my_z = pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
                         
@@ -1172,7 +1216,7 @@ class C_SUT:
                     
                     my_z = self.z_c.copy()
                     
-                    my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z_c.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  sen_min )
+                    my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  sen_min )
                     
                     l_s = np.linalg.inv(np.identity(len(my_z))-my_z) 
                     X_s_0 = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(sen_min)])
@@ -1188,7 +1232,7 @@ class C_SUT:
                     
                     while (j<=sen_max):
                         
-                        my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z_c.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  j )
+                        my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  j )
                         
                                                 
                         l_s = np.linalg.inv(np.identity(len(my_z))-my_z)
@@ -1213,6 +1257,7 @@ class C_SUT:
 
 
         if parameter == 'Y':
+            
 
             
 
@@ -1227,16 +1272,18 @@ class C_SUT:
             par_0 = 'Commodities'
             par_1 = inp.loc[i,'row']  
             par_2 = 'Total final demand'
-
+            
             self.sen_par = '{}, {}.'.format('Y',par_1)            
             # to save the sensitivity results, we need to build a dataframe
             
             # Make a copy of the matrix which is going to be changed.
-            
+
             my_Y = self.Y_c.copy()
- 
-            my_Y.loc[(par_0,par_1),par_2] =  sen_min
-            print(my_Y.loc[(par_0,par_1),par_2])
+
+
+            my_Y.loc[(par_0,par_1),par_2] =  self.Y.loc[(par_0,par_1),par_2].values + sen_min 
+
+            
             
             X_s_0 = pd.DataFrame(self.l_c @ my_Y.values,index=self.X.index,columns=[str(sen_min)])
             
@@ -1250,10 +1297,10 @@ class C_SUT:
             j = sen_min + sen_step
             
             while (j<=sen_max):
-                print(j)
-                print(my_Y.loc[(par_0,par_1),par_2])
-                my_Y.loc[(par_0,par_1),par_2] =  j
-                print(my_Y.loc[(par_0,par_1),par_2])
+
+
+                my_Y.loc[(par_0,par_1),par_2] = self.Y.loc[(par_0,par_1),par_2].values + j 
+
                 
                 X_s = pd.DataFrame(self.l_c @ my_Y.values,index=self.X.index,columns=[str(round(j,4))])
                 
@@ -1269,15 +1316,12 @@ class C_SUT:
                 
                 j = j + sen_step
     
-
+            self.Y_s = my_Y
             self.X_s = X_s_0
             self.VA_s = VA_s_0
             self.S_s  = S_s_0
         
-                    
-                      
-    
-        
+   
         
         if parameter == 'VA':
             
@@ -1310,7 +1354,7 @@ class C_SUT:
                     my_VA = self.VA_c.copy()
                     
                     # Calculating the first step to form the dataframes
-                    my_VA.loc[(par_0,par_1),(par_2,par_3)] = self.VA_c.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
+                    my_VA.loc[(par_0,par_1),(par_2,par_3)] = self.VA.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
                     
                     my_va = pd.DataFrame(my_VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
                     
@@ -1328,7 +1372,7 @@ class C_SUT:
                     
                     while (j<=sen_max):
                         
-                        my_VA.loc[(par_0,par_1),(par_2,par_3)] = self.VA_c.loc[(par_0,par_1),(par_2,par_3)].values + j
+                        my_VA.loc[(par_0,par_1),(par_2,par_3)] = self.VA.loc[(par_0,par_1),(par_2,par_3)].values + j
                         
                         my_va = pd.DataFrame(my_VA.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.VA.index, columns=self.VA.columns)
                         
@@ -1358,7 +1402,7 @@ class C_SUT:
                     my_va = self.va_c.copy()
                     
                     # Calculating the first step to form the dataframes
-                    my_va.loc[(par_0,par_1),(par_2,par_3)] = self.va_c.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
+                    my_va.loc[(par_0,par_1),(par_2,par_3)] = self.va.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
                     
                     VA_s_0 = pd.DataFrame(my_va.values @ (self.X_c.values  * np.identity(len(X_s_0.values))),index = self.VA_ind,columns =  self.Z.columns) 
                     VA_s_0 = pd.concat([VA_s_0],keys=[str(sen_min)], names=['Scenario'])    
@@ -1374,7 +1418,7 @@ class C_SUT:
                     
                     while (j<=sen_max):
                         
-                        my_va.loc[(par_0,par_1),(par_2,par_3)] = self.va_c.loc[(par_0,par_1),(par_2,par_3)].values + j                       
+                        my_va.loc[(par_0,par_1),(par_2,par_3)] = self.va.loc[(par_0,par_1),(par_2,par_3)].values + j                       
 
                         VA_s = pd.DataFrame(my_va.values @ (self.X_c.values * np.identity(len(self.X_c.values))),index = self.VA_ind,columns =  self.Z.columns) 
                         
@@ -1402,7 +1446,10 @@ class C_SUT:
             
             self.S_s_agg = self.S_s.groupby(level=[0,4],sort = False).sum().groupby(axis = 1 , level=[0,4],sort = False).sum()
             
-            self.X_s = pd.concat([self.X_s],keys=[self.sen_par],names=['Parameter'],axis=0)
+            # self.X_s  = pd.concat([self.X_s],keys=[self.sen_par],names=['Parameter'],axis=1)
+            # self.VA_s = pd.concat([self.VA_s],keys=[self.sen_par],names=['Parameter'],axis=0) 
+            # self.S_s_agg = pd.concat([self.S_s_agg],keys=[self.sen_par],names=['Parameter'],axis=0) 
+            
             
             self.results['X_s_' + str(self.s_counter)] = self.X_s
             self.results['VA_s_' + str(self.s_counter)] = self.VA_s
