@@ -174,6 +174,7 @@ class C_SUT:
 
             header = list(Z_m.columns)
             index  = list(Z_m.index)
+            
 
             
             for i in range(len(Z_m)): 
@@ -182,16 +183,15 @@ class C_SUT:
                 # on the coefficients or the flow
                 
                 # IF the changes are going to be imposed on unaggregated levels
-                if Z_m.loc[index[i],header[-1]] == 'No':
+                if Z_m.loc[index[i],'Aggregated'] == 'No':
                 
-                    if Z_m.loc[index[i],header[4]] == 'Percentage':
+                    if Z_m.loc[index[i],'type'] == 'Percentage':
                         
                         self.z_c.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
                             self.z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
                                 * ( 1 +  Z_m.loc[index[i],header[5]] )
                                 
-                    if Z_m.loc[index[i],header[4]] == 'Absolute':
-                        
+                    if Z_m.loc[index[i],'type'] == 'Absolute':
                         my_Z=self.Z.copy()
                         
                         my_Z.loc[(Z_m.loc[index[i],header[0]],Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
@@ -204,11 +204,11 @@ class C_SUT:
                 
                 
                 # If changes are going to implemented on the aggregated level
-                elif  Z_m.loc[index[i],header[-1]] == 'Yes': 
+                elif  Z_m.loc[index[i],'Aggregated'] == 'Yes': 
                     
                     try:
                     
-                        if Z_m.loc[index[i],header[4]] == 'Percentage':
+                        if Z_m.loc[index[i],'type'] == 'Percentage':
                             
                             self.z_c.loc[(Z_m.loc[index[i],header[0]],slice(None),slice(None),slice(None),Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
                                 self.z.loc[(Z_m.loc[index[i],header[0]],slice(None),slice(None),slice(None),Z_m.loc[index[i],header[1]]),(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
@@ -217,7 +217,7 @@ class C_SUT:
 
                     except:
                     
-                        if Z_m.loc[index[i],header[4]] == 'Percentage':
+                        if Z_m.loc[index[i],'type'] == 'Percentage':
                             
                             self.z_c.loc[Z_m.loc[index[i],header[0]],(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])] = \
                                 self.z.loc[Z_m.loc[index[i],header[0]],(Z_m.loc[index[i],header[2]],Z_m.loc[index[i],header[3]])].values \
@@ -235,16 +235,16 @@ class C_SUT:
             for i in range(len(VA_m)):
                 
                 # IF the changes are going to be imposed on unaggregated levels
-                if VA_m.loc[index[i],header[-1]] == 'No':
+                if VA_m.loc[index[i],'Aggregated'] == 'No':
 
                 
-                    if VA_m.loc[index[i],header[3]] == 'Percentage':
+                    if VA_m.loc[index[i],'type'] == 'Percentage':
                         
                         self.va_c.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
                             self.va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
                                 * ( 1 + VA_m.loc[index[i],header[4]])
                                 
-                    if VA_m.loc[index[i],header[3]] == 'Absolute':
+                    if VA_m.loc[index[i],'type'] == 'Absolute':
                         
                         my_VA= self.VA.copy()
                         
@@ -257,10 +257,10 @@ class C_SUT:
                             my_va.loc[VA_m.loc[index[i],header[0]],(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
                                 
                 # If changes are going to implemented on the aggregated level
-                elif  VA_m.loc[index[i],header[-1]] == 'Yes':
+                elif  VA_m.loc[index[i],'Aggregated'] == 'Yes':
                     
 
-                    if VA_m.loc[index[i],header[3]] == 'Percentage':
+                    if VA_m.loc[index[i],'type'] == 'Percentage':
                         
                         self.va_c.loc[(slice(None), slice(None), slice(None), VA_m.loc[index[i],header[0]]),(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])] = \
                             self.va.loc[(slice(None), slice(None), slice(None),VA_m.loc[index[i],header[0]]),(VA_m.loc[index[i],header[1]],VA_m.loc[index[i],header[2]])].values \
@@ -826,6 +826,7 @@ class C_SUT:
         OPT = pd.read_excel(directory,sheet_name='input',index_col=[0,1],header=[0,1])
         
         if inv_sen[0]=='main' and sav_sen[0]=='main':
+            
         
         # Calculateing different invoces using dictionaries and the number of senarios
             INV = self.results['VA_'+ str(inv_sen[1])].values.sum().sum() - self.VA.sum().sum()
@@ -851,39 +852,39 @@ class C_SUT:
             
             
             # Writing the results on the data frame
-            # OPT.loc[OPT.index,('ROI','years')]=self.ROI
-            OPT.loc[OPT.index,('Saving','M kSh/FU')]=SAV
+            # OPT.loc['Scenario',('ROI','years')]=self.ROI
+            OPT.loc['Scenario',('Saving','M kSh/FU')]=SAV
             
-            OPT.loc[OPT.index,('Investment','M kSh')]=INV
+            OPT.loc['Scenario',('Investment','M kSh')]=INV
             
-            OPT.loc[OPT.index,('Water Saving','m3/FU')]=W_S 
-            OPT.loc[OPT.index,('Water Investment','m3/FU')]=W_I
+            OPT.loc['Scenario',('Water Saving','m3/FU')]=W_S 
+            OPT.loc['Scenario',('Water Investment','m3/FU')]=W_I
             
-            OPT.loc[OPT.index,('Emission Saving','kton/FU')]=E_S 
-            OPT.loc[OPT.index,('Emission Investment','kton/FU')]=E_I
+            OPT.loc['Scenario',('Emission Saving','kton/FU')]=E_S 
+            OPT.loc['Scenario',('Emission Investment','kton/FU')]=E_I
     
-            OPT.loc[OPT.index,('Land Saving','M kSh/FU')]=L_S           
-            OPT.loc[OPT.index,('Land Investment','M kSh/FU')]=L_I           
+            OPT.loc['Scenario',('Land Saving','M kSh/FU')]=L_S           
+            OPT.loc['Scenario',('Land Investment','M kSh/FU')]=L_I           
     
-            OPT.loc[OPT.index,('Workforce Saving','M kSh/FU')]=F_S           
-            OPT.loc[OPT.index,('Workforce Investment','M kSh/FU')]=F_I 
+            OPT.loc['Scenario',('Workforce Saving','M kSh/FU')]=F_S           
+            OPT.loc['Scenario',('Workforce Investment','M kSh/FU')]=F_I 
             
-            OPT.loc[OPT.index,('Capital Saving','M kSh/FU')] = C_S
-            OPT.loc[OPT.index,('Capital Investment','M kSh/FU')] = C_I
+            OPT.loc['Scenario',('Capital Saving','M kSh/FU')] = C_S
+            OPT.loc['Scenario',('Capital Investment','M kSh/FU')] = C_I
             
-            OPT.loc[OPT.index,('Import Saving','M kSh/FU')] = IM_S
-            OPT.loc[OPT.index,('Import Investment','M kSh/FU')] = IM_I  
+            OPT.loc['Scenario',('Import Saving','M kSh/FU')] = IM_S
+            OPT.loc['Scenario',('Import Investment','M kSh/FU')] = IM_I  
             
-            OPT.loc[OPT.index,('PROI','M kSh/FU')] = SAV / INV 
-            OPT.loc[OPT.index,('PPBT','years')] = INV / SAV
+            OPT.loc['Scenario',('PROI','M kSh/FU')] = SAV / INV 
+            OPT.loc['Scenario',('PPBT','years')] = INV / SAV
             
             # Total Impacts
-            OPT.loc[OPT.index,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
-            OPT.loc[OPT.index,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
-            OPT.loc[OPT.index,('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
-            OPT.loc[OPT.index,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
-            OPT.loc[OPT.index,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
-            OPT.loc[OPT.index,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
+            OPT.loc['Scenario',('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
+            OPT.loc['Scenario',('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
+            OPT.loc['Scenario',('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
+            OPT.loc['Scenario',('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
+            OPT.loc['Scenario',('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
+            OPT.loc['Scenario',('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
             
             
             
@@ -1132,10 +1133,12 @@ class C_SUT:
                 if par_4 == 'Absolute': 
                     
                     my_Z = self.Z_c.copy()
+                    my_z = self.z_c.copy()
                     # Calculating the first step to form the dataframes
                     my_Z.loc[(par_0,par_1),(par_2,par_3)] = self.Z.loc[(par_0,par_1),(par_2,par_3)].values + sen_min
                     
-                    my_z = pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
+                    my_z0 = pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
+                    my_z.loc[(par_0,par_1),(par_2,par_3)]  = my_z0.loc[(par_0,par_1),(par_2,par_3)].values
                     # BIG QUESTION
                     l_s = np.linalg.inv(np.identity(len(my_z))-my_z) 
                     X_s_0 = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(sen_min)])
@@ -1146,7 +1149,7 @@ class C_SUT:
                     S_s_0  = pd.DataFrame(self.s_c.values @ (X_s_0.values * np.identity(len(X_s_0.values))),index=self.S.index,columns = self.S.columns)
                     S_s_0  = pd.concat([S_s_0],keys=[str(sen_min)],names=['Scenario'])
                     
-                    
+
                     
 
                     j = sen_min + sen_step
@@ -1154,31 +1157,31 @@ class C_SUT:
                     while (j<=sen_max):
                         
                         my_Z.loc[(par_0,par_1),(par_2,par_3)] =  self.Z.loc[(par_0,par_1),(par_2,par_3)].values + j
-                                                
-                        my_z = pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
+                        my_z0 = pd.DataFrame(my_Z.values @ np.linalg.inv (self.X.values * np.identity(len(self.X))),index = self.Z.index , columns = self.Z.columns)
+                        my_z.loc[(par_0,par_1),(par_2,par_3)]  = my_z0.loc[(par_0,par_1),(par_2,par_3)].values
                         
                         l_s = np.linalg.inv(np.identity(len(my_z))-my_z)
                         
-                        X_s = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(round(j,5))])
+                        X_s = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(round(j,15))])
                         
                         X_s_0 = pd.concat([X_s_0,X_s],axis=1)
                         
                         VA_s = pd.DataFrame(self.va_c.values @ (X_s.values * np.identity(len(X_s.values))),index = self.VA_ind,columns =  self.Z.columns) 
                         
-                        VA_s = pd.concat([VA_s],keys=[str(round(j,4))], names=['Scenario'])
+                        VA_s = pd.concat([VA_s],keys=[str(round(j,15))], names=['Scenario'])
                         
                         VA_s_0 = pd.concat([VA_s_0,VA_s])
 
                         S_s    = pd.DataFrame(self.s_c.values @ (X_s.values * np.identity(len(X_s.values))),index=self.S.index,columns = self.S.columns)
                         
-                        S_s    = pd.concat([S_s],keys=[str(round(j,4))],names=['Scenario'])
+                        S_s    = pd.concat([S_s],keys=[str(round(j,15))],names=['Scenario'])
                         S_s_0  = pd.concat([S_s_0,S_s])
 
 
                         
                         j = j + sen_step
                 
-
+                    self.anam = my_z 
                     self.X_s = X_s_0
                     self.VA_s = VA_s_0
                     self.S_s = S_s_0
@@ -1205,17 +1208,17 @@ class C_SUT:
                         my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  j )
                                                 
                         l_s = np.linalg.inv(np.identity(len(my_z))-my_z)
-                        X_s = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(round(j,10))])
+                        X_s = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(round(j,15))])
                         
                         X_s_0 = pd.concat([X_s_0,X_s],axis=1)
                         
                         VA_s = pd.DataFrame(self.va_c.values @ (X_s.values * np.identity(len(X_s.values))),index = self.VA_ind,columns =  self.Z.columns) 
                         
-                        VA_s = pd.concat([VA_s],keys=[str(round(j,10))], names=['Scenario'])                        
+                        VA_s = pd.concat([VA_s],keys=[str(round(j,15))], names=['Scenario'])                        
                         VA_s_0 = pd.concat([VA_s_0,VA_s])
 
                         S_s    = pd.DataFrame(self.s_c.values @ (X_s.values * np.identity(len(X_s.values))),index=self.S.index,columns = self.S.columns)     
-                        S_s    = pd.concat([S_s],keys=[str(round(j,10))],names=['Scenario'])
+                        S_s    = pd.concat([S_s],keys=[str(round(j,15))],names=['Scenario'])
                         S_s_0  = pd.concat([S_s_0,S_s])
 
                         j = j + sen_step
@@ -1271,16 +1274,16 @@ class C_SUT:
                 my_Y.loc[(par_0,par_1),par_2] = self.Y.loc[(par_0,par_1),par_2].values + j 
 
                 
-                X_s = pd.DataFrame(self.l_c @ my_Y.values,index=self.X.index,columns=[str(round(j,4))])
+                X_s = pd.DataFrame(self.l_c @ my_Y.values,index=self.X.index,columns=[str(round(j,15))])
                 
                 X_s_0 = pd.concat([X_s_0,X_s],axis=1)
                 
                 VA_s = pd.DataFrame(self.va_c.values @ (X_s.values * np.identity(len(X_s.values))),index = self.VA_ind,columns =  self.Z.columns)            
-                VA_s = pd.concat([VA_s],keys=[str(round(j,4))], names=['Scenario'])                       
+                VA_s = pd.concat([VA_s],keys=[str(round(j,15))], names=['Scenario'])                       
                 VA_s_0 = pd.concat([VA_s_0,VA_s])  
 
                 S_s    = pd.DataFrame(self.s_c.values @ (X_s.values * np.identity(len(X_s.values))),index=self.S.index,columns = self.S.columns)                        
-                S_s    = pd.concat([S_s],keys=[str(round(j,4))],names=['Scenario'])
+                S_s    = pd.concat([S_s],keys=[str(round(j,15))],names=['Scenario'])
                 S_s_0  = pd.concat([S_s_0,S_s])    
                 
                 j = j + sen_step
@@ -1351,12 +1354,12 @@ class C_SUT:
                         
                         VA_s_0 = pd.concat([VA_s_0,VA_s])
 
-                        X_s = pd.DataFrame(self.X_c.values,index=self.X.index,columns=[str(round(j,4))])
+                        X_s = pd.DataFrame(self.X_c.values,index=self.X.index,columns=[str(round(j,15))])
                 
                         X_s_0 = pd.concat([X_s_0,X_s],axis=1)
 
                         S_s    = pd.DataFrame(self.S_c.values,index=self.S.index,columns = self.S.columns)                        
-                        S_s    = pd.concat([S_s_0],keys=[str(round(j,4))],names=['Scenario'])
+                        S_s    = pd.concat([S_s_0],keys=[str(round(j,15))],names=['Scenario'])
                         S_s_0  = pd.concat([S_s_0,S_s])  
                         
                         j = j + sen_step
@@ -1395,12 +1398,12 @@ class C_SUT:
                         
                         VA_s_0 = pd.concat([VA_s_0,VA_s])
                         
-                        X_s = pd.DataFrame(self.X_c.values,index=self.X.index,columns=[str(round(j,4))])
+                        X_s = pd.DataFrame(self.X_c.values,index=self.X.index,columns=[str(round(j,15))])
                 
                         X_s_0 = pd.concat([X_s_0,X_s],axis=1)
                         
                         S_s    = pd.DataFrame(self.S_c.values,index=self.S.index,columns = self.S.columns)                        
-                        S_s    = pd.concat([S_s_0],keys=[str(round(j,4))],names=['Scenario'])
+                        S_s    = pd.concat([S_s],keys=[str(round(j,15))],names=['Scenario'])
                         S_s_0  = pd.concat([S_s_0,S_s])                          
 
 

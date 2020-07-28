@@ -27,16 +27,19 @@ kenya.shock(path=r'Interventions\Ecopulpers.xlsx', VA=True, S=True, Z=True)
 kenya.calc_all()
 kenya.aggregate()
 kenya.add_dict()
-
+#%%
 kenya.sensitivity(parameter='Z')
 
-kenya.plot_dv(unit='M KSH', main_title='Annual impact of using more efficient machines', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins'], color='terrain')
+#kenya.plot_dv(unit='M KSH', main_title='Annual impact of using more efficient machines', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins'], color='terrain')
 
 # kenya.plot_dS(indicator='Green Water',  Type='absolute', main_title='Decrease in the use of green water due to the use of 1 M KSH eco-pulpers with respect to baseline', color='ocean')
 #%%
 results = kenya.results
 #%%
-kenya.Int_Ass(sav_sen=['sensitivity',1],sce_name='Pulping_price')
+kenya.Int_Ass(sce_name='Ecopulpers_main')
 #%%
 print('ROI = '+str(round(kenya.ROI,4)))
 print('Annual Savings = '+str(round(kenya.SAV,4)))
+#%%
+
+    
