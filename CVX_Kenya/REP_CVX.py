@@ -874,8 +874,8 @@ class C_SUT:
             OPT.loc[OPT.index,('Import Saving','M kSh/FU')] = IM_S
             OPT.loc[OPT.index,('Import Investment','M kSh/FU')] = IM_I  
             
-            OPT.loc[OPT.index,('PROI','M kSh/FU')] = INV / SAV 
-            OPT.loc[OPT.index,('PPBT','years')] = SAV / INV
+            OPT.loc[OPT.index,('PROI','M kSh/FU')] = SAV / INV 
+            OPT.loc[OPT.index,('PPBT','years')] = INV / SAV
             
             # Total Impacts
             OPT.loc[OPT.index,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
@@ -939,8 +939,8 @@ class C_SUT:
                 OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
 
 
-                OPT.loc[i,('PROI','M kSh/FU')] = INV / SAV 
-                OPT.loc[i,('PPBT','years')] = SAV / INV   
+                OPT.loc[i,('PROI','M kSh/FU')] = SAV / INV 
+                OPT.loc[i,('PPBT','years')] = INV / SAV   
                 
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='main':
             indeces=list(self.S_s_agg.index.get_level_values(0))
@@ -990,8 +990,8 @@ class C_SUT:
                 OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
                 OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S      
 
-                OPT.loc[i,('PROI','M kSh/FU')] = INV / SAV 
-                OPT.loc[i,('PPBT','years')] = SAV / INV   
+                OPT.loc[i,('PROI','M kSh/FU')] = SAV / INV 
+                OPT.loc[i,('PPBT','years')] = INV / SAV   
                 
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='sensitivity':
             

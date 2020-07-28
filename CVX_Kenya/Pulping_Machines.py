@@ -5,7 +5,7 @@ Created on Mon Mar 30 11:28:09 2020
 @author: Amin
 
 """
-import REP_CVX_sens as cvx
+import REP_CVX as cvx
 
 kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
 #%% Step1: Investment
@@ -32,7 +32,7 @@ kenya.sensitivity(parameter='Z')
 
 kenya.plot_dv(unit='M KSH', main_title='Annual impact of using more efficient machines', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins'], color='terrain')
 
-kenya.plot_dS(indicator='Green Water',  Type='absolute', main_title='Decrease in the use of green water due to the use of 1 M KSH eco-pulpers with respect to baseline', color='ocean')
+# kenya.plot_dS(indicator='Green Water',  Type='absolute', main_title='Decrease in the use of green water due to the use of 1 M KSH eco-pulpers with respect to baseline', color='ocean')
 #%%
 results = kenya.results
 #%%
