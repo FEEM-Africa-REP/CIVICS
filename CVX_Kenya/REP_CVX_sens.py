@@ -448,9 +448,9 @@ class C_SUT:
 #    2. A general graph function in which user can choose what to graph        
     
 
-
-    def plot_dx(self, aggregation=True, kind='bar', unit='M USD', stacked=True, level=None, percent=False):
+    def plot_dx(self, aggregation=True, kind='bar', unit='M KSH', stacked=True, level=None, percent=False,ranshow=(0,0)):
         import matplotlib.pyplot as plt
+        import EX_func
         plt.style.use(['ggplot'])
 
         
@@ -477,15 +477,18 @@ class C_SUT:
         if aggregation: 
             
             try:
-                old = self.X_agg
-                new = self.X_c_agg
+                old = self.X_agg.copy()
+                new = self.X_c_agg.copy()
             except: 
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
                 
         elif aggregation == False:
             
-            old = self.X
-            new = self.X_c
+            old = self.X.copy()
+            new = self.X_c.copy()
+            ind=[old.index.get_level_values(0),old.index.get_level_values(1)]
+            old.index=ind
+            new.index=ind
             
         if level == None:
             old = old
@@ -511,7 +514,8 @@ class C_SUT:
             title=''
         else:
             title=' by '+str(level)
-            
+        dx=EX_func.drop_fun(data=dx.T, ranshow=ranshow)
+        dx=dx.T
         dx.plot(kind=kind, stacked=stacked)
         plt.title('Production Change'+title)
         plt.ylabel(unit)
@@ -519,9 +523,10 @@ class C_SUT:
         plt.show()
         
   
-    def plot_dv(self,aggregation=True, kind='bar', unit='K USD', stacked=True, level=None, drop='unused', percent=False, main_title = 'default', color='terrain'):
+    def plot_dv(self,aggregation=True, kind='bar', unit='M KSH', stacked=True, level=None, drop='unused', percent=False, main_title = 'default', color='terrain',ranshow=(0,0)):
         
         import matplotlib.pyplot as plt
+        import EX_func
         plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
@@ -550,16 +555,22 @@ class C_SUT:
             
             try:
 
-                old = self.VA_agg
+                old = self.VA_agg.copy()
 
-                new = self.VA_c_agg
+                new = self.VA_c_agg.copy()
             except: 
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
                 
         elif aggregation == False:
             
-            old = self.VA
-            new = self.VA_c
+            old = self.VA.copy()
+            new = self.VA_c.copy()
+            ind=old.index.get_level_values(0)
+            col=[old.columns.get_level_values(0),old.columns.get_level_values(1)]
+            old.index=ind
+            new.index=ind
+            old.columns=col
+            new.columns=col
             
         if level == None:
             old = old
@@ -590,13 +601,17 @@ class C_SUT:
         else:
              title = main_title
         
-        dv = dv.drop(drop)
+        if aggregation == True:
+            dv = dv.drop(drop)
+            
+        dv=EX_func.drop_fun(data=dv,ranshow=ranshow)
         dv=dv.T
+        
         
         dv.plot(kind = kind , stacked = stacked, colormap=color)
         plt.title(title)
         plt.ylabel(unit)
-        plt.legend(loc = 1,bbox_to_anchor = (1.5,1))
+        plt.legend(loc = 1,bbox_to_anchor = (1.8,1))
         plt.show()        
 
     
@@ -656,7 +671,7 @@ class C_SUT:
         plt.show()    
     
     
-    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute', main_title = 'default', color='terrain'):
+    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute'):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
@@ -700,12 +715,6 @@ class C_SUT:
             except:
                 raise ValueError('There is no aggregated result of {} and {}. Please Run the aggregation function first'.format('Baseline Prodction','New Production'))
 
-        # Set the title
-        if main_title=='default':
-            title = 'Change in {}'.format(indicator)
-        else:
-            title = main_title
-        
         # To Take the unit
         
         if Type == 'percentage':
@@ -716,14 +725,14 @@ class C_SUT:
             dS=dS.groupby(level=0).sum().T
             
             if details:
-                dS.plot(kind = kind , stacked = stacked, colormap=color)
-                plt.title(title)     
+                dS.plot(kind = kind , stacked = stacked)
+                plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(unit)
                 
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
-                plt.title(title)     
+                dS.plot(kind = kind , stacked = stacked,legend=False)
+                plt.title('Change in {}'.format(indicator))  
                 plt.ylabel(unit)
                 
         if Type == 'absolute':
@@ -743,15 +752,15 @@ class C_SUT:
             dS=dS.groupby(level=0).sum().T
             
             if details:
-                dS.plot(kind = kind , stacked = stacked, colormap=color)
-                plt.title(title)     
+                dS.plot(kind = kind , stacked = stacked)
+                plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
+                dS.plot(kind = kind , stacked = stacked,legend=False)
                 plt.title('Change in {}'.format(indicator))  
                 plt.ylabel(unit)
-        
+                
         if Type == 'change':
             
             unit = "?"
@@ -764,14 +773,15 @@ class C_SUT:
             
             if details:
                 dS.plot(kind = kind , stacked = stacked)
-                plt.title(title)     
+                plt.title('Change in {}'.format(indicator))     
                 plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
                 plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False, colormap=color)
-                plt.title(title)     
+                dS.plot(kind = kind , stacked = stacked,legend=False)
+                plt.title('Change in {}'.format(indicator))  
                 plt.ylabel(unit)           
-        plt.show()      
+        plt.show()  
+      
 
 
     def add_dict(self):
@@ -986,62 +996,13 @@ class C_SUT:
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='sensitivity':
             
             raise ValueError ("Only one senseitivty parameter can be analyzed!")
-            # indeces=list(self.S_s_agg.index.get_level_values(0))
-            # indeces = list(dict.fromkeys(indeces))
-            
-            
-            # for i in indeces:
-            #     # Investments 
+
                 
-            #     INV = self.results['VA_s_'+ str(inv_sen[1])].loc[i].values.sum().sum() - self.VA.sum().sum()  
-            #     W_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
-            #     E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
-            #     L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-            #     F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
-            #     C_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[capital].sum().sum() - self.VA.groupby(level=3).sum().loc[capital].sum().sum()            
-            #     IM_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
-                
-            #     OPT.loc[i,('Investment','M kSh')]=INV
-            #     OPT.loc[i,('Water Investment','m3/FU')]=W_I
-            #     OPT.loc[i,('Emission Investment','kton/FU')]=E_I
-            #     OPT.loc[i,('Land Investment','M kSh/FU')]=L_I           
-            #     OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
-            #     OPT.loc[i,('Capital Investment','M kSh/FU')] = C_I
-            #     OPT.loc[i,('Import Investment','M kSh/FU')] = IM_I                 
-              
-            #     SAV = -self.results['VA_s_'+ str(sav_sen[1])].loc[i].values.sum().sum() + self.VA.sum().sum()
-            #     W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
-            #     E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
-            #     L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-            #     F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
-            #     C_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
-            #     IM_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum() 
-                    
-          
-            #     OPT.loc[i,('Saving','M kSh/FU')]=SAV
-            #     OPT.loc[i,('Water Saving','m3/FU')]=W_S                 
-            #     OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
-            #     OPT.loc[i,('Land Saving','M kSh/FU')]=L_S           
-            #     OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S               
-            #     OPT.loc[i,('Import Saving','M kSh/FU')] = IM_S
-            #     OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
-                
-            #     OPT.loc[i,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
-            #     OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
-            #     OPT.loc[i,('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
-            #     OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
-            #     OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
-            #     OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S 
-                
-                
+        self.OPT = OPT        
         save_dir = r'Optimization\ ' + sce_name + '.xlsx'
         with pd.ExcelWriter(save_dir) as writer:
             OPT.to_excel(writer)
             
-        # Save sensitivity scenarios in this intervention-specific excel ^
-        
-        # except:
-        #     raise ValueError('Please Use Aggregation Function and Add to dictionary function for every step')
         
     def optimize(self,scenario):
         import cvxpy as cp
@@ -1225,9 +1186,7 @@ class C_SUT:
                 if par_4 == 'Percentage': 
                     
                     my_z = self.z_c.copy()
-                    print(my_z.loc[(par_0,par_1),(par_2,par_3)] )
                     my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  sen_min )
-                    print(my_z.loc[(par_0,par_1),(par_2,par_3)] )
                     
                     l_s = np.linalg.inv(np.identity(len(my_z))-my_z) 
                     X_s_0 = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(sen_min)])
@@ -1244,7 +1203,6 @@ class C_SUT:
                     while (j<=sen_max):
                         
                         my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  j )
-                        print(my_z.loc[(par_0,par_1),(par_2,par_3)] )
                                                 
                         l_s = np.linalg.inv(np.identity(len(my_z))-my_z)
                         X_s = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(round(j,10))])
