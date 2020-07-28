@@ -42,7 +42,7 @@ kenya.plot_dv(unit='M KSH', main_title='Change in the output of activities', lev
 #%%
 results= kenya.results
 #%%
-kenya.Int_Ass(inv_sen=['sensitivity',1],sav_sen=['main',2],sce_name='Sens_Try')
+kenya.Int_Ass(inv_sen=['sensitivity',1],sav_sen=['main',2],sce_name='Shading_interv')
 #print(kenya.ROI)
 #%%
 sens = kenya.X_s

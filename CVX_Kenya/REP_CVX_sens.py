@@ -819,7 +819,7 @@ class C_SUT:
         
         # Calculateing different invoces using dictionaries and the number of senarios
             INV = self.results['VA_'+ str(inv_sen[1])].values.sum().sum() - self.VA.sum().sum()
-            self.SAV = -self.results['VA_'+ str(sav_sen[1])].values.sum().sum() + self.VA.sum().sum()
+            SAV = -self.results['VA_'+ str(sav_sen[1])].values.sum().sum() + self.VA.sum().sum()
             
             W_I =  self.results['S_agg_' + str(inv_sen[1])].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
             W_S = -self.results['S_agg_' + str(sav_sen[1])].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
@@ -839,10 +839,10 @@ class C_SUT:
             IM_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
             IM_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum()   
             
-            self.ROI = INV/self.SAV
+            
             # Writing the results on the data frame
-            OPT.loc[OPT.index,('ROI','years')]=self.ROI
-            OPT.loc[OPT.index,('Saving','M kSh/FU')]=self.SAV
+            # OPT.loc[OPT.index,('ROI','years')]=self.ROI
+            OPT.loc[OPT.index,('Saving','M kSh/FU')]=SAV
             
             OPT.loc[OPT.index,('Investment','M kSh')]=INV
             
@@ -863,6 +863,9 @@ class C_SUT:
             
             OPT.loc[OPT.index,('Import Saving','M kSh/FU')] = IM_S
             OPT.loc[OPT.index,('Import Investment','M kSh/FU')] = IM_I  
+            
+            OPT.loc[OPT.index,('PROI','M kSh/FU')] = INV / SAV 
+            OPT.loc[OPT.index,('PPBT','years')] = SAV / INV
             
             # Total Impacts
             OPT.loc[OPT.index,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
@@ -924,7 +927,11 @@ class C_SUT:
                 OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
                 OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
                 OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
-        
+
+
+                OPT.loc[i,('PROI','M kSh/FU')] = INV / SAV 
+                OPT.loc[i,('PPBT','years')] = SAV / INV   
+                
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='main':
             indeces=list(self.S_s_agg.index.get_level_values(0))
             indeces = list(dict.fromkeys(indeces))
@@ -972,6 +979,9 @@ class C_SUT:
                 OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
                 OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
                 OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S      
+
+                OPT.loc[i,('PROI','M kSh/FU')] = INV / SAV 
+                OPT.loc[i,('PPBT','years')] = SAV / INV   
                 
         if inv_sen[0]=='sensitivity' and sav_sen[0]=='sensitivity':
             
@@ -1215,8 +1225,9 @@ class C_SUT:
                 if par_4 == 'Percentage': 
                     
                     my_z = self.z_c.copy()
-                    
+                    print(my_z.loc[(par_0,par_1),(par_2,par_3)] )
                     my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  sen_min )
+                    print(my_z.loc[(par_0,par_1),(par_2,par_3)] )
                     
                     l_s = np.linalg.inv(np.identity(len(my_z))-my_z) 
                     X_s_0 = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(sen_min)])
@@ -1233,20 +1244,20 @@ class C_SUT:
                     while (j<=sen_max):
                         
                         my_z.loc[(par_0,par_1),(par_2,par_3)] = self.z.loc[(par_0,par_1),(par_2,par_3)].values * ( 1 +  j )
-                        
+                        print(my_z.loc[(par_0,par_1),(par_2,par_3)] )
                                                 
                         l_s = np.linalg.inv(np.identity(len(my_z))-my_z)
-                        X_s = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(round(j,4))])
+                        X_s = pd.DataFrame(l_s @ self.Y_c.values,index=self.X.index,columns=[str(round(j,10))])
                         
                         X_s_0 = pd.concat([X_s_0,X_s],axis=1)
                         
                         VA_s = pd.DataFrame(self.va_c.values @ (X_s.values * np.identity(len(X_s.values))),index = self.VA_ind,columns =  self.Z.columns) 
                         
-                        VA_s = pd.concat([VA_s],keys=[str(round(j,4))], names=['Scenario'])                        
+                        VA_s = pd.concat([VA_s],keys=[str(round(j,10))], names=['Scenario'])                        
                         VA_s_0 = pd.concat([VA_s_0,VA_s])
 
                         S_s    = pd.DataFrame(self.s_c.values @ (X_s.values * np.identity(len(X_s.values))),index=self.S.index,columns = self.S.columns)     
-                        S_s    = pd.concat([S_s],keys=[str(round(j,4))],names=['Scenario'])
+                        S_s    = pd.concat([S_s],keys=[str(round(j,10))],names=['Scenario'])
                         S_s_0  = pd.concat([S_s_0,S_s])
 
                         j = j + sen_step
