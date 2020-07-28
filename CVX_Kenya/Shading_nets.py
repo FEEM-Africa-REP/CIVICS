@@ -35,16 +35,18 @@ kenya.add_dict()
 kenya.plot_dv(unit='M USD', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
 kenya.plot_dv(unit='M USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Accent')
 
-kenya.plot_dv(unit='M USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Pastel1', ranshow=(0.0001,-0.00001), aggregation=False)
-kenya.plot_dx(unit='M USD', level='Activities', percent=False, ranshow=(0.0001,-0.0001), aggregation=False)
+# kenya.plot_dv(unit='M USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Pastel1', ranshow=(0.0001,-0.00001), aggregation=False)
+# kenya.plot_dx(unit='M USD', level='Activities', percent=False, ranshow=(0.0001,-0.0001), aggregation=False)
 
 kenya.plot_dv()
 kenya.plot_dx()
 kenya.plot_dp()
 kenya.plot_dS()
 #%%
+kenya.sensitivity(parameter='Z')
+
 results= kenya.results
 #%%
-kenya.Int_Ass()
+kenya.Int_Ass(sav_sen=['sensitivity',1],sce_name='Nets')
 print('ROI = '+str(round(kenya.ROI,4)))
 print('Annual Savings = '+str(round(kenya.SAV,4)))
