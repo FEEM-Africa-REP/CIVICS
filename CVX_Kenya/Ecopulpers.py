@@ -32,11 +32,11 @@ kenya.sensitivity(parameter='Z')
 
 #kenya.plot_dv(unit='M KSH', main_title='Annual impact of using more efficient machines', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins'], color='terrain')
 
-# kenya.plot_dS(indicator='Green Water',  Type='absolute', main_title='Decrease in the use of green water due to the use of 1 M KSH eco-pulpers with respect to baseline', color='ocean')
+kenya.plot_dS(indicator='CO2',  Type='absolute', main_title='Decrease in the use of green water due to the use of 1 M KSH eco-pulpers with respect to baseline', color='ocean')
 #%%
 results = kenya.results
 #%%
-kenya.Int_Ass(sce_name='Ecopulpers_main')
+kenya.Int_Ass(sav_sen=['sensitivity',1], sce_name='Ecopulpers_prod')
 
 
     

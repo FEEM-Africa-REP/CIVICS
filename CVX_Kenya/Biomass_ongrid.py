@@ -31,7 +31,9 @@ kenya.plot_dx()
 kenya.plot_dp()
 kenya.plot_dS()
 #%%
+# kenya.sensitivity(parameter='Z')
+
 results= kenya.results
 #%%
-kenya.Int_Ass()
+# kenya.Int_Ass(sav_sen=['sensitivity',1], sce_name='Biomass_price_petr')
 print(kenya.ROI)

@@ -900,12 +900,12 @@ class C_SUT:
             OPT.loc['Scenario',('PPBT','years')] = INV / SAV
             
             # Total Impacts
-            OPT.loc['Scenario',('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
-            OPT.loc['Scenario',('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
-            OPT.loc['Scenario',('Land Total Impact','kha/FU')] = L_I + self.UL * L_S
-            OPT.loc['Scenario',('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
-            OPT.loc['Scenario',('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
-            OPT.loc['Scenario',('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
+            OPT.loc['Scenario',('Water Total Impact','m3/FU')] = W_I - self.UL * W_S
+            OPT.loc['Scenario',('Emission Total Impact','kton/FU')] = E_I - self.UL * E_S
+            OPT.loc['Scenario',('Land Total Impact','kha/FU')] = L_I - self.UL * L_S
+            OPT.loc['Scenario',('Import Total Impact','M kSh/FU')] = IM_I - self.UL * IM_S
+            OPT.loc['Scenario',('Workforce Total Impact','M kSh/FU')] = F_I - self.UL * F_S
+            OPT.loc['Scenario',('Capital Total Impact','M kSh/FU')] = C_I - self.UL * C_S
             
             
             
@@ -953,12 +953,12 @@ class C_SUT:
                 OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
                 
                 # Total Impacts
-                OPT.loc[i,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
-                OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
-                OPT.loc[i,('Land Total Impact','kha/FU')] = L_I + self.UL * L_S
-                OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
-                OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
-                OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
+                OPT.loc[i,('Water Total Impact','m3/FU')] = W_I - self.UL * W_S
+                OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I - self.UL * E_S
+                OPT.loc[i,('Land Total Impact','kha/FU')] = L_I - self.UL * L_S
+                OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I - self.UL * IM_S
+                OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I - self.UL * F_S
+                OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I - self.UL * C_S
 
 
                 OPT.loc[i,('PROI','M kSh/FU')] = SAV / INV 
@@ -1005,12 +1005,12 @@ class C_SUT:
                 OPT.loc[i,('Import Saving','M kSh/FU')] = IM_S
                 OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
                 
-                OPT.loc[i,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
-                OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
-                OPT.loc[i,('Land Total Impact','kha/FU')] = L_I + self.UL * L_S
-                OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
-                OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
-                OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S      
+                OPT.loc[i,('Water Total Impact','m3/FU')] = W_I - self.UL * W_S
+                OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I - self.UL * E_S
+                OPT.loc[i,('Land Total Impact','kha/FU')] = L_I - self.UL * L_S
+                OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I - self.UL * IM_S
+                OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I - self.UL * F_S
+                OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I - self.UL * C_S      
 
                 OPT.loc[i,('PROI','M kSh/FU')] = SAV / INV 
                 OPT.loc[i,('PPBT','years')] = INV / SAV   
