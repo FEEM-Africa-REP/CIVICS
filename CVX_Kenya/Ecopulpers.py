@@ -37,9 +37,6 @@ kenya.sensitivity(parameter='Z')
 results = kenya.results
 #%%
 kenya.Int_Ass(sce_name='Ecopulpers_main')
-#%%
-print('ROI = '+str(round(kenya.ROI,4)))
-print('Annual Savings = '+str(round(kenya.SAV,4)))
-#%%
+
 
     
