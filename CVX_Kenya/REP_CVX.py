@@ -819,7 +819,7 @@ class C_SUT:
         
         self.counter += 1
 
-    def Int_Ass(self,inv_sen=['main',1],sav_sen=['main',2],sce_name='Unknown',directory=r'Optimization\Optimization.xlsx',imports=['Import'],w_ext=['Green Water'], em_ext=['CO2'], land=['Capital - Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
+    def Int_Ass(self,inv_sen=['main',1],sav_sen=['main',2],sce_name='Unknown',directory=r'Optimization\Optimization.xlsx',imports=['Import'],w_ext=['Green Water'], em_ext=['CO2'], land=['Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
         import pandas as pd
         
         # Let's assume that the inv and sav senario is the same for sensitivity and main results
@@ -859,9 +859,9 @@ class C_SUT:
             E_I =  self.results['S_agg_' + str(inv_sen[1])].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
             E_S = -self.results['S_agg_' + str(sav_sen[1])].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()    
             
-            L_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-            L_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
-            
+            L_I =  self.results['S_agg_' + str(inv_sen[1])].loc[land].sum().sum() - self.S_agg.loc[land].sum().sum()
+            L_S = -self.results['S_agg_' + str(sav_sen[1])].loc[land].sum().sum() + self.S_agg.loc[land].sum().sum()    
+
             F_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
             F_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
             
@@ -884,8 +884,8 @@ class C_SUT:
             OPT.loc['Scenario',('Emission Saving','kton/FU')]=E_S 
             OPT.loc['Scenario',('Emission Investment','kton/FU')]=E_I
     
-            OPT.loc['Scenario',('Land Saving','M kSh/FU')]=L_S           
-            OPT.loc['Scenario',('Land Investment','M kSh/FU')]=L_I           
+            OPT.loc['Scenario',('Land Saving','kha/FU')]=L_S           
+            OPT.loc['Scenario',('Land Investment','kha/FU')]=L_I           
     
             OPT.loc['Scenario',('Workforce Saving','M kSh/FU')]=F_S           
             OPT.loc['Scenario',('Workforce Investment','M kSh/FU')]=F_I 
@@ -902,7 +902,7 @@ class C_SUT:
             # Total Impacts
             OPT.loc['Scenario',('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
             OPT.loc['Scenario',('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
-            OPT.loc['Scenario',('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
+            OPT.loc['Scenario',('Land Total Impact','kha/FU')] = L_I + self.UL * L_S
             OPT.loc['Scenario',('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
             OPT.loc['Scenario',('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
             OPT.loc['Scenario',('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
@@ -921,8 +921,8 @@ class C_SUT:
                 
                 INV = self.results['VA_'+ str(inv_sen[1])].values.sum().sum() - self.VA.sum().sum()  
                 W_I =  self.results['S_agg_' + str(inv_sen[1])].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
-                E_I =  self.results['S_agg_' + str(inv_sen[1])].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
-                L_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+                E_I =  self.results['S_agg_' + str(inv_sen[1])].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()                
+                L_I = self.results['S_agg_' + str(inv_sen[1])].loc[land].sum().sum() - self.S_agg.loc[land].sum().sum() 
                 F_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
                 C_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() - self.VA.groupby(level=3).sum().loc[capital].sum().sum()            
                 IM_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
@@ -930,7 +930,7 @@ class C_SUT:
                 OPT.loc[i,('Investment','M kSh')]=INV
                 OPT.loc[i,('Water Investment','m3/FU')]=W_I
                 OPT.loc[i,('Emission Investment','kton/FU')]=E_I
-                OPT.loc[i,('Land Investment','M kSh/FU')]=L_I           
+                OPT.loc[i,('Land Investment','kha/FU')]=L_I           
                 OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
                 OPT.loc[i,('Capital Investment','M kSh/FU')] = C_I
                 OPT.loc[i,('Import Investment','M kSh/FU')] = IM_I                 
@@ -938,7 +938,7 @@ class C_SUT:
                 SAV = -self.results['VA_s_'+ str(sav_sen[1])].loc[i].values.sum().sum() + self.VA.sum().sum()
                 W_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
                 E_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
-                L_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+                L_S = -self.results['S_s_agg_' + str(sav_sen[1])].loc[i].loc[land].sum().sum() + self.S_agg.loc[land].sum().sum()         
                 F_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
                 C_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
                 IM_S = -self.results['VA_s_'+ str(sav_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum() 
@@ -947,7 +947,7 @@ class C_SUT:
                 OPT.loc[i,('Saving','M kSh/FU')]=SAV
                 OPT.loc[i,('Water Saving','m3/FU')]=W_S                 
                 OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
-                OPT.loc[i,('Land Saving','M kSh/FU')]=L_S           
+                OPT.loc[i,('Land Saving','kha/FU')]=L_S           
                 OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S       
                 OPT.loc[i,('Import Saving','M kSh/FU')] = IM_S
                 OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
@@ -955,7 +955,7 @@ class C_SUT:
                 # Total Impacts
                 OPT.loc[i,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
                 OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
-                OPT.loc[i,('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
+                OPT.loc[i,('Land Total Impact','kha/FU')] = L_I + self.UL * L_S
                 OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
                 OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
                 OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S
@@ -975,7 +975,7 @@ class C_SUT:
                 INV = self.results['VA_s_'+ str(inv_sen[1])].loc[i].values.sum().sum() - self.VA.sum().sum()  
                 W_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[w_ext].sum().sum() - self.S_agg.loc[w_ext].sum().sum()
                 E_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[em_ext].sum().sum() - self.S_agg.loc[em_ext].sum().sum()
-                L_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[land].sum().sum() - self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+                L_I =  self.results['S_s_agg_' + str(inv_sen[1])].loc[i].loc[land].sum().sum() - self.S_agg.loc[land].sum().sum()
                 F_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[labour].sum().sum() - self.VA.groupby(level=3).sum().loc[labour].sum().sum()   
                 C_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[capital].sum().sum() - self.VA.groupby(level=3).sum().loc[capital].sum().sum()            
                 IM_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
@@ -991,7 +991,7 @@ class C_SUT:
                 SAV = -self.results['VA_'+ str(sav_sen[1])].values.sum().sum() + self.VA.sum().sum()
                 W_S = -self.results['S_agg_' + str(sav_sen[1])].loc[w_ext].sum().sum() + self.S_agg.loc[w_ext].sum().sum()
                 E_S = -self.results['S_agg_' + str(sav_sen[1])].loc[em_ext].sum().sum() + self.S_agg.loc[em_ext].sum().sum()         
-                L_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[land].sum().sum() + self.VA.groupby(level=3).sum().loc[land].sum().sum() 
+                L_S = -self.results['S_agg_' + str(sav_sen[1])].loc[land].sum().sum() + self.S_agg.loc[land].sum().sum()         
                 F_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[labour].sum().sum() + self.VA.groupby(level=3).sum().loc[labour].sum().sum() 
                 C_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[capital].sum().sum() + self.VA.groupby(level=3).sum().loc[capital].sum().sum()
                 IM_S = -self.results['VA_'+ str(sav_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() + self.VA.groupby(level=3).sum().loc[imports].sum().sum() 
@@ -1000,14 +1000,14 @@ class C_SUT:
                 OPT.loc[i,('Saving','M kSh/FU')]=SAV
                 OPT.loc[i,('Water Saving','m3/FU')]=W_S                 
                 OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
-                OPT.loc[i,('Land Saving','M kSh/FU')]=L_S           
+                OPT.loc[i,('Land Saving','kha/FU')]=L_S           
                 OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S                             
                 OPT.loc[i,('Import Saving','M kSh/FU')] = IM_S
                 OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
                 
                 OPT.loc[i,('Water Total Impact','m3/FU')] = W_I + self.UL * W_S
                 OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I + self.UL * E_S
-                OPT.loc[i,('Land Total Impact','M kSh/FU')] = L_I + self.UL * L_S
+                OPT.loc[i,('Land Total Impact','kha/FU')] = L_I + self.UL * L_S
                 OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I + self.UL * IM_S
                 OPT.loc[i,('Workforce Total Impact','M kSh/FU')] = F_I + self.UL * F_S
                 OPT.loc[i,('Capital Total Impact','M kSh/FU')] = C_I + self.UL * C_S      
