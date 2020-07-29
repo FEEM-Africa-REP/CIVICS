@@ -153,6 +153,7 @@ class C_SUT:
         #self.imp_c = self.imp.copy()
         self.s_c   = self.s.copy()
         self.z_c   = self.z.copy()
+
         self.UL = pd.read_excel(path,sheet_name = 'UL',index_col=[0],header=[0]).loc['Useful life','Value']
         
         if Y:
@@ -278,11 +279,23 @@ class C_SUT:
             
             for i in range(len(S_m)): 
                 
-                if S_m.loc[index[i],header[2]] == 'Percentage':
+                
+                if S_m.loc[index[i],'type'] == 'Percentage':
                     
                     self.s_c.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])] = \
                         self.s.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])].values \
                             * ( 1 + S_m.loc[index[i],header[3]])
+                            
+                if S_m.loc[index[i],'type'] == 'Absolute':
+                    
+                    my_S = self.S.copy()
+                    my_S.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])]=\
+                        my_S.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])].values \
+                            + S_m.loc[index[i],header[3]]
+                    my_s = pd.DataFrame(my_S.values @ np.linalg.inv(self.X.values  * np.identity(len(self.X))), index=self.S.index, columns=self.S.columns)
+                    self.s_c.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])]=\
+                        my_s.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])].values
+                        
                     
 ##################################################################################################################              
 
