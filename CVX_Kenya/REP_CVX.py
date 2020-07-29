@@ -671,18 +671,26 @@ class C_SUT:
         plt.show()    
     
     
-    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute'):
+    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute',main_title = 'default',color ='terrain'):
         
         import matplotlib.pyplot as plt
         plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
-        try:
-            a = self.X_c
-        except:
-            raise ValueError('This function can not be used if no shock is impemented')
+        # try:
+        #     a = self.X_c
+        # except:
+        #     raise ValueError('This function can not be used if no shock is impemented')
             
+        
+        # set the title
+            
+        if main_title == 'default':
+            title = 'Change in {}'.format(indicator)
+        else:
+            title = main_title
 
+            
         check = 0
         S_list = self.S_agg.index.to_list()
         
@@ -725,14 +733,14 @@ class C_SUT:
             dS=dS.groupby(level=0).sum().T
             
             if details:
-                dS.plot(kind = kind , stacked = stacked)
-                plt.title('Change in {}'.format(indicator))     
+                dS.plot(kind = kind , stacked = stacked,colormap=color)
+                plt.title(title)     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(unit)
                 
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False)
-                plt.title('Change in {}'.format(indicator))  
+                dS.plot(kind = kind , stacked = stacked,legend=False,colormap=color)
+                plt.title(title)  
                 plt.ylabel(unit)
                 
         if Type == 'absolute':
@@ -752,13 +760,13 @@ class C_SUT:
             dS=dS.groupby(level=0).sum().T
             
             if details:
-                dS.plot(kind = kind , stacked = stacked)
-                plt.title('Change in {}'.format(indicator))     
+                dS.plot(kind = kind , stacked = stacked,colormap=color)
+                plt.title(title)     
                 plt.legend(loc = 1,bbox_to_anchor = (1.9,1))
                 plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False)
-                plt.title('Change in {}'.format(indicator))  
+                dS.plot(kind = kind , stacked = stacked,legend=False,colormap=color)
+                plt.title(title)  
                 plt.ylabel(unit)
                 
         if Type == 'change':
@@ -773,12 +781,12 @@ class C_SUT:
             
             if details:
                 dS.plot(kind = kind , stacked = stacked)
-                plt.title('Change in {}'.format(indicator))     
+                plt.title(title)     
                 plt.legend(loc = 1,bbox_to_anchor = (1.7,1))
                 plt.ylabel(unit)
             if details == False:
-                dS.plot(kind = kind , stacked = stacked,legend=False)
-                plt.title('Change in {}'.format(indicator))  
+                dS.plot(kind = kind , stacked = stacked,legend=False,colormap=color)
+                plt.title(title)  
                 plt.ylabel(unit)           
         plt.show()  
       
