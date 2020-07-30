@@ -762,8 +762,8 @@ class C_SUT:
                 unit="ton"
             
             else:
-                if indicator=='Green Water':
-                    unit='m$^3$'
+                if indicator=='Water':
+                    unit='Mm$^3$'
                 else:                
                     unit='?'
             
@@ -819,7 +819,7 @@ class C_SUT:
         
         self.counter += 1
 
-    def Int_Ass(self,inv_sen=['main',1],sav_sen=['main',2],sce_name='Unknown',directory=r'Optimization\Optimization.xlsx',imports=['Import'],w_ext=['Green Water'], em_ext=['CO2'], land=['Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
+    def Int_Ass(self,inv_sen=['main',1],sav_sen=['main',2],sce_name='Unknown',directory=r'Optimization\Optimization.xlsx',imports=['Import'],w_ext=['Water'], em_ext=['CO2'], land=['Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
         import pandas as pd
         
         # Let's assume that the inv and sav senario is the same for sensitivity and main results
@@ -878,8 +878,8 @@ class C_SUT:
             
             OPT.loc['Scenario',('Investment','M kSh')]=INV
             
-            OPT.loc['Scenario',('Water Saving','m3/FU')]=W_S 
-            OPT.loc['Scenario',('Water Investment','m3/FU')]=W_I
+            OPT.loc['Scenario',('Water Saving','Mm3/FU')]=W_S 
+            OPT.loc['Scenario',('Water Investment','Mm3/FU')]=W_I
             
             OPT.loc['Scenario',('Emission Saving','kton/FU')]=E_S 
             OPT.loc['Scenario',('Emission Investment','kton/FU')]=E_I
@@ -900,7 +900,7 @@ class C_SUT:
             OPT.loc['Scenario',('PPBT','years')] = INV / SAV
             
             # Total Impacts
-            OPT.loc['Scenario',('Water Total Impact','m3/FU')] = W_I - self.UL * W_S
+            OPT.loc['Scenario',('Water Total Impact','Mm3/FU')] = W_I - self.UL * W_S
             OPT.loc['Scenario',('Emission Total Impact','kton/FU')] = E_I - self.UL * E_S
             OPT.loc['Scenario',('Land Total Impact','kha/FU')] = L_I - self.UL * L_S
             OPT.loc['Scenario',('Import Total Impact','M kSh/FU')] = IM_I - self.UL * IM_S
@@ -945,7 +945,7 @@ class C_SUT:
                     
           
                 OPT.loc[i,('Saving','M kSh/FU')]=SAV
-                OPT.loc[i,('Water Saving','m3/FU')]=W_S                 
+                OPT.loc[i,('Water Saving','Mm3/FU')]=W_S                 
                 OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
                 OPT.loc[i,('Land Saving','kha/FU')]=L_S           
                 OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S       
@@ -953,7 +953,7 @@ class C_SUT:
                 OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
                 
                 # Total Impacts
-                OPT.loc[i,('Water Total Impact','m3/FU')] = W_I - self.UL * W_S
+                OPT.loc[i,('Water Total Impact','Mm3/FU')] = W_I - self.UL * W_S
                 OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I - self.UL * E_S
                 OPT.loc[i,('Land Total Impact','kha/FU')] = L_I - self.UL * L_S
                 OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I - self.UL * IM_S
@@ -981,7 +981,7 @@ class C_SUT:
                 IM_I = self.results['VA_s_'+ str(inv_sen[1])].groupby(level=[0,4]).sum().loc[i].loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
                 
                 OPT.loc[i,('Investment','M kSh')]=INV
-                OPT.loc[i,('Water Investment','m3/FU')]=W_I
+                OPT.loc[i,('Water Investment','Mm3/FU')]=W_I
                 OPT.loc[i,('Emission Investment','kton/FU')]=E_I
                 OPT.loc[i,('Land Investment','M kSh/FU')]=L_I           
                 OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
@@ -998,14 +998,14 @@ class C_SUT:
                     
           
                 OPT.loc[i,('Saving','M kSh/FU')]=SAV
-                OPT.loc[i,('Water Saving','m3/FU')]=W_S                 
+                OPT.loc[i,('Water Saving','Mm3/FU')]=W_S                 
                 OPT.loc[i,('Emission Saving','kton/FU')]=E_S        
                 OPT.loc[i,('Land Saving','kha/FU')]=L_S           
                 OPT.loc[i,('Workforce Saving','M kSh/FU')]=F_S                             
                 OPT.loc[i,('Import Saving','M kSh/FU')] = IM_S
                 OPT.loc[i,('Capital Saving','M kSh/FU')] = C_S
                 
-                OPT.loc[i,('Water Total Impact','m3/FU')] = W_I - self.UL * W_S
+                OPT.loc[i,('Water Total Impact','Mm3/FU')] = W_I - self.UL * W_S
                 OPT.loc[i,('Emission Total Impact','kton/FU')] = E_I - self.UL * E_S
                 OPT.loc[i,('Land Total Impact','kha/FU')] = L_I - self.UL * L_S
                 OPT.loc[i,('Import Total Impact','M kSh/FU')] = IM_I - self.UL * IM_S
