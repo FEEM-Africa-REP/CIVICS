@@ -7,7 +7,7 @@ Created on Mon Apr 13 17:53:57 2020
 
 import REP_CVX as cvx
 kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
-sh_path = r'Interventions\New folder\num_hect\2500.xlsx'
+sh_path = r'Interventions\New folder\cover\0.33.xlsx'
 kenya.shock(path = sh_path, Y = True )
 
 kenya.calc_all()
@@ -43,7 +43,7 @@ kenya.add_dict()
 #%%
 #results= kenya.results
 #%%
-kenya.Int_Ass(sce_name='2500')
+kenya.Int_Ass(sce_name='0.33')
 #print(kenya.ROI)
 #%%
 #am = kenya.X.index.get_level_values(0,1)
