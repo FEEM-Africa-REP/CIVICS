@@ -51,7 +51,7 @@ kenya.plot_dS()
 
 results= kenya.results
 #%%
-kenya.Int_Ass(inv_sen=['main',1],sav_sen=['sensitivity',1],sce_name='Nets_product')
+kenya.Int_Ass(inv_sen=['main',1],sav_sen=['sensitivity',1],sce_name='Nets_product_new')
 #%%
-print('ROI = '+str(round(kenya.ROI,4)))
-print('Annual Savings = '+str(round(kenya.SAV,4)))
+print('PPBT = '+str(round(kenya.OPT.PPBT,4)))
+print('Annual Savings = '+str(round(kenya.OPT.Saving,4)))
