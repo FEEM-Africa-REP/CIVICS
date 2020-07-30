@@ -36,7 +36,7 @@ kenya.plot_dS(indicator='CO2',  Type='absolute', main_title='Decrease in the use
 #%%
 results = kenya.results
 #%%
-kenya.Int_Ass(sav_sen=['sensitivity',1], sce_name='Ecopulpers_prod')
+kenya.Int_Ass(sav_sen=['sensitivity',1], sce_name='Ecopulpers_petr')
 
 
     

@@ -51,8 +51,3 @@ kenya.add_dict()
 
 
 # results= kenya.results
-#%%
-kenya.Int_Ass(sce_name='1')
-#%%
-# print('ROI = '+str(round(kenya.ROI,4)))
-# print('Annual Savings = '+str(round(kenya.SAV,4)))
