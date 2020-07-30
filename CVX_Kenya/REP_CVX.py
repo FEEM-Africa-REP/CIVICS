@@ -288,6 +288,8 @@ class C_SUT:
                             
                 if S_m.loc[index[i],'type'] == 'Absolute':
                     
+                    
+                    
                     my_S = self.S.copy()
                     my_S.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])]=\
                         my_S.loc[S_m.loc[index[i],header[0]],('Activities',S_m.loc[index[i],header[1]])].values \
@@ -928,7 +930,7 @@ class C_SUT:
                 IM_I = self.results['VA_'+ str(inv_sen[1])].groupby(level=3).sum().loc[imports].sum().sum() - self.VA.groupby(level=3).sum().loc[imports].sum().sum()
                 
                 OPT.loc[i,('Investment','M kSh')]=INV
-                OPT.loc[i,('Water Investment','m3/FU')]=W_I
+                OPT.loc[i,('Water Investment','Mm3/FU')]=W_I
                 OPT.loc[i,('Emission Investment','kton/FU')]=E_I
                 OPT.loc[i,('Land Investment','kha/FU')]=L_I           
                 OPT.loc[i,('Workforce Investment','M kSh/FU')]=F_I  
