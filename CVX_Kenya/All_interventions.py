@@ -5,13 +5,6 @@ Created on Thu Jul 30 19:49:57 2020
 @author: nigolred
 """
 
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 30 11:28:09 2020
-
-@author: Amin
-
-"""
 import REP_CVX as cvx
 
 kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
@@ -25,7 +18,7 @@ kenya.add_dict()
 results = kenya.results
 
 kenya.plot_dx(unit='K USD', level='Activities')
-kenya.plot_dv(unit='K USD', level='Commodities')
+kenya.plot_dv(unit='K USD', level='Activities')
 
 #%%
 

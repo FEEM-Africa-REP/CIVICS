@@ -686,9 +686,11 @@ class C_SUT:
         plt.show()    
     
     
-    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute',main_title = 'default',color ='terrain'):
+    def plot_dS(self, details=True, kind='bar', stacked=True, indicator='CO2', Type='absolute',main_title = 'default',color ='terrain', ranshow=(0,0)):
         
         import matplotlib.pyplot as plt
+        import EX_func
+
         plt.style.use(['ggplot'])
         
         # To check if the shock is implemented or not
@@ -754,6 +756,7 @@ class C_SUT:
                 plt.ylabel(unit)
                 
             if details == False:
+                
                 dS.plot(kind = kind , stacked = stacked,legend=False,colormap=color)
                 plt.title(title)  
                 plt.ylabel(unit)
@@ -762,17 +765,19 @@ class C_SUT:
             
             if indicator=='CO2':
                 unit="ton"
+                dS = (new  - old)*1000
             
             else:
                 if indicator=='Water':
                     unit='Mm$^3$'
+                    dS = (new  - old)
+
                 else:                
-                    unit='?'
-            
-            
-            dS = (new  - old)*1000 
+                    unit='kha'
+                    dS = (new  - old)
             
             dS=dS.groupby(level=0).sum().T
+            dS=EX_func.drop_fun(data=dS, ranshow=ranshow)
             
             if details:
                 dS.plot(kind = kind , stacked = stacked,colormap=color)
@@ -786,8 +791,15 @@ class C_SUT:
                 
         if Type == 'change':
             
-            unit = "?"
+            if indicator=='CO2':
+                unit="ton"
             
+            else:
+                if indicator=='Water':
+                    unit='Mm$^3$'
+                else:                
+                    unit='kha'
+           
             coffee = new['HIGH RAINFALL (CP)'] + new['COFFEE PROD']
             print(coffee)
             dS = (new  - old)  / coffee.values
@@ -821,7 +833,7 @@ class C_SUT:
         
         self.counter += 1
 
-    def Int_Ass(self,inv_sen=['main',1],sav_sen=['main',2],sce_name='Unknown',directory=r'Optimization\Optimization.xlsx',imports=['Import'],w_ext=['Water'], em_ext=['CO2'], land=['Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
+    def Int_Ass(self,inv_sen=['main',1],sav_sen=['main',2],sce_name='Unknown',directory=r'Optimization\optimization.xlsx',imports=['Import'],w_ext=['Water'], em_ext=['CO2'], land=['Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
         import pandas as pd
         
         # Let's assume that the inv and sav senario is the same for sensitivity and main results

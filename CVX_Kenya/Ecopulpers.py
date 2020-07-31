@@ -17,10 +17,11 @@ kenya.add_dict()
 
 #%%
 # Focus on labour impact
-# kenya.plot_dv(unit='M KSH', main_title='Investment-induced Labour increase by skill and sector for 1 M KSH expenditure in Eco-pulpers', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], 
-#               color='ocean')
+kenya.plot_dv(unit='K USD', main_title='Investment-induced Labour increase by skill and sector for renewing 40% of wet mills', level='Commodities', color='Accent', drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'])
+kenya.plot_dv(unit='K USD', main_title='Investment-induced Labour increase by skill and sector for renewing 40% of wet mills', level='Activities', drop=['unused','Taxes','Import','Margins','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines'], color='Accent')
 
-# kenya.plot_dS(indicator='Water',  Type='percentage', main_title='Decrease in the use of green water', color='ocean')
+
+kenya.plot_dS(indicator='Water',  Type='percentage', main_title='Decrease in the use of green water', color='ocean')
 #%% Step2: Benefit
 kenya.shock(path=r'Interventions\Ecopulpers.xlsx', VA=True, S=True, Z=True)
 
@@ -30,13 +31,11 @@ kenya.add_dict()
 #%%
 kenya.sensitivity(parameter='Z')
 
-#kenya.plot_dv(unit='M KSH', main_title='Annual impact of using more efficient machines', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins'], color='terrain')
+kenya.plot_dv(unit='K USD', main_title='Annual impact of using more efficient machines', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins'], color='terrain')
 
-#kenya.plot_dS(indicator='CO2',  Type='absolute', main_title='Decrease in the use of green water due to the use of 1 M KSH eco-pulpers with respect to baseline', color='ocean')
+kenya.plot_dS(indicator='Water',  Type='absolute', main_title='Decrease in the use of water due to use of eco-pulpers', color='ocean')
+
 #%%
 #results = kenya.results
 #%%
 kenya.Int_Ass(sav_sen=['sensitivity',1], sce_name='Ecopulpers_petr')
-
-
-    

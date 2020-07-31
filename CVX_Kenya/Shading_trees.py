@@ -7,7 +7,7 @@ Created on Mon Apr 13 17:53:57 2020
 
 import REP_CVX as cvx
 kenya = cvx.C_SUT(r'Database\Kenya_2014_SAM.xlsx')
-sh_path = r'Interventions\New folder\banan\20.xlsx'
+sh_path = r'Interventions\Shading_trees.xlsx'
 kenya.shock(path = sh_path, Y = True )
 
 kenya.calc_all()
@@ -37,13 +37,14 @@ kenya.add_dict()
 # kenya.plot_dp()
 #kenya.plot_dS(Type='absolute')
 #%%
-#kenya.plot_dv(unit='M KSH', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
-#kenya.plot_dv(unit='M KSH', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Accent')
+kenya.plot_dv(unit='K USD', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
+kenya.plot_dv(unit='K USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Accent')
+kenya.plot_dS(main_title='Reduction in Carbon Dioxide emission by source and sector', indicator='CO2')
 
 #%%
-#results= kenya.results
+results= kenya.results
 #%%
-kenya.Int_Ass(sce_name='20')
+# kenya.Int_Ass(sav_sen=['sensitivity',1],sce_name='Trees')
 #print(kenya.ROI)
 #%%
 #am = kenya.X.index.get_level_values(0,1)
