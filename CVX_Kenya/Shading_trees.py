@@ -37,14 +37,14 @@ kenya.add_dict()
 # kenya.plot_dp()
 #kenya.plot_dS(Type='absolute')
 #%%
-kenya.plot_dv(unit='K USD', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
+kenya.plot_dv(unit='K USD', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled','Taxes','Margins'], color='ocean', ranshow=(0.0001,-10))
 kenya.plot_dv(unit='K USD', main_title='Change in the output of activities', level='Activities', percent=False, drop=['unused', 'Taxes', 'Import','Margins'], color='Accent')
 kenya.plot_dS(main_title='Reduction in Carbon Dioxide emission by source and sector', indicator='CO2')
 
 #%%
 results= kenya.results
 #%%
-# kenya.Int_Ass(sav_sen=['sensitivity',1],sce_name='Trees')
+kenya.Int_Ass()
 #print(kenya.ROI)
 #%%
 #am = kenya.X.index.get_level_values(0,1)

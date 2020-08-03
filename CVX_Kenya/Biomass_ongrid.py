@@ -26,6 +26,7 @@ kenya.calc_all()
 kenya.aggregate()
 kenya.add_dict()
 
+kenya.plot_dv(unit='K USD', main_title='Change in the use of commodities', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled','Taxes','Margins'], color='ocean', ranshow=(0.0001,-10))
 kenya.plot_dv(unit='K USD', main_title='Changes avoiding electricity production from oil derivatives and own-producing fertilizers', level='Commodities', percent=False, drop=['unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'], color='ocean')
 # kenya.plot_dx()
 # kenya.plot_dp()
@@ -35,5 +36,5 @@ kenya.sensitivity(parameter='Z')
 
 #results= kenya.results
 #%%
-kenya.Int_Ass(sav_sen=['sensitivity',1], sce_name='Biomass_price_petr')
+kenya.Int_Ass(sce_name='Biomass_12')
 # print(kenya.ROI)
