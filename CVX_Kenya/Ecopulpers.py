@@ -34,6 +34,7 @@ kenya.sensitivity(parameter='Z')
 kenya.plot_dv(unit='K USD', main_title='Annual impact of using more efficient machines', level='Activities', percent=False, drop=['unused','Taxes','Import','Margins'], color='terrain')
 
 kenya.plot_dS(indicator='Water',  Type='absolute', main_title='Decrease in the use of water due to use of eco-pulpers', color='ocean')
+kenya.plot_dS(indicator='CO2',  Type='absolute', main_title='Changes in CO2 emissions due to the use of eco-pulpers')
 
 #%%
 #results = kenya.results
