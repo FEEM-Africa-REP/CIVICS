@@ -161,11 +161,15 @@ def dem_matrix (model,co_techs,carr,nodes):
 
 def prod_imp_exp (production,imports,exports,node):
     import pandas as pd
+
     
     in_node  = pd.concat([production[node],imports[node]],axis=1)
     out_node = exports[node]
     
     return in_node,out_node
+
+
+    
     
     
     

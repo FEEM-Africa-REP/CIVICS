@@ -6,28 +6,19 @@ Created on Mon Aug 17 10:25:37 2020
 @author: Amin
 """
 
-class C_Graph:
-    
-    
-    import pandas as pd
-    import numpy as np
-    import warnings
-    
-    from calliope_graph.version import __version__
-    
-    from calliope_graph.matrixmaker import input_read
-    from calliope_graph.matrixmaker import prod_matrix
-    from calliope_graph.matrixmaker import imp_exp
-    from calliope_graph.matrixmaker import dem_matrix
-    
-    from calliope_graph.units import unit_check  
-    from calliope_graph.units import u_conv 
-    
-    from calliope_graph.graphs import disp
-    
-    
+class C_Graph:    
     
     def __init__(self,model,ex_path,unit):
+        
+        from calliope_graph.version import __version__
+        
+        from calliope_graph.matrixmaker import input_read
+        from calliope_graph.matrixmaker import prod_matrix
+        from calliope_graph.matrixmaker import imp_exp
+        from calliope_graph.matrixmaker import dem_matrix
+        
+        from calliope_graph.units import unit_check  
+
         
         self.model = model
         self.m_unit = unit_check(unit)
@@ -50,7 +41,18 @@ class C_Graph:
         self.demand                 = dem_matrix (model,self.co_techs,self.carrier,self.nodes)
             
 
-    def node_dispatch (nodes='All', fig_format = 'png' , unit=self.m_unit, style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12,figsize=(8,6)):
+    def node_dispatch (self,nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,dirctory='my_graphs'):
+
+                
+        from calliope_graph.units import unit_check  
+        from calliope_graph.units import u_conv 
+        
+        from calliope_graph.graphs import disp   
+        
+        if unit == '' :
+            unit = self.m_unit
+        else:
+            unit == unit
         
         unit = unit_check(unit)
         conversion = u_conv(self.m_unit,unit)
@@ -60,10 +62,10 @@ class C_Graph:
         else: 
             nodes = nodes
             
-        disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,rotate=70)
+        self.a =disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,dirctory)
             
         
-        
+    
         
             
         
