@@ -48,7 +48,7 @@ class C_Graph:
         from calliope_graph.units import unit_check  
         from calliope_graph.units import u_conv 
         
-        from calliope_graph.graphs import disp   
+        from calliope_graph.graphs import node_disp   
         
         if unit == '' :
             unit = self.m_unit
@@ -63,7 +63,7 @@ class C_Graph:
         else: 
             nodes = nodes
             
-        disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
+        node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
             
         
     
@@ -73,7 +73,7 @@ class C_Graph:
         from calliope_graph.units import unit_check  
         from calliope_graph.units import u_conv     
         
-        from calliope_graph.graphs import sys
+        from calliope_graph.graphs import sys_disp
         
         
         if unit == '' :
@@ -84,11 +84,48 @@ class C_Graph:
         unit = unit_check(unit)
         conversion = u_conv(self.m_unit,unit)        
         
-        sys(rational,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
+        sys_disp(rational,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
         
-        
-        
+    def node_pie (self,rational='production',nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12 , figsize=(16, 8),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs',v_round=0):
+       
+        from calliope_graph.units import unit_check  
+        from calliope_graph.units import u_conv         
 
+        if unit == '' :
+            unit = self.m_unit
+        else:
+            unit == unit
+        
+        unit = unit_check(unit)
+        conversion = u_conv(self.m_unit,unit)
+        
+        if nodes == 'All':
+            nodes = self.nodes  
+        else: 
+            nodes = nodes        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         
 

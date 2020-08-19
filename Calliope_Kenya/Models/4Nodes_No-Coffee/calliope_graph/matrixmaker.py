@@ -179,6 +179,63 @@ def system_matrix(production,demand,exports=None,imports=None): # Then the expor
     
     
     return demand,tech_production,reg_production
+
+
+def pie_prod(production,kind):
+    
+    import pandas as pd
+    
+    if kind == 'share':
+        production = pd.DataFrame(production.sum().values/production.sum().sum()*100,index=production.columns,columns=['Share'])
+        
+    elif kind == 'absolute':
+        production = pd.DataFrame(production.sum().values,index=production.columns,columns=['Absolute'])
+        
+    else:
+        raise ValueError('/kind/ can be one of the followings: \n 1. /share/ \n 2. /absolute/')
+        
+    return production
+
+def pie_cons(production,imports,exports,kind):
+    
+    import pandas as pd
+    from calliope_graph.matrixmaker import pie_prod
+    
+    diff = imports.sum().sum() + exports.sum().sum()
+    
+    if diff <=0:
+        
+        production = pie_prod(production,kind)
+        
+    else:
+        imports = pd.DataFrame(imports.sum(axis=1),index=production,columns = ['Imports'])
+        production = pd.concat([production,imports],axis=1)
+        production = pie_prod(production,kind)
+        
+    return production
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
     
     
     

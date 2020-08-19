@@ -21,7 +21,7 @@ def style_check(style):
     return style
     
     
-def disp (nodes,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory):
+def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory):
     
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
@@ -138,7 +138,7 @@ def disp (nodes,fig_format,unit,conversion,style,date_format,title_font,producti
         
 
 
-def sys (rational,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory):
+def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory):
     
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
@@ -258,10 +258,37 @@ def sys (rational,fig_format,unit,conversion,style,date_format,title_font,produc
     plt.show()        
         
         
+
+
+
+def nod_pie(rational,fig_format,unit,conversion,style,title_font,production,imports,exports,figsize,colors,names,directory):
+       
         
         
         
-        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         
         
         
