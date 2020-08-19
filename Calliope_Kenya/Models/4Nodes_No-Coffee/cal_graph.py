@@ -17,8 +17,8 @@ class C_Graph:
         from calliope_graph.matrixmaker import imp_exp
         from calliope_graph.matrixmaker import dem_matrix
         from calliope_graph.matrixmaker import install_cap
-        
-        
+        from calliope_graph.matrixmaker import cap_fac
+
         from calliope_graph.units import unit_check  
 
         
@@ -42,8 +42,8 @@ class C_Graph:
         self.imports,self.exports   = imp_exp(model,self.nodes,self.production,self.tr_tech,self.carrier)
         self.demand                 = dem_matrix (model,self.co_techs,self.carrier,self.nodes)
         self.install_capacity       = install_cap (model,self.nodes,self.pr_techs)
-        
-            
+        self.cap_factor             = cap_fac(model,self.pr_techs,self.nodes,self.carrier,self.production)
+                        
 
     def node_dispatch (self,nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):
 
@@ -114,7 +114,7 @@ class C_Graph:
         
         
         
-    def ins_cap_plot (self,kind='table',fig_format = 'png' , unit= '', style = 'ggplot',title_font = 12 ,table_font=15,figsize=(8,8),directory='my_graphs',v_round=0):
+    def ins_cap_plot (self,kind='table',fig_format = 'png' , unit= '', style = 'ggplot',title_font = 12 ,table_font=15,figsize=(8,6),directory='my_graphs',v_round=0):
         
         from calliope_graph.units import unit_check  
         from calliope_graph.units import u_conv 
@@ -131,8 +131,17 @@ class C_Graph:
         tab_install (figsize,self.install_capacity,self.colors,self.names,self.nodes,table_font,title_font,directory,conversion,style,v_round,fig_format,kind,unit)
         
         
+    def cap_f_plot (self,nodes='All', fig_format = 'png' , style = 'ggplot' , title_font = 12,figsize=(8,6),directory='my_graphs'):
         
+        from calliope_graph.graphs import cap_f_bar 
+        if nodes == 'All':
+            nodes = self.nodes  
+        else: 
+            nodes = nodes 
+            
+        cap_f_bar(nodes,fig_format,style,title_font,figsize,directory,self.cap_factor,self.colors,self.names)
         
+    
         
         
         

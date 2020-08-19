@@ -381,6 +381,33 @@ def tab_install (figsize,install_cap,colors,names,nodes,table_font,title_font,di
             
     
     
+def cap_f_bar(nodes,fig_format,style,title_font,figsize,directory,cap_f,colors,names):
+    
+    import matplotlib.pyplot as plt
+    from calliope_graph.graphs import style_check 
+    
+
+    style = style_check(style)
+    plt.style.use(style) 
+    
+    colors = colors[cap_f.index]
+    cap_f.index = names[cap_f.index]
+    
+    for i in nodes:
+        
+        cap_f[i].plot(kind='bar',stacked=True,color=colors,figsize=figsize,legend=False)
+      
+        
+        
+        plt.title('{} capacity factor'.format(names[i]),fontsize=title_font)
+        plt.savefig('{}\{}capacity_factor.{}'.format(directory,i,fig_format),bbox_inches='tight',dpi=150)
+        plt.show()
+        
+    
+    
+    
+    
+    
     
     
     

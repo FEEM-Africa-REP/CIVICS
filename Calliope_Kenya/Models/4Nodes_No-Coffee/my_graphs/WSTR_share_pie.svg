@@ -1114,7 +1114,7 @@ L 900 64.8
    </g>
   </g>
   <g id="text_16">
-   <!-- Western Region region -->
+   <!-- Western Region  -->
    <defs>
     <path d="M 44.390625 34.1875 
 Q 47.5625 33.109375 50.5625 29.59375 
@@ -1144,7 +1144,7 @@ Q 39.203125 64.796875 32.078125 64.796875
 z
 " id="DejaVuSans-82"/>
    </defs>
-   <g transform="translate(354.283594 18.597656)scale(0.15 -0.15)">
+   <g transform="translate(378 18.597656)scale(0.15 -0.15)">
     <use xlink:href="#DejaVuSans-87"/>
     <use x="93.001953" xlink:href="#DejaVuSans-101"/>
     <use x="154.525391" xlink:href="#DejaVuSans-115"/>
@@ -1160,12 +1160,6 @@ z
     <use x="659.652344" xlink:href="#DejaVuSans-111"/>
     <use x="720.833984" xlink:href="#DejaVuSans-110"/>
     <use x="784.212891" xlink:href="#DejaVuSans-32"/>
-    <use x="816" xlink:href="#DejaVuSans-114"/>
-    <use x="854.863281" xlink:href="#DejaVuSans-101"/>
-    <use x="916.386719" xlink:href="#DejaVuSans-103"/>
-    <use x="979.863281" xlink:href="#DejaVuSans-105"/>
-    <use x="1007.646484" xlink:href="#DejaVuSans-111"/>
-    <use x="1068.828125" xlink:href="#DejaVuSans-110"/>
    </g>
   </g>
  </g>

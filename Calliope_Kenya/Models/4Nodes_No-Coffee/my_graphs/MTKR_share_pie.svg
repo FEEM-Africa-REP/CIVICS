@@ -1109,7 +1109,7 @@ L 900 64.8
    </g>
   </g>
   <g id="text_16">
-   <!-- Mont Kenya Region region -->
+   <!-- Mont Kenya Region  -->
    <defs>
     <path d="M 9.8125 72.90625 
 L 24.515625 72.90625 
@@ -1167,7 +1167,7 @@ Q 39.203125 64.796875 32.078125 64.796875
 z
 " id="DejaVuSans-82"/>
    </defs>
-   <g transform="translate(340.957031 18.597656)scale(0.15 -0.15)">
+   <g transform="translate(364.673438 18.597656)scale(0.15 -0.15)">
     <use xlink:href="#DejaVuSans-77"/>
     <use x="86.279297" xlink:href="#DejaVuSans-111"/>
     <use x="147.460938" xlink:href="#DejaVuSans-110"/>
@@ -1186,12 +1186,6 @@ z
     <use x="837.326172" xlink:href="#DejaVuSans-111"/>
     <use x="898.507812" xlink:href="#DejaVuSans-110"/>
     <use x="961.886719" xlink:href="#DejaVuSans-32"/>
-    <use x="993.673828" xlink:href="#DejaVuSans-114"/>
-    <use x="1032.537109" xlink:href="#DejaVuSans-101"/>
-    <use x="1094.060547" xlink:href="#DejaVuSans-103"/>
-    <use x="1157.537109" xlink:href="#DejaVuSans-105"/>
-    <use x="1185.320312" xlink:href="#DejaVuSans-111"/>
-    <use x="1246.501953" xlink:href="#DejaVuSans-110"/>
    </g>
   </g>
  </g>
