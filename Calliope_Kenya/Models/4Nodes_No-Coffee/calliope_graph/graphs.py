@@ -261,10 +261,28 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
 
 
 
-def nod_pie(rational,fig_format,unit,conversion,style,title_font,production,imports,exports,figsize,colors,names,directory):
+def nod_pie(nodes,rational,fig_format,unit,conversion,style,title_font,production,imports,exports,figsize,colors,names,directory):
        
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+    from matplotlib import gridspec
+    
+    from calliope_graph.graphs import style_check 
+    
+    from calliope_graph.matrixmaker import pie_prod  
+    from calliope_graph.matrixmaker import pie_cons        
         
+
+    for i in nodes:
         
+        if rational == 'production':
+            data = pie_prod(production,kind)
+        elif rational == 'consumption':
+            data = pie_cons(production,imports,exports,kind)
+            
+        fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=figsize)
+        
+        ax1.pie(data['Production'],shadow=False,colors=colors[data.col])
         
     
     

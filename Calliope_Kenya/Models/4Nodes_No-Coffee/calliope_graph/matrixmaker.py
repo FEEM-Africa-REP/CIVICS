@@ -186,10 +186,10 @@ def pie_prod(production,kind):
     import pandas as pd
     
     if kind == 'share':
-        production = pd.DataFrame(production.sum().values/production.sum().sum()*100,index=production.columns,columns=['Share'])
+        production = pd.DataFrame(production.sum().values/production.sum().sum()*100,index=production.columns,columns=['Production'])
         
     elif kind == 'absolute':
-        production = pd.DataFrame(production.sum().values,index=production.columns,columns=['Absolute'])
+        production = pd.DataFrame(production.sum().values,index=production.columns,columns=['Production'])
         
     else:
         raise ValueError('/kind/ can be one of the followings: \n 1. /share/ \n 2. /absolute/')
