@@ -141,7 +141,11 @@ class C_Graph:
             
         cap_f_bar(nodes,fig_format,style,title_font,figsize,directory,self.cap_factor,self.colors,self.names)
         
-    
+   # def report_pdf(self,average='hourly',unit='',):
+        
+        
+        
+       # self.node_dispatch()
         
         
         
