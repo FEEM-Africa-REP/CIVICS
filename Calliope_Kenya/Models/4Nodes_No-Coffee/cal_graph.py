@@ -16,6 +16,8 @@ class C_Graph:
         from calliope_graph.matrixmaker import prod_matrix
         from calliope_graph.matrixmaker import imp_exp
         from calliope_graph.matrixmaker import dem_matrix
+        from calliope_graph.matrixmaker import install_cap
+        
         
         from calliope_graph.units import unit_check  
 
@@ -39,6 +41,7 @@ class C_Graph:
         self.production             = prod_matrix (model,self.pr_techs,self.nodes,self.carrier)
         self.imports,self.exports   = imp_exp(model,self.nodes,self.production,self.tr_tech,self.carrier)
         self.demand                 = dem_matrix (model,self.co_techs,self.carrier,self.nodes)
+        self.install_capacity       = install_cap (model,self.nodes,self.pr_techs)
         
             
 
@@ -86,10 +89,13 @@ class C_Graph:
         
         sys_disp(rational,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
         
-    def node_pie (self,rational='production',nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12 , figsize=(16, 8),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs',v_round=0):
+        
+    def node_pie (self,rational='production',nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=0):
        
         from calliope_graph.units import unit_check  
-        from calliope_graph.units import u_conv         
+        from calliope_graph.units import u_conv   
+        
+        from calliope_graph.graphs import nod_pie
 
         if unit == '' :
             unit = self.m_unit
@@ -102,17 +108,27 @@ class C_Graph:
         if nodes == 'All':
             nodes = self.nodes  
         else: 
-            nodes = nodes        
+            nodes = nodes  
+            
+        nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,self.production,self.imports,self.exports,figsize,self.colors,self.names,directory,table_font,v_round)
         
         
         
+    def ins_cap_plot (self,kind='table',fig_format = 'png' , unit= '', style = 'ggplot',title_font = 12 ,table_font=15,figsize=(8,8),directory='my_graphs',v_round=0):
         
+        from calliope_graph.units import unit_check  
+        from calliope_graph.units import u_conv 
+        from calliope_graph.graphs import tab_install 
         
+        if unit == '' :
+            unit = self.m_unit
+        else:
+            unit == unit
         
+        unit = unit_check(unit)
+        conversion = u_conv(self.m_unit,unit)        
         
-        
-        
-        
+        tab_install (figsize,self.install_capacity,self.colors,self.names,self.nodes,table_font,title_font,directory,conversion,style,v_round,fig_format,kind,unit)
         
         
         

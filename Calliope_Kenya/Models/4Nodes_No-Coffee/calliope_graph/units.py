@@ -12,7 +12,7 @@ def unit_check(unit):
     units = ['Wh','kWh','MWh','GWh','TWh']
     
     if unit not in units:
-        raise ValueError ('{} is not correct. Unti should be one of the followings: \n {}'.format(unit,units))
+        raise ValueError ('{} is not correct. Unit should be one of the followings: \n {}'.format(unit,units))
         
     return unit
         

@@ -213,6 +213,10 @@ def pie_cons(production,imports,exports,kind):
         production = pie_prod(production,kind)
         
     return production
+
+def install_cap (model,nodes,techs):
+    
+    return model.get_formatted_array('energy_cap_equals').loc[{'techs':techs,'locs':nodes}].to_pandas().T.fillna(0)
         
         
         

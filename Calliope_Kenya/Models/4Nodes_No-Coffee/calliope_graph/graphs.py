@@ -127,12 +127,12 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             plt.ylabel(unit)
             
         # Title
-        plt.title('{} Dispatch'.format(i),fontsize=title_font)
+        plt.title('{} Dispatch'.format(names[i]),fontsize=title_font)
         
         
         # saving 
 
-    plt.savefig('{}\{}_{}_dispatch.{}'.format(directory,i,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
+    fig.savefig('{}\{}_{}_dispatch.{}'.format(directory,i,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
     plt.show()
 
         
@@ -253,47 +253,132 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
         plt.xlabel('Date')
         
     plt.ylabel(unit)
+    plt.title('System Dispatch',fontsize=title_font)
     
-    plt.savefig('{}\system{}_dispatch.{}'.format(directory,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
+    fig.savefig('{}\system{}_dispatch.{}'.format(directory,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
     plt.show()        
         
         
 
 
 
-def nod_pie(nodes,rational,fig_format,unit,conversion,style,title_font,production,imports,exports,figsize,colors,names,directory):
+def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,production,imports,exports,figsize,colors,names,directory,table_font,v_round):
        
     import matplotlib.pyplot as plt
-    import matplotlib.dates as mdates
-    from matplotlib import gridspec
+
     
     from calliope_graph.graphs import style_check 
     
     from calliope_graph.matrixmaker import pie_prod  
     from calliope_graph.matrixmaker import pie_cons        
         
-
+    style = style_check(style)
+    plt.style.use(style)
+    
     for i in nodes:
         
         if rational == 'production':
-            data = pie_prod(production,kind)
+            data = pie_prod(production[i],kind)
         elif rational == 'consumption':
-            data = pie_cons(production,imports,exports,kind)
+            data = pie_cons(production[i],imports[i],exports[i],kind)
+        else:
+            raise ValueError ('rational could be one of the follwoings: \n 1. /production/ \n 2. /consumption/')
+            
+        if kind == 'absolute':
+            data = data*conversion
             
         fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=figsize)
+
         
-        ax1.pie(data['Production'],shadow=False,colors=colors[data.col])
+        ax1.pie(data['Production'],shadow=False,colors=colors[data.index],startangle=90)
+        
+        ax2.patch.set_visible(False)
+        ax2.get_xaxis().set_visible(False)
+        ax2.get_yaxis().set_visible(False)
+    
+        if kind == 'share':
+            tab_label = '%'
+            
+        else:
+            tab_label = unit
+        
+        data=data.round(v_round)
+        
+        table = ax2.table(cellText=data.values,
+                              rowColours=colors[data.index],
+                              rowLabels= names[data.index],
+                              colLabels = [tab_label],
+                              loc='center right',
+                              rowLoc ='center',
+                              colLoc='center',
+                              cellLoc='center')    
+    
+        table.auto_set_font_size(False)
+        
+        table.scale(0.4, 3)
+        table.set_fontsize(table_font)
+        
+        fig.suptitle('{} '.format(names[i]), fontsize=title_font)
+        
+        plt.show()
+        fig.savefig('{}\{}_{}_pie.{}'.format(directory,i,kind,fig_format), dpi=fig.dpi,bbox_inches='tight')
+        
+        
+
+def tab_install (figsize,install_cap,colors,names,nodes,table_font,title_font,directory,conversion,style,v_round,fig_format,kind,unit):
+    
+    import matplotlib.pyplot as plt
+    
+    from calliope_graph.graphs import style_check 
+    
+
+    style = style_check(style)
+    plt.style.use(style)   
+
+    install_cap = install_cap * conversion
+    install_cap = install_cap.round(v_round)
+    
+    
+    
+    if kind == 'table':
+        
+        fig,(ax) = plt.subplots(1,figsize=figsize)
+        table = plt.table(cellText=install_cap.values,
+                                  rowColours=colors[install_cap.index],
+                                  rowLabels= names[install_cap.index],
+                                  colLabels = nodes,
+                                  loc='upper center',
+                                  rowLoc ='center',
+                                  colLoc='center',
+                                  cellLoc='center')    
+        
+        
+        table.set_fontsize(table_font)
+        table.scale(1, 2)
+        plt.box(on=None)
+        ax = plt.gca()
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
+        
+    elif kind == 'bar':
+        
+        install_cap.columns = install_cap.columns.to_list()
+        install_cap.T.plot(kind='bar',stacked=True,color=colors[install_cap.index],figsize=figsize)
+        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.,frameon=True,labels=names[install_cap.index])
+        
+        plt.xlabel('Nodes')
+        plt.ylabel(unit)
+        
+
+    else:
+        raise ValueError('/kind/ should be one of the followings: \n 1. /table/ \n 2. /bar/')
         
     
+    plt.title('Installed Capacity',fontsize=title_font)
     
     
-    
-    
-    
-    
-    
-    
-    
+    plt.savefig('{}\{}_installed_cap.{}'.format(directory,kind,fig_format),bbox_inches='tight',dpi=150)
+            
     
     
     
