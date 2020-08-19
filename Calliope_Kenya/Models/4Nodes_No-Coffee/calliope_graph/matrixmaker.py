@@ -160,15 +160,25 @@ def dem_matrix (model,co_techs,carr,nodes):
     return -model.get_formatted_array('carrier_con').loc[{'techs':co_techs,'carriers':carr,'locs':nodes}].sum('techs').sum('carriers').to_pandas().T
 
 def prod_imp_exp (production,imports,exports,node):
+    
     import pandas as pd
-
     
     in_node  = pd.concat([production[node],imports[node]],axis=1)
     out_node = exports[node]
     
     return in_node,out_node
 
-
+def system_matrix(production,demand,exports=None,imports=None): # Then the exports and imports of the external nodes should be inserted to take the external points
+    
+    import pandas as pd
+    
+    tech_production = production.groupby(level=1,axis=1,sort=False).sum()
+    reg_production  = production.groupby(level=0,axis=1,sort=False).sum()
+    
+    demand = pd.DataFrame(demand.sum(axis=1),index=demand.index,columns=['Demand'])
+    
+    
+    return demand,tech_production,reg_production
     
     
     

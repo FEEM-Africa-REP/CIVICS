@@ -131,18 +131,131 @@ def disp (nodes,fig_format,unit,conversion,style,date_format,title_font,producti
         
         
         # saving 
-        try:
-            plt.savefig('{}\{}_{}_dispatch.{}'.format(directory,i,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
-            plt.show()
-        except:
-            plt.show()
-        
 
+    plt.savefig('{}\{}_{}_dispatch.{}'.format(directory,i,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
+    plt.show()
 
         
 
+
+def sys (rational,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory):
+    
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+    from matplotlib import gridspec
+    
+    from calliope_graph.graphs import style_check  
+    from calliope_graph.matrixmaker import prod_imp_exp
+    from calliope_graph.matrixmaker import system_matrix
+    
+    style = style_check(style)
+    plt.style.use(style)
+    
+    if average == 'weekly':
+        av = '1w'
+    elif average == 'daily':
+        av = '1d'
+    elif average == 'monthly':
+        av = '1m'
+    elif average == 'hourly':
+        av = '1h'
+    elif average == 'yearly':
+        av = '1y'
+            
+    else:
+        raise ValueError ('Incorrect average type.\n Average can be one of the followings: {},{},{},{} and {}'.format('hourly','daily','weekly','monthly','yearly')) 
+        
+    data = system_matrix(production, demand)
+    
+    demand  = data[0]
+    
+    if rational == 'techs':
+        production = data[1]
+        if sp_nodes:
+            raise ValueError ('For /techs/ rational, specific nodes cannot be plotted.')
+        
+    elif rational == 'nodes':
+        production = data[2]
+        if sp_techs:
+            raise ValueError('For /nodes/ rational, specific techs cannot be plotted.')
+
+    else:
+        raise ValueError ('rational could be one of the followings: \n 1. techs : plotting the graph based on the technologies. \n 2. nodes: Plotting the graph based on the nodes')
+    
+    specific = None
+    if sp_techs:
+        specific = sp_techs
+    elif sp_nodes:
+        specific = sp_nodes
+        
+    
+        
+    if specific:
+            
+        fig, (axs) = plt.subplots(2, figsize=figsize,sharex=True)
+        gs = gridspec.GridSpec(2, 1,height_ratios=[3,1]) 
+        
+        axs[1] = plt.subplot(gs[1])
+        axs[0] = plt.subplot(gs[0],sharex=axs[1])
+        
+        plt.setp(axs[0].get_xticklabels(), visible=False)
+           
+        
+        axs[0].margins(x=0)
+        axs[0].margins(y=0.1)
+
+        axs[1].margins(x=0)
+        axs[1].margins(y=0.1)
+        
+        axs[0].plot(demand.index,demand.values*conversion,'black',alpha=0.5, linestyle = '--', label ='Demand',linewidth=3)
+            
+        # Drawing positivie numbers
+        axs[0].stackplot(production.index,production.values.T*conversion,colors=colors[production.columns],labels=names[production.columns])
+            
+        # Drawing negative numbers
+        #axs[0].stackplot(data1.index,data1.values.T*conversion,colors=colors[data1.columns],labels=names[data1.columns])                
+            
+        axs[0].legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.,frameon=True)
+            
+        axs[1].stackplot(production.index,production[specific].values.T*conversion,colors=colors[specific])
+        
+        # xticks properties
+        xfmt = mdates.DateFormatter(date_format)
+        axs[1].xaxis.set_major_formatter(xfmt)
+        axs[1].tick_params(axis='x', rotation=rotate)  
+        
+    else:
+        
+                
+        fig,(ax) = plt.subplots(1,figsize=figsize)
+        ax.margins(x=0)
+        ax.margins(y=0.1)
+        
+        # Drawing demand line
+        plt.plot(demand.index,demand.values*conversion,'black',alpha=0.5, linestyle = '--', label ='Demand',linewidth=3)
+        
+        # Drawing positivie numbers
+        plt.stackplot(production.index,production.values.T*conversion,colors=colors[production.columns],labels=names[production.columns])
+        
+        # Drawing negative numbers
+        #plt.stackplot(data1.index,data1.values.T*conversion,colors=colors[data1.columns],labels=names[data1.columns])
+        
+        # Legend properties
+        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.,frameon=True)
         
         
+        # xticks properties
+        xfmt = mdates.DateFormatter(date_format)
+        ax.xaxis.set_major_formatter(xfmt)
+        plt.xticks(rotation=rotate)
+    
+        # labels
+        plt.xlabel('Date')
+        
+    plt.ylabel(unit)
+    
+    plt.savefig('{}\system{}_dispatch.{}'.format(directory,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
+    plt.show()        
         
         
         

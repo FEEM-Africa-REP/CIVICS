@@ -39,9 +39,10 @@ class C_Graph:
         self.production             = prod_matrix (model,self.pr_techs,self.nodes,self.carrier)
         self.imports,self.exports   = imp_exp(model,self.nodes,self.production,self.tr_tech,self.carrier)
         self.demand                 = dem_matrix (model,self.co_techs,self.carrier,self.nodes)
+        
             
 
-    def node_dispatch (self,nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,dirctory='my_graphs'):
+    def node_dispatch (self,nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):
 
                 
         from calliope_graph.units import unit_check  
@@ -62,22 +63,28 @@ class C_Graph:
         else: 
             nodes = nodes
             
-        self.a =disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,dirctory)
+        disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
             
         
     
         
-            
+    def sys_dispatch (self, rational = 'techs' , fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):            
+        
+        from calliope_graph.units import unit_check  
+        from calliope_graph.units import u_conv     
+        
+        from calliope_graph.graphs import sys
         
         
+        if unit == '' :
+            unit = self.m_unit
+        else:
+            unit == unit
         
+        unit = unit_check(unit)
+        conversion = u_conv(self.m_unit,unit)        
         
-        
-        
-        
-        
-        
-        
+        sys(rational,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
         
         
         
