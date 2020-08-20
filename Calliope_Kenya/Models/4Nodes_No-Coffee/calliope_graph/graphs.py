@@ -132,8 +132,8 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
         
         # saving 
 
-    fig.savefig('{}\{}_{}_dispatch.{}'.format(directory,i,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
-    plt.show()
+        fig.savefig('{}\{}_{}_dispatch.{}'.format(directory,i,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
+        plt.show()
 
         
 
@@ -373,39 +373,69 @@ def tab_install (figsize,install_cap,colors,names,nodes,table_font,title_font,di
     else:
         raise ValueError('/kind/ should be one of the followings: \n 1. /table/ \n 2. /bar/')
         
-    
+
+
+
     plt.title('Installed Capacity',fontsize=title_font)
+        
     
     
     plt.savefig('{}\{}_installed_cap.{}'.format(directory,kind,fig_format),bbox_inches='tight',dpi=150)
             
     
     
-def cap_f_bar(nodes,fig_format,style,title_font,figsize,directory,cap_f,colors,names):
+def cap_f_bar(nodes,fig_format,style,title_font,figsize,directory,cap_f_inp,colors,names,kind,table_font,v_round):
     
     import matplotlib.pyplot as plt
     from calliope_graph.graphs import style_check 
     
-
+    cap_f = cap_f_inp.copy()
     style = style_check(style)
     plt.style.use(style) 
     
     colors = colors[cap_f.index]
     cap_f.index = names[cap_f.index]
+    cap_f = cap_f.round(v_round)
     
-    for i in nodes:
+    if kind == 'bar':
+    
+        for i in nodes:
+            
+            cap_f[i].plot(kind='bar',stacked=True,color=colors,figsize=figsize,legend=False)
+          
+            
+            
+            plt.title('{} capacity factor'.format(names[i]),fontsize=title_font)
+            plt.savefig('{}\{}capacity_factor.{}'.format(directory,i,fig_format),bbox_inches='tight',dpi=150)
+            plt.show()
         
-        cap_f[i].plot(kind='bar',stacked=True,color=colors,figsize=figsize,legend=False)
-      
+    elif kind == 'table':
+        
+        fig,(ax) = plt.subplots(1,figsize=figsize)
+        table = plt.table(cellText=cap_f.values,
+                                  rowColours= colors,
+                                  rowLabels= cap_f.index,
+                                  colLabels = nodes,
+                                  loc='upper center',
+                                  rowLoc ='center',
+                                  colLoc='center',
+                                  cellLoc='center')    
         
         
-        plt.title('{} capacity factor'.format(names[i]),fontsize=title_font)
-        plt.savefig('{}\{}capacity_factor.{}'.format(directory,i,fig_format),bbox_inches='tight',dpi=150)
-        plt.show()
+        table.set_fontsize(table_font)
+        table.scale(1, 2)
+        plt.box(on=None)
+        ax = plt.gca()
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)  
+        
+        plt.title('Capacity Factor',fontsize=title_font)
+        
+        plt.savefig('{}\system_capacity_factor.{}'.format(directory,fig_format),bbox_inches='tight',dpi=150)
         
     
-    
-    
+    else:
+        raise ValueError('/kind/ should be one of the followings: \n 1. /table/ \n 2. /bar/')    
     
     
     

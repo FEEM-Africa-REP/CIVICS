@@ -18,8 +18,10 @@ class C_Graph:
         from calliope_graph.matrixmaker import dem_matrix
         from calliope_graph.matrixmaker import install_cap
         from calliope_graph.matrixmaker import cap_fac
+        from calliope_graph.matrixmaker import levelized_cost
 
         from calliope_graph.units import unit_check  
+        
 
         
         self.model = model
@@ -43,9 +45,10 @@ class C_Graph:
         self.demand                 = dem_matrix (model,self.co_techs,self.carrier,self.nodes)
         self.install_capacity       = install_cap (model,self.nodes,self.pr_techs)
         self.cap_factor             = cap_fac(model,self.pr_techs,self.nodes,self.carrier,self.production)
+        self.TLC                    = levelized_cost(model)
                         
 
-    def node_dispatch (self,nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):
+    def node_dispatch (self,nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 15,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):
 
                 
         from calliope_graph.units import unit_check  
@@ -71,7 +74,7 @@ class C_Graph:
         
     
         
-    def sys_dispatch (self, rational = 'techs' , fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):            
+    def sys_dispatch (self, rational = 'techs' , fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 15,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):            
         
         from calliope_graph.units import unit_check  
         from calliope_graph.units import u_conv     
@@ -90,7 +93,7 @@ class C_Graph:
         sys_disp(rational,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
         
         
-    def node_pie (self,rational='production',nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 12 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=0):
+    def node_pie (self,rational='production',nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , date_format = '%d/%m/%y , %H:%M', title_font = 15 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=0):
        
         from calliope_graph.units import unit_check  
         from calliope_graph.units import u_conv   
@@ -114,7 +117,7 @@ class C_Graph:
         
         
         
-    def ins_cap_plot (self,kind='table',fig_format = 'png' , unit= '', style = 'ggplot',title_font = 12 ,table_font=15,figsize=(8,6),directory='my_graphs',v_round=0):
+    def ins_cap_plot (self,kind='table',fig_format = 'png' , unit= '', style = 'ggplot',title_font = 15 ,table_font=15,figsize=(8,6),directory='my_graphs',v_round=0,cap_f = False):
         
         from calliope_graph.units import unit_check  
         from calliope_graph.units import u_conv 
@@ -131,15 +134,20 @@ class C_Graph:
         tab_install (figsize,self.install_capacity,self.colors,self.names,self.nodes,table_font,title_font,directory,conversion,style,v_round,fig_format,kind,unit)
         
         
-    def cap_f_plot (self,nodes='All', fig_format = 'png' , style = 'ggplot' , title_font = 12,figsize=(8,6),directory='my_graphs'):
+    def cap_f_plot (self,kind='table',nodes='All', fig_format = 'png' , style = 'ggplot' , title_font = 15,figsize=(8,6),directory='my_graphs',table_font=15,v_round=0):
         
+
         from calliope_graph.graphs import cap_f_bar 
         if nodes == 'All':
             nodes = self.nodes  
         else: 
             nodes = nodes 
+                
+        cap_f_bar(nodes,fig_format,style,title_font,figsize,directory,self.cap_factor,self.colors,self.names,kind,table_font,v_round)
             
-        cap_f_bar(nodes,fig_format,style,title_font,figsize,directory,self.cap_factor,self.colors,self.names)
+
+
+            
         
    # def report_pdf(self,average='hourly',unit='',):
         

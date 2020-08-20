@@ -219,15 +219,16 @@ def install_cap (model,nodes,techs):
     return model.get_formatted_array('energy_cap_equals').loc[{'techs':techs,'locs':nodes}].to_pandas().T.fillna(0)
         
 def cap_fac (model,techs,nodes,carrier,production):
-    
-    import pandas as pd
+
     
     cap_f = model.get_formatted_array('capacity_factor').loc[{'techs':techs,'locs':nodes,'carriers':carrier[0]}].sum('timesteps').to_pandas().T
     
     return cap_f / len(production.index)
         
         
-        
+def levelized_cost (model):
+    
+    return  float(model.get_formatted_array('total_levelised_cost').values)  
         
         
         
