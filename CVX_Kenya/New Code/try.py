@@ -10,5 +10,5 @@ a=cvx.C_SUT(path=r'Database\Kenya_2014_SAM.xlsx',unit='M KSH')
 #%%
 a.shock(path=r'Shading_trees.xlsx',Y=True)  
 #%%
-s = Z.index
-
+a.calc_all()
+#%%
