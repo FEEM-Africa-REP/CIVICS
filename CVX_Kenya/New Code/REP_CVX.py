@@ -24,13 +24,13 @@ class C_SUT:
         filterwarnings("ignore") 
         
         # Reading the Database
-        self.SUT,self.U,self.V,self.Z,self.S,self.Y,self.VA,self.X = database(path)
+        self.SUT,self.U,self.V,self.Z,self.S,self.Y,self.VA,self.X = database (path)
         
         # Calculating the baseline coefficients
         self.z,self.s,self.va,self.l,self.p = cal_coef (self.Z,self.S,self.VA,self.X)
         
         # Getting indeces
-        self.indeces = indeces(self.S,self.Z,self.VA,self.X)
+        self.indeces = indeces (self.S,self.Z,self.VA,self.X)
         
         # All the information needs to be stored in every step because it will be used in some other functions
         self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'va':self.va,'z':self.z}
@@ -72,14 +72,14 @@ class C_SUT:
          
         # Saving all the new matrices in the results dictionary.
         if save:
-            self.results['Z_' + str(self.counter)]= self.Z_c
-            self.results['X_' + str(self.counter)]= self.X_c
-            self.results['VA_'+ str(self.counter)]= self.VA_c
-            self.results['p_' + str(self.counter)]= self.p_c
-            self.results['Y_' + str(self.counter)]= self.Y_c
+            self.results['Z_'  + str(self.counter)]= self.Z_c
+            self.results['X_'  + str(self.counter)]= self.X_c
+            self.results['VA_' + str(self.counter)]= self.VA_c
+            self.results['p_'  + str(self.counter)]= self.p_c
+            self.results['Y_'  + str(self.counter)]= self.Y_c
             self.results['va_' + str(self.counter)]= self.va_c
-            self.results['z_' + str(self.counter)]= self.z_c
-            self.results['S_' + str(self.counter)]= self.S_c   
+            self.results['z_'  + str(self.counter)]= self.z_c
+            self.results['S_'  + str(self.counter)]= self.S_c   
             
             self.counter += 1
 
