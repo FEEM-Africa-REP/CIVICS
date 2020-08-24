@@ -14,19 +14,16 @@ class C_SUT:
         from functions.units import unit_check
         from functions.io_calculation import cal_coef
         from functions.indexer import indeces
-        
 
-        
-        
         print(__version__)
         
         # Check if the unit is correct or not
         self.m_unit = unit_check(unit)
         
-        # Ignoring the warnings caused by 
+        # Ignoring the warnings 
         filterwarnings("ignore") 
         
-        # Reading the Data Base
+        # Reading the Database
         self.SUT,self.U,self.V,self.Z,self.S,self.Y,self.VA,self.X = database(path)
         
         # Calculating the baseline coefficients
