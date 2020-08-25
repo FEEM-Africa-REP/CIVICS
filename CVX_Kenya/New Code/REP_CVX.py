@@ -88,8 +88,8 @@ class C_SUT:
             self.counter += 1
         
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
-                fig_format='png',title_font=15,style='ggplot',figsize=(8, 8),
-                directory='my_graphs',ranshow=(0,0),title='default'):
+                fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
+                directory='my_graphs',ranshow=(0,0),title='default',color = 'rainbow'):
         
         from functions.plots import dx
         
@@ -103,7 +103,7 @@ class C_SUT:
         else:
             X_c,X = self.X_c_agg,self.X_agg
             
-        self.a = dx(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format)
+        self.a = dx(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color)
 
 
 

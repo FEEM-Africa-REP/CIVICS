@@ -52,7 +52,7 @@ def kind_check (kind):
     
     kinds = ['Absolute','Percentage']
     if kind not in kinds:
-        raise ValueError('/kind/ can be: \n 1. /Absolute/ /n 2. {Percentage}')
+        raise ValueError('/kind/ can be: \n 1. /Absolute/ /n 2. /Percentage/')
     
     return kind
     
