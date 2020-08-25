@@ -103,7 +103,7 @@ class C_SUT:
         else:
             X_c,X = self.X_c_agg,self.X_agg
             
-        self.a = dx(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color)
+        dx(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color)
 
 
 
