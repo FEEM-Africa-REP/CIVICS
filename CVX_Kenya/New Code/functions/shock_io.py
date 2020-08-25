@@ -53,7 +53,7 @@ def Z_shock (path,z,Z,X):
                 new_z = cal_z(Z,X)
                 
                 z.loc[(level_rows[i],rows[i]),(level_cols[i],cols[i])] = \
-                    new_z.loc[(level_rows[i],rows[i]),(level_cols[i],cols[i])] 
+                    new_z.loc[(level_rows[i],rows[i]),(level_cols[i],cols[i])].values 
                 
             elif aggreg[i] == 'Yes':
                 Z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
@@ -62,7 +62,7 @@ def Z_shock (path,z,Z,X):
                 new_z = cal_z(Z,X)
                 
                 z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
-                    new_z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),level_cols[i],cols[i]]      
+                    new_z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),level_cols[i],cols[i]].values    
             else: 
                 raise ValueError('Aggregation could be /Yes/ or /No/. Please check shock excel file.')  
                 
@@ -105,7 +105,7 @@ def VA_shock(path,va,VA,X):
                 new_va = cal_s(VA,X)
                 
                 va.loc[rows[i],(level_cols[i],cols[i])] = \
-                    new_va.loc[rows[i],(level_cols[i],cols[i])] 
+                    new_va.loc[rows[i],(level_cols[i],cols[i])].values
                 
             elif aggreg[i] == 'Yes':
                 VA.loc[(slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
@@ -114,7 +114,7 @@ def VA_shock(path,va,VA,X):
                 new_va = cal_s(VA,X)
                 
                 va.loc[(slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
-                    new_va.loc[(slice(None),slice(None),slice(None),rows[i]),level_cols[i],cols[i]]      
+                    new_va.loc[(slice(None),slice(None),slice(None),rows[i]),level_cols[i],cols[i]].values     
             else: 
                 raise ValueError('Aggregation could be /Yes/ or /No/. Please check shock excel file.')  
                 
@@ -123,11 +123,34 @@ def VA_shock(path,va,VA,X):
 
     return va
 
-
-
-
-
-
+def S_shock(path,s,S,X):
+    
+    import pandas as pd
+    from functions.io_calculation import cal_s
+    
+    S_sh = pd.read_excel(path, sheet_name = 'S', index_col = [0] , header = [0])
+    
+    rows        = list(S_sh['row'].values)
+    cols        = list(S_sh['col'].values)
+    types       = list(S_sh['type'].values)
+    values      = list(S_sh['value'].values)
+    level_cols  = 'Activities'
+    
+    
+    for i in range (len(rows)):
+        if types[i] == 'Percentage':
+            s.loc[rows[i],(level_cols,cols[i])] = \
+                    s.loc[rows[i],(level_cols,cols[i])].values * (1+values[i])
+            
+        elif types[i] == 'Absolute':
+            S.loc[rows[i],(level_cols,cols[i])] = \
+                    S.loc[rows[i],(level_cols,cols[i])].values + values[i]
+            new_s = cal_s(S,X)
+            
+            s.loc[rows[i],(level_cols,cols[i])] = \
+                new_s.loc[rows[i],(level_cols,cols[i])] .values
+            
+    return s
 
 
 
