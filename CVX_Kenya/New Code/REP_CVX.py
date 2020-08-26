@@ -103,7 +103,7 @@ class C_SUT:
         else:
             X_c,X = self.X_c,self.X
             
-        delta_xv(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop,None)
+        delta_xv(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop)
 
 
     def plot_dv(self,aggregated=True,unit='default',level=None,kind='Absolute',
@@ -120,7 +120,7 @@ class C_SUT:
         if aggregated:   VA_c,VA = self.VA_c_agg,self.VA_agg    
         else:            VA_c,VA = self.VA_c,self.VA
             
-        delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop,None)        
+        delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop)        
         
         
     def plot_ds(self,indicator,aggregated=True,detail=True,unit='default',

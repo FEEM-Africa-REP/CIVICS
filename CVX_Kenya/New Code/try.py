@@ -11,4 +11,4 @@ a=cvx.C_SUT(path=r'Database\Kenya_2014_SAM.xlsx',unit='M KSH')
 #%%
 a.shock_calc(path=r'Shading_trees.xlsx',Y=True)  
 #%%
-a.plot_ds(indicator='an',kind='Percentage')
+a.plot_dv(unit='M USD',level='Activities')

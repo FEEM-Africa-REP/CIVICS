@@ -113,7 +113,7 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
             # Depending on the input of the color, the code will be different
             try:    d_x.plot(kind='bar',figsize=figsize,stacked=True,colormap=color) # colormap if a color map is given
             except: d_x.plot(kind='bar',figsize=figsize,stacked=True,color=color) # color if a color list is given
-            plt.legend(loc = 1,bbox_to_anchor = (1.3,1))
+            plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fancybox=True, shadow=True)
         else:
             try:    d_x.plot(kind='bar',figsize=figsize,legend=None,stacked=True,colormap=color)
             except: d_x.plot(kind='bar',figsize=figsize,legend=None,stacked=True,color=color)
@@ -121,7 +121,7 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     if info == 'VA':
         try:    d_x.plot(kind='bar',figsize=figsize,stacked=True,colormap=color)
         except: d_x.plot(kind='bar',figsize=figsize,stacked=True,color=color)
-        plt.legend(loc = 1,bbox_to_anchor = (1.3,1))        
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fancybox=True, shadow=True)      
         
     # Due to competutional errors, even in the case that one thing is not changed, we may have very small differences 
     # This makes the graphs ugly!! To solve the issue we print an error for the user to make them understand.
@@ -180,8 +180,6 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
         
     if abs(d_x.sum().sum() <= 0.000001):
         print('The following matrix seems to be unchanged in the implemented shock, so the numbers represented in the graph are very small and related to computational errors.')
-        
-
        
     # Specifing the range of showing results
     d_x = drop_fun(data=d_x, ranshow=ranshow)
@@ -198,7 +196,7 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     if detail:
         try:    d_x.plot(kind = 'bar' , stacked = True,colormap=color)
         except: d_x.plot(kind = 'bar' , stacked = True,color=color)
-        plt.legend(loc = 1,bbox_to_anchor = (1.6,1))
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5),fancybox=True, shadow=True)
     else:
         try:    d_x.plot(kind = 'bar' , stacked = True,legend=False,colormap=color)
         except: d_x.plot(kind = 'bar' , stacked = True,legend=False,color=color)

@@ -42,7 +42,7 @@ def level_check(level):
     
     levels = ['Activities' , 'Commodities']
     if level != None :
-        if level not in levels: raise ValueError('/level/ can be: \n 1. /Activities/ \n 2. /Commodities/ \n 3. /None/ ')
+        if level not in levels: raise ValueError('\'level\' can be: \n 1. \'Activities\' \n 2. \'Commodities\' \n 3. \'None\' ')
         else: title , level = ' by {}'.format(level) , [level]
     else: title , level = '' , levels
         
@@ -52,7 +52,7 @@ def kind_check (kind):
     
     kinds = ['Absolute','Percentage']
     if kind not in kinds:
-        raise ValueError('/kind/ can be: \n 1. /Absolute/ /n 2. /Percentage/')
+        raise ValueError('\'kind\' can be: \n 1. \'Absolute\' /n 2. \'Percentage\'')
     
     return kind
     
