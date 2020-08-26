@@ -129,9 +129,8 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
         
     plt.title(title,fontsize=title_font)
     plt.ylabel(unit)
-    plt.show()
-    
     plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
+    plt.show()
 
  
    
