@@ -13,10 +13,12 @@ class C_SUT:
         from functions.data_read import database
         from functions.check import unit_check
         from functions.io_calculation import cal_coef
-        from functions.indexer import indeces
+        from functions.utility import indeces
         from functions.aggregation import aggregate
 
         print(__version__)
+        
+        self.main_path = path
         
         # Check if the unit is correct or not
         self.m_unit = unit_check(unit)
@@ -39,9 +41,13 @@ class C_SUT:
         # All the information needs to be stored in every step because it will be used in some other functions
         self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'S':self.S,'va':self.va,'z':self.z \
                         ,'Z_agg':self.Z_agg, 'Y_agg':self.Y_agg,'X_agg':self.X_agg,'VA_agg':self.VA_agg,'S_agg':self.S_agg}
+            
+        # In order to identify the sensitivity scenario, the information will be stored in the following dictionary
+        self.sens_info = {}
         
         # A counter for saving the results in a dictionary
-        self.counter = 1 
+        self.counter   = 1 
+        self.s_counter = 1
         
         
     def shock_calc (self,path,Y=False, VA=False, Z=False, S=False,save=True):
@@ -50,6 +56,7 @@ class C_SUT:
         from functions.io_calculation import cal_flows
         from functions.aggregation import aggregate
         
+        self.sh_path = path
         # Taking a copy of all matrices to have both changed and unchanged ones
         self.Y_c   = self.Y.copy()
         self.va_c  = self.va.copy()
@@ -142,7 +149,39 @@ class C_SUT:
         
         delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces)        
         
+
+    def sensitivity(self,path,Y=False,VA=False,Z=False,S=False,save=True):
         
+        if not Y and not VA and not Z and not S:
+            raise ValueError('At lest one of the arguments should be \'True\' ')
+        import glob
         
+        files = [f for f in glob.glob(path + "**/*.xlsx", recursive=True)]
+    
+              
+        for i in files:
+            self.shock_calc(path=r'{}'.format(i),Y=Y,VA=VA,Z=Z,S=S,save=False)
+            
+            if save:
+                self.results['Z_s_'  + str(self.counter)]= self.Z_c
+                self.results['X_s_'  + str(self.counter)]= self.X_c
+                self.results['VA_s_' + str(self.counter)]= self.VA_c
+                self.results['p_s_'  + str(self.counter)]= self.p_c
+                self.results['Y_s_'  + str(self.counter)]= self.Y_c
+                self.results['va_s_' + str(self.counter)]= self.va_c
+                self.results['z_s_'  + str(self.counter)]= self.z_c
+                self.results['S_s_'  + str(self.counter)]= self.S_c
+                
+                self.results['Z_s_agg_'  + str(self.counter)]= self.Z_c_agg
+                self.results['X_s_agg_'  + str(self.counter)]= self.X_c_agg
+                self.results['VA_s_agg_' + str(self.counter)]= self.VA_c_agg
+                self.results['Y_s_agg_'  + str(self.counter)]= self.Y_c_agg
+                self.results['S_s_agg_'  + str(self.counter)]= self.S_c_agg
+                
+                self.sens_info['Scenario {}'.format(self.s_counter)] = i
+                
+                self.s_counter += 1
+                
+        print("Warning: \n all the shock variables are equal to the last sensitivity file: \'{}\' ".format(i))
         
      

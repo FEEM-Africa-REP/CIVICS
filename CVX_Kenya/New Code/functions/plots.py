@@ -13,8 +13,6 @@ def x_reshape(X):
     X_r.loc['Activities','Activities']   = X.loc['Activities','Total Production'].values
     X_r.loc['Commodities','Commodities'] = X.loc['Commodities','Total Production'].values
     
-
-    
     return X_r
 
 def drop_fun(data,ranshow):
@@ -42,7 +40,6 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     from functions.check import style_check
     from functions.check import level_check
     from functions.check import kind_check
-    import warnings
 
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()
@@ -135,8 +132,6 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     plt.ylabel(unit)
     plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
     plt.show()
-    
-
 
  
 def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,indeces):
@@ -146,7 +141,6 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     from functions.check import level_check
     from functions.check import kind_check
     from functions.check import indic_check
-    import warnings
 
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()

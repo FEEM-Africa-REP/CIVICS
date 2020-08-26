@@ -9,6 +9,6 @@ import REP_CVX as cvx
 
 a=cvx.C_SUT(path=r'Database\Kenya_2014_SAM.xlsx',unit='M KSH') 
 #%%
-a.shock_calc(path=r'Shading_trees.xlsx',Y=True)  
+a.shock_calc(path=r'sensitivity\a1\q1.xlsx',Z=True)  
 #%%
-a.plot_dv(unit='M USD',level='Activities')
+a.sensitivity(r'sensitivity\a1',Y=True)
