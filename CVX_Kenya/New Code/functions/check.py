@@ -56,7 +56,13 @@ def kind_check (kind):
     
     return kind
     
+def indic_check (indicator,indicators):
     
+    indicators = list(dict.fromkeys(indicators))
+
+    if indicator not in indicators:
+        raise ValueError('\'{}\' not found in {}'.format(indicator, indicators))
+    return indicator
     
     
     

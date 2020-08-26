@@ -103,7 +103,7 @@ class C_SUT:
         else:
             X_c,X = self.X_c,self.X
             
-        delta_xv(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop)
+        delta_xv(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop,None)
 
 
     def plot_dv(self,aggregated=True,unit='default',level=None,kind='Absolute',
@@ -117,20 +117,30 @@ class C_SUT:
         except: raise ValueError('To run the plot function, there should be an implemented shock.')
         
         # To check the input to the plot function in the aggregated level or disaggregated
-        if aggregated:
-            VA_c,VA = self.VA_c_agg,self.VA_agg    
-        else:
-            VA_c,VA = self.VA_c,self.VA
+        if aggregated:   VA_c,VA = self.VA_c_agg,self.VA_agg    
+        else:            VA_c,VA = self.VA_c,self.VA
             
-        self.a = delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop)        
+        delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop,None)        
+        
+        
+    def plot_ds(self,indicator,aggregated=True,detail=True,unit='default',
+                level='Activities',kind='Absolute',fig_format='png',title_font=15,
+                style='ggplot',figsize=(10, 6),directory='my_graphs',ranshow=(0,0)
+                ,title='default',color = 'terrain', drop= None):
+        
+        from functions.plots import delta_s
+        
+        # Check if the shock result exist or not
+        try: self.X_c          
+        except: raise ValueError('To run the plot function, there should be an implemented shock.')        
+
+        # To check the input to the plot function in the aggregated level or disaggregated
+        if aggregated and not detail: S_c,S = self.S_c_agg,self.S_agg 
+        else: S_c,S = self.S_c,self.S
         
         
         
-        
-        
-        
-        
-        
+        delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces)        
         
         
         

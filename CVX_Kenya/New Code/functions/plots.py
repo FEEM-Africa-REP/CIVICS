@@ -43,7 +43,6 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     from functions.check import level_check
     from functions.check import kind_check
     import warnings
-    warnings.warn('I am a warning!')
 
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()
@@ -75,11 +74,8 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
         X   = X[level]
         
     # defining the d_x matrix 
-    if kind == 'Absolute': 
-        d_x = (X_c - X) * conversion
-    else:
-        d_x = (X_c - X)/X * 100
-        unit = '%'
+    if kind == 'Absolute': d_x = (X_c - X) * conversion
+    else: d_x ,unit = (X_c - X)/X * 100 ,'%'
         
     # Check the title
     if info == 'X':
@@ -131,8 +127,7 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     # This makes the graphs ugly!! To solve the issue we print an error for the user to make them understand.
     
     if abs(d_x.sum().sum() <= 0.000001):
-        warnings.simplefilter('always')
-        warnings.warn('The following matrix seems to be unchanged in the implemented shock, so the numbers represented in the graph are very small and related to computational errors.')
+        print('The following matrix seems to be unchanged in the implemented shock, so the numbers represented in the graph are very small and related to computational errors.')
         
     
         
@@ -141,10 +136,87 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
     plt.show()
     
-    return d_x
+
 
  
-   
+def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,indeces):
+    
+    import matplotlib.pyplot as plt
+    from functions.check import style_check
+    from functions.check import level_check
+    from functions.check import kind_check
+    from functions.check import indic_check
+    import warnings
+
+    # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
+    X_c = X_c.copy()
+    X   = X.copy() 
+    
+    # Checking the styles
+    style       = style_check(style)
+    tit,level   = level_check(level)
+    kind        = kind_check (kind)
+    indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(3)))
+    
+    # Implementing the plot style
+    plt.style.use(style)   
+    
+    if detail:
+        X_c = X_c.loc[(slice(None),slice(None),slice(None),indicator),level].groupby(axis=1,level=4).sum().groupby(axis=0,level=0).sum()
+        X   = X.loc[(slice(None),slice(None),slice(None),indicator),level].groupby(axis=1,level=4).sum().groupby(axis=0,level=0).sum()
+    else:
+        X_c = X_c.loc[indicator,level].groupby(axis=1,level=3).sum()
+        X   = X.loc[indicator,level].groupby(axis=1,level=3).sum() 
+        
+    # defining the d_x matrix 
+    if kind == 'Absolute': 
+        d_x,unit = (X_c - X),''
+        print('The unit of the graph is the same of the database.')  
+    else: d_x,unit = (X_c - X)/X * 100,'%'
+    
+    # if detail is True, we need to reindex it
+    if detail:
+        d_x.index = d_x.index.get_level_values(0) 
+        
+    if abs(d_x.sum().sum() <= 0.000001):
+        print('The following matrix seems to be unchanged in the implemented shock, so the numbers represented in the graph are very small and related to computational errors.')
+        
+
+       
+    # Specifing the range of showing results
+    d_x = drop_fun(data=d_x, ranshow=ranshow)
+    d_x = d_x.T
+
+    # Removing the name of the indeces for better representation
+    d_x.index.name   = None
+    d_x.columns.name = None
+
+    # Title Definition
+    if title == 'default': title = '{} Change{}'.format(indicator, tit)
+    else: title = title
+        
+    if detail:
+        try:    d_x.plot(kind = 'bar' , stacked = True,colormap=color)
+        except: d_x.plot(kind = 'bar' , stacked = True,color=color)
+        plt.legend(loc = 1,bbox_to_anchor = (1.6,1))
+    else:
+        try:    d_x.plot(kind = 'bar' , stacked = True,legend=False,colormap=color)
+        except: d_x.plot(kind = 'bar' , stacked = True,legend=False,color=color)
+    
+    plt.title(title)  
+    plt.ylabel(unit)
+
+       
+    plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
+    plt.show()    
+    
+
+    
+    
+    
+    
+    
+    
     
     
     
