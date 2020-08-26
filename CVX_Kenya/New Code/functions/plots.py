@@ -42,7 +42,8 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     from functions.check import style_check
     from functions.check import level_check
     from functions.check import kind_check
-    
+    import warnings
+    warnings.warn('I am a warning!')
 
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()
@@ -126,11 +127,21 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
         except: d_x.plot(kind='bar',figsize=figsize,stacked=True,color=color)
         plt.legend(loc = 1,bbox_to_anchor = (1.3,1))        
         
+    # Due to competutional errors, even in the case that one thing is not changed, we may have very small differences 
+    # This makes the graphs ugly!! To solve the issue we print an error for the user to make them understand.
+    
+    if abs(d_x.sum().sum() <= 0.000001):
+        warnings.simplefilter('always')
+        warnings.warn('The following matrix seems to be unchanged in the implemented shock, so the numbers represented in the graph are very small and related to computational errors.')
+        
+    
         
     plt.title(title,fontsize=title_font)
     plt.ylabel(unit)
     plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
     plt.show()
+    
+    return d_x
 
  
    

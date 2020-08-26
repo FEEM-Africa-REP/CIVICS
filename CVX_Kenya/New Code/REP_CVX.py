@@ -57,10 +57,10 @@ class C_SUT:
         self.z_c   = self.z.copy()
         
         # check the type of the shock
-        if Y:   self.Y_c  = sh.Y_shock  (path,self.Y_c)                      
-        if Z:   self.z_c  = sh.Z_shock  (path,self.z_c,self.Z.copy(),self.X.copy())
-        if VA:  self.va_c = sh.VA_shock (path,self.va_c,self.VA.copy(),self.X.copy())
-        if S:   self.s_c  = sh.S_shock  (path,self.s_c,self.S.copy(),self.X.copy())
+        if Y:   self.Y_c  = sh.Y_shock  (path,self.Y_c.copy())                      
+        if Z:   self.z_c  = sh.Z_shock  (path,self.z_c.copy(),self.Z.copy(),self.X.copy())
+        if VA:  self.va_c = sh.VA_shock (path,self.va_c.copy(),self.VA.copy(),self.X.copy())
+        if S:   self.s_c  = sh.S_shock  (path,self.s_c.copy(),self.S.copy(),self.X.copy())
         
         # Calculating the shock result
         self.l_c,self.X_c,self.VA_c,self.S_c,self.Z_c,self.p_c = cal_flows(self.z_c,self.Y_c,self.va_c,self.s_c,self.indeces)        
@@ -122,7 +122,7 @@ class C_SUT:
         else:
             VA_c,VA = self.VA_c,self.VA
             
-        delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop)        
+        self.a = delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop)        
         
         
         
