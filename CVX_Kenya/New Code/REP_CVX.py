@@ -89,9 +89,9 @@ class C_SUT:
         
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
-                directory='my_graphs',ranshow=(0,0),title='default',color = 'rainbow'):
+                directory='my_graphs',ranshow=(0,0),title='default',color = 'rainbow', drop=None):
         
-        from functions.plots import dx
+        from functions.plots import delta_xv
         
         # Check if the shock result exist or not
         try: self.X_c          
@@ -101,10 +101,38 @@ class C_SUT:
         if aggregated:
             X_c,X = self.X_c_agg,self.X_agg    
         else:
-            X_c,X = self.X_c_agg,self.X_agg
+            X_c,X = self.X_c,self.X
             
-        dx(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color)
+        delta_xv(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop)
 
 
-
+    def plot_dv(self,aggregated=True,unit='default',level=None,kind='Absolute',
+                fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
+                directory='my_graphs',ranshow=(0,0),title='default',color = 'terrain', drop= None):
+        
+        from functions.plots import delta_xv
+        
+        # Check if the shock result exist or not
+        try: self.X_c          
+        except: raise ValueError('To run the plot function, there should be an implemented shock.')
+        
+        # To check the input to the plot function in the aggregated level or disaggregated
+        if aggregated:
+            VA_c,VA = self.VA_c_agg,self.VA_agg    
+        else:
+            VA_c,VA = self.VA_c,self.VA
+            
+        delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop)        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
      

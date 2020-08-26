@@ -34,7 +34,7 @@ def drop_fun(data,ranshow):
     return data.drop(columns=drop_list)
 
 
-def dx(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color):
+def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,info,drop):
     
     import matplotlib.pyplot as plt
     from functions.check import unit_check
@@ -62,14 +62,17 @@ def dx(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize,direc
     # Implementing the plot style
     plt.style.use(style)
     
-    #reshaping X matrix for better representation
-    X_c = x_reshape(X_c)
-    X   = x_reshape(X)
     
-    # Taking the level
-    X_c = X_c.loc[level,level]
-    X   = X.loc[level,level]
-    
+    #reshaping X matrix for better representation and Taking the level
+    if info == 'X':
+        X_c = x_reshape(X_c)
+        X   = x_reshape(X)
+        X_c = X_c.loc[level,level]
+        X   = X.loc[level,level]
+    elif info == 'VA':
+        X_c = X_c[level]
+        X   = X[level]
+        
     # defining the d_x matrix 
     if kind == 'Absolute': 
         d_x = (X_c - X) * conversion
@@ -78,23 +81,51 @@ def dx(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize,direc
         unit = '%'
         
     # Check the title
-    if title == 'default': title = 'Production Change{}'.format(tit)
-    else: title = title
-
+    if info == 'X':
+        if title == 'default': title = 'Production Change{}'.format(tit)
+        else: title = title
+        
+    elif info == 'VA':
+        if title == 'default': title = 'Value Added Change{}'.format(tit)
+        else: title = title
+        
     # Reindexing to avoid showing multiple indeces: only the second level
-    d_x.index = X.index.get_level_values(1)
+    if info == 'X': d_x.index = X.index.get_level_values(1)
+    elif info == 'VA': 
+        if len(level) == 2: d_x.index , d_x.columns =  X.index.get_level_values(0) , [d_x.columns.get_level_values(0),d_x.columns.get_level_values(1)]
+        else: d_x.index , d_x.columns =  X.index.get_level_values(0) , d_x.columns.get_level_values(1)
     
-    # defining the range of the valuse to be shown   
-    d_x = drop_fun(data=d_x.T, ranshow=ranshow)
+    # Droping some of the categories based on the user input
+    if drop:
+        d_x = d_x.drop(drop)
+
+        
+    # defining the range of the valuse to be shown 
+    if info     == 'X' : d_x = drop_fun(data=d_x.T, ranshow=ranshow)
+    elif info   == 'VA': d_x = drop_fun(data=d_x  , ranshow=ranshow)
+    
     d_x = d_x.T
     
+    # Removing the name of the indeces for better representation
+    d_x.index.name   = None
+    d_x.columns.name = None
+    
     # Plotting
-    # if the two level exist, the legend is needed. Otherwise, legend is not necessary
-    if len(level) == 2:
-        d_x.plot(kind='bar',figsize=figsize,stacked=True,colormap=color) 
-        plt.legend(loc = 1,bbox_to_anchor = (1.3,1))
-    else:
-        d_x.plot(kind='bar',figsize=figsize,legend=None,stacked=True)
+    if info == 'X':
+        if len(level) == 2:
+            # Depending on the input of the color, the code will be different
+            try:    d_x.plot(kind='bar',figsize=figsize,stacked=True,colormap=color) # colormap if a color map is given
+            except: d_x.plot(kind='bar',figsize=figsize,stacked=True,color=color) # color if a color list is given
+            plt.legend(loc = 1,bbox_to_anchor = (1.3,1))
+        else:
+            try:    d_x.plot(kind='bar',figsize=figsize,legend=None,stacked=True,colormap=color)
+            except: d_x.plot(kind='bar',figsize=figsize,legend=None,stacked=True,color=color)
+            
+    if info == 'VA':
+        try:    d_x.plot(kind='bar',figsize=figsize,stacked=True,colormap=color)
+        except: d_x.plot(kind='bar',figsize=figsize,stacked=True,color=color)
+        plt.legend(loc = 1,bbox_to_anchor = (1.3,1))        
+        
         
     plt.title(title,fontsize=title_font)
     plt.ylabel(unit)
@@ -102,7 +133,8 @@ def dx(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize,direc
     
     plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
 
-    
+ 
+   
     
     
     
