@@ -15,6 +15,7 @@ class C_SUT:
         from functions.io_calculation import cal_coef
         from functions.utility import indeces
         from functions.aggregation import aggregate
+        from functions.utility import dict_maker
 
         print(__version__)
         
@@ -39,15 +40,16 @@ class C_SUT:
         self.indeces = indeces (self.S,self.Z,self.VA,self.X)
         
         # All the information needs to be stored in every step because it will be used in some other functions
-        self.results = {'Z':self.Z, 'Y':self.Y,'X':self.X,'VA':self.VA,'p':self.p,'S':self.S,'va':self.va,'z':self.z \
-                        ,'Z_agg':self.Z_agg, 'Y_agg':self.Y_agg,'X_agg':self.X_agg,'VA_agg':self.VA_agg,'S_agg':self.S_agg}
+        self.results = {}
+        self.results['baseline']= dict_maker(self.Z,self.X,self.VA,self.p,self.Y,self.va,
+                                                self.z,self.s,self.Z_agg,self.X_agg,self.VA_agg,self.Y_agg,self.S_agg)
             
         # In order to identify the sensitivity scenario, the information will be stored in the following dictionary
         self.sens_info = {}
         
         # A counter for saving the results in a dictionary
         self.counter   = 1 
-        self.s_counter = 1
+        self.m_counter = 1
         
         
     def shock_calc (self,path,Y=False, VA=False, Z=False, S=False,save=True):
@@ -55,6 +57,7 @@ class C_SUT:
         import functions.shock_io as sh
         from functions.io_calculation import cal_flows
         from functions.aggregation import aggregate
+        from functions.utility import dict_maker
         
         self.sh_path = path
         # Taking a copy of all matrices to have both changed and unchanged ones
@@ -77,21 +80,8 @@ class C_SUT:
         
         # Saving all the new matrices in the results dictionary.
         if save:
-            self.results['Z_'  + str(self.counter)]= self.Z_c
-            self.results['X_'  + str(self.counter)]= self.X_c
-            self.results['VA_' + str(self.counter)]= self.VA_c
-            self.results['p_'  + str(self.counter)]= self.p_c
-            self.results['Y_'  + str(self.counter)]= self.Y_c
-            self.results['va_' + str(self.counter)]= self.va_c
-            self.results['z_'  + str(self.counter)]= self.z_c
-            self.results['S_'  + str(self.counter)]= self.S_c
-            
-            self.results['Z_agg'  + str(self.counter)]= self.Z_c_agg
-            self.results['X_agg'  + str(self.counter)]= self.X_c_agg
-            self.results['VA_agg' + str(self.counter)]= self.VA_c_agg
-            self.results['Y_agg'  + str(self.counter)]= self.Y_c_agg
-            self.results['S_agg'  + str(self.counter)]= self.S_c_agg
-            
+            self.results['shock_{}'.format(self.counter)]= dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
+                                                self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,self.Y_c_agg,self.S_c_agg)
             self.counter += 1
         
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
@@ -150,7 +140,8 @@ class C_SUT:
         delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces)        
         
 
-    def sensitivity(self,path,Y=False,VA=False,Z=False,S=False,save=True):
+    def multi_shock(self,path,Y=False,VA=False,Z=False,S=False,save=True):
+        
         
         if not Y and not VA and not Z and not S:
             raise ValueError('At lest one of the arguments should be \'True\' ')
@@ -163,25 +154,55 @@ class C_SUT:
             self.shock_calc(path=r'{}'.format(i),Y=Y,VA=VA,Z=Z,S=S,save=False)
             
             if save:
-                self.results['Z_s_'  + str(self.counter)]= self.Z_c
-                self.results['X_s_'  + str(self.counter)]= self.X_c
-                self.results['VA_s_' + str(self.counter)]= self.VA_c
-                self.results['p_s_'  + str(self.counter)]= self.p_c
-                self.results['Y_s_'  + str(self.counter)]= self.Y_c
-                self.results['va_s_' + str(self.counter)]= self.va_c
-                self.results['z_s_'  + str(self.counter)]= self.z_c
-                self.results['S_s_'  + str(self.counter)]= self.S_c
+                self.results['Z_m_'  + str(self.counter)]= self.Z_c
+                self.results['X_m_'  + str(self.counter)]= self.X_c
+                self.results['VA_m_' + str(self.counter)]= self.VA_c
+                self.results['p_m_'  + str(self.counter)]= self.p_c
+                self.results['Y_m_'  + str(self.counter)]= self.Y_c
+                self.results['va_m_' + str(self.counter)]= self.va_c
+                self.results['z_m_'  + str(self.counter)]= self.z_c
+                self.results['S_m_'  + str(self.counter)]= self.S_c
                 
-                self.results['Z_s_agg_'  + str(self.counter)]= self.Z_c_agg
-                self.results['X_s_agg_'  + str(self.counter)]= self.X_c_agg
-                self.results['VA_s_agg_' + str(self.counter)]= self.VA_c_agg
-                self.results['Y_s_agg_'  + str(self.counter)]= self.Y_c_agg
-                self.results['S_s_agg_'  + str(self.counter)]= self.S_c_agg
+                self.results['Z_m_agg_'  + str(self.counter)]= self.Z_c_agg
+                self.results['X_m_agg_'  + str(self.counter)]= self.X_c_agg
+                self.results['VA_m_agg_' + str(self.counter)]= self.VA_c_agg
+                self.results['Y_m_agg_'  + str(self.counter)]= self.Y_c_agg
+                self.results['S_m_agg_'  + str(self.counter)]= self.S_c_agg
                 
-                self.sens_info['Scenario {}'.format(self.s_counter)] = i
+                self.sens_info['Scenario {}'.format(self.m_counter)] = i
                 
-                self.s_counter += 1
+                self.m_counter += 1
                 
         print("Warning: \n all the shock variables are equal to the last sensitivity file: \'{}\' ".format(i))
         
-     
+    def sensitivity(self,path,save=True):
+
+        from functions.data_read import sens_info
+        
+        directs,counter,sensitivity_info = sens_info(path)
+        
+        
+
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
