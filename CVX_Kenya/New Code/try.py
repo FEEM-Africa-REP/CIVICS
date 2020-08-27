@@ -13,7 +13,7 @@ a.shock_calc(path=r'sensitivity\a1\q1.xlsx',Z=True)
 #%%
 a.sensitivity(path=r'shading_trees.xlsx')
 #%%
-a.plot_dx()
+a.plot_dv()
 
     
     

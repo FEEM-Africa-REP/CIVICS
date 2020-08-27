@@ -124,7 +124,7 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     # This makes the graphs ugly!! To solve the issue we print an error for the user to make them understand.
     
     if abs(d_x.sum().sum() <= 0.000001):
-        print('The following matrix seems to be unchanged in the implemented shock, so the numbers represented in the graph are very small and related to computational errors.')
+        print('The following matrix seems to be unchanged in the implemented shock, Maybe the numbers represented in the graph are very small and related to computational errors.')
         
     
         
@@ -173,7 +173,7 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
         d_x.index = d_x.index.get_level_values(0) 
         
     if abs(d_x.sum().sum() <= 0.000001):
-        print('The following matrix seems to be unchanged in the implemented shock, so the numbers represented in the graph are very small and related to computational errors.')
+        print('The following matrix seems to be unchanged in the implemented shock, Maybe the numbers represented in the graph are very small and related to computational errors.')
        
     # Specifing the range of showing results
     d_x = drop_fun(data=d_x, ranshow=ranshow)
