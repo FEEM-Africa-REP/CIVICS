@@ -64,7 +64,8 @@ def sens_info(path):
             sensitivity_info['{}'.format(counter)] = {'parameter':worksheet.cell(row=row+1, column=par_col).value,
                                                                  'minimum':worksheet.cell(row=row+1, column=min_col).value,
                                                                  'maximum':worksheet.cell(row=row+1, column=max_col).value,
-                                                                 'step':worksheet.cell(row=row+1, column=stp_col).value}
+                                                                 'step':worksheet.cell(row=row+1, column=stp_col).value,
+                                                                 'row':row+1}
             counter+=1                                                    
     
     print ('{} sensitivities are found'.format(counter))
@@ -87,9 +88,9 @@ def sens_info(path):
             myworkbook=openpyxl.load_workbook(path)
             worksheet= myworkbook.get_sheet_by_name('main')
             worksheet.cell(row=row, column=val_col).value = s_min
-            name = directs[i] + '\{}.xlsx'.format(s_min)
+            name = directs[i] + '\case_{}.xlsx'.format(s_min)
             myworkbook.save(name)
             s_min+=step    
     
-    return directs,counter,sensitivity_info
+    return directs,sensitivity_info
         

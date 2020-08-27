@@ -47,9 +47,10 @@ class C_SUT:
         # In order to identify the sensitivity scenario, the information will be stored in the following dictionary
         self.sens_info = {}
         
+        
         # A counter for saving the results in a dictionary
         self.counter   = 1 
-        self.m_counter = 1
+        self.s_counter = 1
         
         
     def shock_calc (self,path,Y=False, VA=False, Z=False, S=False,save=True):
@@ -175,14 +176,30 @@ class C_SUT:
                 
         print("Warning: \n all the shock variables are equal to the last sensitivity file: \'{}\' ".format(i))
         
-    def sensitivity(self,path,save=True):
+    def sensitivity(self,path):
 
         from functions.data_read import sens_info
+        from functions.utility import dict_maker
+        import glob
         
-        directs,counter,sensitivity_info = sens_info(path)
+        directs,sensitivity_info = sens_info(path)
+        i=0
         
-        
-
+        for file in directs:
+            excels = [f for f in glob.glob(file + "**/*.xlsx", recursive=True)]
+            self.results['sensitivity_{}'.format(self.s_counter)]={'information':sensitivity_info[str(i)]}
+            i+=1
+            
+            for excel in excels:
+                self.shock_calc(path=r'{}'.format(excel),Y=True,VA=True,Z=True,S=True,save=False)
+                value = str(excel).replace(".xlsx","").replace('{}\case_'.format(file), "")
+                self.results['sensitivity_{}'.format(self.s_counter)][value]=\
+                    dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
+                               self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,
+                               self.Y_c_agg,self.S_c_agg)
+            
+            self.s_counter+=1
+                                                                    
         
 
         
