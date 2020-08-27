@@ -182,7 +182,7 @@ class C_SUT:
         from functions.utility import dict_maker
         import glob
         
-        directs,sensitivity_info = sens_info(path)
+        directs,sensitivity_info = sens_info (path)
         i=0
         
         for file in directs:
@@ -192,6 +192,7 @@ class C_SUT:
             
             for excel in excels:
                 self.shock_calc(path=r'{}'.format(excel),Y=True,VA=True,Z=True,S=True,save=False)
+                
                 value = str(excel).replace(".xlsx","").replace('{}\case_'.format(file), "")
                 self.results['sensitivity_{}'.format(self.s_counter)][value]=\
                     dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
