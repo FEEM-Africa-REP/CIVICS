@@ -69,6 +69,7 @@ def sens_info(path):
             counter+=1                                                    
     
     print ('{} sensitivities are found'.format(counter))
+    if counter == 0: raise ValueError('No sensitivity found.')
     
     directs=[]
     for i in range (counter):

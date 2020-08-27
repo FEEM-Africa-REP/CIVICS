@@ -13,6 +13,8 @@ a.shock_calc(path=r'sensitivity\a1\q1.xlsx',Z=True)
 #%%
 a.sensitivity(path=r'shading_trees.xlsx')
 #%%
+import os
+q = os.path.basename(os.path.normpath(r'Database\Kenya_2014_SAM.xlsx'))
      
         
         
