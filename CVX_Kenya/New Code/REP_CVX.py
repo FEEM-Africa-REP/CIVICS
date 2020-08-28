@@ -51,6 +51,7 @@ class C_SUT:
         # A counter for saving the results in a dictionary
         self.counter   = 1 
         self.s_counter = 1
+        self.i_counter = 1
         
         
     def shock_calc (self,path,Y=False, VA=False, Z=False, S=False,save=True):
@@ -84,6 +85,7 @@ class C_SUT:
             self.results['shock_{}'.format(self.counter)]= dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
                                                 self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,self.Y_c_agg,self.S_c_agg,self.p_c_agg)
             self.counter += 1
+            
         
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
@@ -181,10 +183,13 @@ class C_SUT:
                 
         print("Warning: \n all the shock variables are equal to the last sensitivity file: \'{}\' ".format(i))
         
-    def sensitivity(self,path):
+    def sensitivity(self,path,):
 
         from functions.data_read import sens_info
         from functions.utility import dict_maker
+        import functions.shock_io as sh
+        from functions.io_calculation import cal_flows
+        from functions.aggregation import aggregate
         import glob
         
         directs,sensitivity_info = sens_info (path)
@@ -196,22 +201,42 @@ class C_SUT:
             i+=1
             
             for excel in excels:
-                self.shock_calc(path=r'{}'.format(excel),Y=True,VA=True,Z=True,S=True,save=False)
+
+                # Taking a copy of all matrices to have both changed and unchanged ones
+                Y_c   = self.Y.copy()
+                va_c  = self.va.copy()
+                s_c   = self.s.copy()
+                z_c   = self.z.copy()
+                
+                # check the type of the shock
+                Y_c  = sh.Y_shock  (path,Y_c.copy())                      
+                z_c  = sh.Z_shock  (path,z_c.copy(),self.Z.copy(),self.X.copy())
+                va_c = sh.VA_shock (path,va_c.copy(),self.VA.copy(),self.X.copy())
+                s_c  = sh.S_shock  (path,s_c.copy(),self.S.copy(),self.X.copy())
+                
+                # Calculating the shock result
+                l_c,X_c,VA_c,S_c,Z_c,p_c = cal_flows(z_c,Y_c,va_c,s_c,self.indeces)        
+        
+                # Aggregation of the results
+                X_c_agg,Y_c_agg,VA_c_agg,S_c_agg,Z_c_agg,p_c_agg = aggregate(X_c,Y_c,VA_c,S_c,Z_c,p_c)
+                
                 
                 value = str(excel).replace(".xlsx","").replace('{}\case_'.format(file), "")
                 self.results['sensitivity_{}'.format(self.s_counter)][value]=\
-                    dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
-                               self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,
-                               self.Y_c_agg,self.S_c_agg,self.p_c_agg)
+                    dict_maker(Z_c,X_c,VA_c,p_c,Y_c,va_c,
+                               z_c,s_c,Z_c_agg,X_c_agg,VA_c_agg,
+                               Y_c_agg,S_c_agg,p_c_agg)
             
             self.s_counter+=1
                                                                     
         
-
+    def impact(self,p_life,saving_sce,invest_sce,imports=['Import'],w_ext=['Water'], em_ext=['CO2'], land=['Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
+        from functions.impact import impact_assessment
         
-        
-        
-        
+        self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports)
+                
+        self.results['Impact_{}'.format(self.i_counter)]=self.impact
+        self.i_counter += 1
         
         
         

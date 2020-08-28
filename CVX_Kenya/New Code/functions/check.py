@@ -64,9 +64,12 @@ def indic_check (indicator,indicators):
         raise ValueError('\'{}\' not found in {}'.format(indicator, indicators))
     return indicator
     
+
+        
+
     
     
-    
+        
     
     
     

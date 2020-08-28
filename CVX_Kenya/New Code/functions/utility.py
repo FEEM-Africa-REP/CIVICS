@@ -21,3 +21,4 @@ def dict_maker(Z=None,X=None,VA=None,p=None,Y=None,va=None,z=None,s=None,
             dictionary[outputs[i]]=inputs[i]
                
     return dictionary
+
