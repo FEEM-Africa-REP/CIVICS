@@ -34,7 +34,7 @@ class C_SUT:
         self.z,self.s,self.va,self.l,self.p = cal_coef (self.Z,self.S,self.VA,self.X)
         
         # Building aggregated results for the baseline
-        self.X_agg,self.Y_agg,self.VA_agg,self.S_agg,self.Z_agg = aggregate(self.X,self.Y,self.VA,self.S,self.Z)
+        self.X_agg,self.Y_agg,self.VA_agg,self.S_agg,self.Z_agg,self.p_agg = aggregate(self.X,self.Y,self.VA,self.S,self.Z,self.p)
         
         # Getting indeces
         self.indeces = indeces (self.S,self.Z,self.VA,self.X)
@@ -42,7 +42,7 @@ class C_SUT:
         # All the information needs to be stored in every step because it will be used in some other functions
         self.results = {}
         self.results['baseline']= dict_maker(self.Z,self.X,self.VA,self.p,self.Y,self.va,
-                                                self.z,self.s,self.Z_agg,self.X_agg,self.VA_agg,self.Y_agg,self.S_agg)
+                                                self.z,self.s,self.Z_agg,self.X_agg,self.VA_agg,self.Y_agg,self.S_agg,self.p_agg)
             
         # In order to identify the sensitivity scenario, the information will be stored in the following dictionary
         self.sens_info = {}
@@ -77,12 +77,12 @@ class C_SUT:
         self.l_c,self.X_c,self.VA_c,self.S_c,self.Z_c,self.p_c = cal_flows(self.z_c,self.Y_c,self.va_c,self.s_c,self.indeces)        
 
         # Aggregation of the results
-        self.X_c_agg,self.Y_c_agg,self.VA_c_agg,self.S_c_agg,self.Z_c_agg = aggregate(self.X_c,self.Y_c,self.VA_c,self.S_c,self.Z_c)
+        self.X_c_agg,self.Y_c_agg,self.VA_c_agg,self.S_c_agg,self.Z_c_agg,self.p_c_agg = aggregate(self.X_c,self.Y_c,self.VA_c,self.S_c,self.Z_c,self.p_c)
         
         # Saving all the new matrices in the results dictionary.
         if save:
             self.results['shock_{}'.format(self.counter)]= dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
-                                                self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,self.Y_c_agg,self.S_c_agg)
+                                                self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,self.Y_c_agg,self.S_c_agg,self.p_c_agg)
             self.counter += 1
         
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
@@ -141,12 +141,32 @@ class C_SUT:
         delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces)        
         
 
+    def plot_dp(self,unit='default',level=None,fig_format='png',title_font=15,
+                style='ggplot',figsize=(10, 6),directory='my_graphs',title='default',color = 'terrain',aggregated=False):
+        
+        from functions.plots import delta_p
+        
+        # Check if the shock result exist or not
+        try: self.X_c
+        except: raise ValueError('To run the plot function, there should be an implemented shock.')
+        
+        if aggregated: 
+            p_c,p = self.p_c_agg,self.p_agg, 
+            print('For the aggregated results, the mean of the price of aggregated invoices are represented')
+        else: p_c,p = self.p_c,self.p
+        
+        delta_p(p_c,p,style,level,title,title_font,figsize,directory,fig_format,color)
+
+
+
     def multi_shock(self,path,Y=False,VA=False,Z=False,S=False,save=True):
         
+        import glob
+        from functions.utility import dict_maker
         
         if not Y and not VA and not Z and not S:
             raise ValueError('At lest one of the arguments should be \'True\' ')
-        import glob
+        
         
         files = [f for f in glob.glob(path + "**/*.xlsx", recursive=True)]
     
@@ -155,24 +175,9 @@ class C_SUT:
             self.shock_calc(path=r'{}'.format(i),Y=Y,VA=VA,Z=Z,S=S,save=False)
             
             if save:
-                self.results['Z_m_'  + str(self.counter)]= self.Z_c
-                self.results['X_m_'  + str(self.counter)]= self.X_c
-                self.results['VA_m_' + str(self.counter)]= self.VA_c
-                self.results['p_m_'  + str(self.counter)]= self.p_c
-                self.results['Y_m_'  + str(self.counter)]= self.Y_c
-                self.results['va_m_' + str(self.counter)]= self.va_c
-                self.results['z_m_'  + str(self.counter)]= self.z_c
-                self.results['S_m_'  + str(self.counter)]= self.S_c
-                
-                self.results['Z_m_agg_'  + str(self.counter)]= self.Z_c_agg
-                self.results['X_m_agg_'  + str(self.counter)]= self.X_c_agg
-                self.results['VA_m_agg_' + str(self.counter)]= self.VA_c_agg
-                self.results['Y_m_agg_'  + str(self.counter)]= self.Y_c_agg
-                self.results['S_m_agg_'  + str(self.counter)]= self.S_c_agg
-                
-                self.sens_info['Scenario {}'.format(self.m_counter)] = i
-                
-                self.m_counter += 1
+                self.results['shock_{}'.format(self.counter)]= dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
+                                                    self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,self.Y_c_agg,self.S_c_agg,self.p_c_agg)
+                self.counter += 1
                 
         print("Warning: \n all the shock variables are equal to the last sensitivity file: \'{}\' ".format(i))
         
@@ -197,7 +202,7 @@ class C_SUT:
                 self.results['sensitivity_{}'.format(self.s_counter)][value]=\
                     dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
                                self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,
-                               self.Y_c_agg,self.S_c_agg)
+                               self.Y_c_agg,self.S_c_agg,self.p_c_agg)
             
             self.s_counter+=1
                                                                     

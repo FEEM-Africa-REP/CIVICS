@@ -203,6 +203,59 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     plt.show()    
     
 
+def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,color):
+    
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from functions.check import style_check
+    from functions.check import level_check   
+    
+    # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
+    X_c = X_c.copy()
+    X   = X.copy()     
+    
+    # Checking the styles
+    style       = style_check(style)
+    tit,level   = level_check(level)    
+    
+    # Implementing the plot style
+    plt.style.use(style)      
+    
+    # Taking the level
+    X_c = X_c[level]
+    X   = X[level]    
+    
+    # Title Definition
+    if title == 'default': title = 'Price ratio{}'.format(tit)
+    else: title = title
+
+    # Making the d_x matrix: Here is X_c/X cause is the price ratio
+    d_x = X_c/X
+    
+    if len(level) == 2: d_x.index , d_x.columns =  X.index.get_level_values(0) , [d_x.columns.get_level_values(0),d_x.columns.get_level_values(1)]
+    else: d_x.index , d_x.columns =  X.index.get_level_values(0) , d_x.columns.get_level_values(1)
+    
+    # Removing the name of the indeces for better representation
+    d_x.index.name   = None
+    d_x.columns.name = None
+    
+    fig = plt.figure(figsize=figsize)
+    ax = sns.heatmap(d_x.T , annot=False,cmap=color)
+    
+    plt.ylabel('Price Ratio')
+    plt.title(title)
+    
+    plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
+    plt.show()  
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

@@ -7,13 +7,13 @@ Created on Mon Aug 24 12:12:55 2020
 
 import REP_CVX as cvx
 
-a=cvx.C_SUT(path=r'Database\Kenya_2014_SAM.xlsx',unit='M KSH') 
+a = cvx.C_SUT(path=r'Database\Kenya_2014_SAM.xlsx',unit='M KSH') 
 #%%
 a.shock_calc(path=r'sensitivity\a1\q1.xlsx',Z=True)  
 #%%
 a.sensitivity(path=r'shading_trees.xlsx')
 #%%
-a.plot_dv()
+a.plot_dp(color="YlGnBu",level='Activities',aggregated=True)
 
     
     
