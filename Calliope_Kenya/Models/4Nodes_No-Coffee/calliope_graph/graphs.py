@@ -21,7 +21,7 @@ def style_check(style):
     return style
     
     
-def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory):
+def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory,x_ticks):
     
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
@@ -51,13 +51,16 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
         
         data = prod_imp_exp(production,imports,exports,i)
         
-
+        
 
         demand[i] = demand[i].resample(av).mean()
         data0     = data[0].resample(av).mean()
         data1     = data[1].resample(av).mean()
         
-
+        if x_ticks=='name':
+            demand[i].index = demand[i].index.month_name()
+            data0.index = data0.index.month_name()
+            data1.index = data1.index.month_name()
         
         
         if sp_techs!= None and i in sp_nodes:
@@ -95,6 +98,10 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             xfmt = mdates.DateFormatter(date_format)
             axs[1].xaxis.set_major_formatter(xfmt)
             axs[1].tick_params(axis='x', rotation=rotate)
+            
+            if x_ticks=='name':
+                axs[0].xaxis_date()
+                axs[1].xaxis_date()
 
 
 
@@ -126,6 +133,10 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             plt.xlabel('Date')
             plt.ylabel(unit)
             
+            if x_ticks=='name':
+                ax.xaxis_date()
+          
+            
         # Title
         plt.title('{} Dispatch'.format(names[i]),fontsize=title_font)
         
@@ -135,7 +146,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
         fig.savefig('{}\{}_{}_dispatch.{}'.format(directory,i,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
         plt.show()
 
-        
+        return data0
 
 
 def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory):

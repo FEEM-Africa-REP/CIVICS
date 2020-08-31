@@ -48,7 +48,7 @@ class C_Graph:
         self.TLC                    = levelized_cost(model)
                         
 
-    def node_dispatch (self,nodes='All', fig_format = 'png' , unit= '' , style = 'default' , date_format = '%d/%m/%y , %H:%M', title_font = 15,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):
+    def node_dispatch (self,x_ticks='date',nodes='All', fig_format = 'png' , unit= '' , style = 'default' , date_format = '%d/%m/%y , %H:%M', title_font = 15,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):
 
                 
         from calliope_graph.units import unit_check  
@@ -69,12 +69,12 @@ class C_Graph:
         else: 
             nodes = nodes
             
-        node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
+        self.a=node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory,x_ticks)
             
         
     
         
-    def sys_dispatch (self, rational = 'techs' , fig_format = 'png' , unit= '' , style = 'default' , date_format = '%d/%m/%y , %H:%M', title_font = 15,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):            
+    def sys_dispatch (self, x_ticks='date',rational = 'techs' , fig_format = 'png' , unit= '' , style = 'default' , date_format = '%d/%m/%y , %H:%M', title_font = 15,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):            
         
         from calliope_graph.units import unit_check  
         from calliope_graph.units import u_conv     
@@ -90,7 +90,7 @@ class C_Graph:
         unit = unit_check(unit)
         conversion = u_conv(self.m_unit,unit)        
         
-        sys_disp(rational,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory)
+        sys_disp(rational,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory,x_ticks)
         
         
     def node_pie (self,rational='production',nodes='All', fig_format = 'png' , unit= '' , style = 'default' , date_format = '%d/%m/%y , %H:%M', title_font = 15 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=0):
