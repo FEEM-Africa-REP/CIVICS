@@ -6,7 +6,7 @@ Created on Tue Aug 18 13:53:42 2020
 """
 def style_check(style):
     
-    styles = ['defualt','classic','Solarize_Light2','_classic_test','bmh',
+    styles = ['default','classic','Solarize_Light2','_classic_test','bmh',
               'dark_background','fast','fivethirtyeight','ggplot','grayscale',
               'seaborn','seaborn-bright','seaborn-colorblind','seaborn-dark',
               'seaborn-dark-palette','seaborn-darkgrid','seaborn-deep',
