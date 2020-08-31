@@ -96,7 +96,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             axs[1].margins(x=0)
             axs[1].margins(y=0.1)
             
-            axs[0].plot(dem.index,dem.values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=3)
+            axs[0].plot(dem.index,dem.values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=1)
                 
             # Drawing positivie numbers
             axs[0].stackplot(data0.index,data0.values.T*conversion,colors=colors[data0.columns],labels=names[data0.columns])
@@ -116,6 +116,8 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             if x_ticks=='name':
                 ticks = date2name(list(data0.index),list(data0.index.month_name()))
                 plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)
+                axs[1].set_xticks(ax.get_xticks()[0:len(ticks[0])])
+
 
 
         else:
@@ -125,7 +127,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             ax.margins(y=0.1)
             
             # Drawing demand line
-            plt.plot(demand[i].index,demand[i].values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=3)
+            plt.plot(demand[i].index,demand[i].values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=1)
             
             # Drawing positivie numbers
             plt.stackplot(data0.index,data0.values.T*conversion,colors=colors[data0.columns],labels=names[data0.columns])
@@ -149,6 +151,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             if x_ticks=='name':
                 ticks = date2name(list(data0.index),list(data0.index.month_name()))
                 plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)
+                ax.set_xticks(ax.get_xticks()[0:len(ticks[0])])
           
             
         # Title
@@ -234,7 +237,7 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
         axs[1].margins(x=0)
         axs[1].margins(y=0.1)
         
-        axs[0].plot(demand.index,demand.values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=3)
+        axs[0].plot(demand.index,demand.values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=0.5)
             
         # Drawing positivie numbers
         axs[0].stackplot(production.index,production.values.T*conversion,colors=colors[production.columns],labels=names[production.columns])
@@ -253,7 +256,8 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
 
         if x_ticks=='name':
             ticks = date2name(list(production.index),list(production.index.month_name()))
-            plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)       
+            plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate) 
+            axs[1].set_xticks(ax.get_xticks()[0:len(ticks[0])])
     else:
         
                 
@@ -284,7 +288,8 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
 
         if x_ticks=='name':
             ticks = date2name(list(production.index),list(production.index.month_name()))
-            plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate) 
+            plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)
+            ax.set_xticks(ax.get_xticks()[0:len(ticks[0])])
             
     plt.ylabel(unit)
     plt.title('System Dispatch',fontsize=title_font)
