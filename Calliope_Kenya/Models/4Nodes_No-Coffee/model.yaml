@@ -32,7 +32,7 @@ model:
     name: 'Kenya 4 Nodes Model (2015)'           # Defining the name of the model
     calliope_version: 0.6.5                      # What version of Calliope this model is intended for
     timeseries_data_path: 'Time_series_data'     # Time series data path
-    subset_time: ['2015-01-01', '2015-01-02']    # shows the a subset of time to represent the results
+    subset_time: ['2015-01-01', '2015-12-31']    # shows the a subset of time to represent the results
 
 ########################################################################
 #                                RUN                                   #

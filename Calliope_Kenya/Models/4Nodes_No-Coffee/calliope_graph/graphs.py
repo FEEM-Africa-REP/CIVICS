@@ -20,7 +20,21 @@ def style_check(style):
         
     return style
     
+
+def date2name(date,name):
     
+    l_date=[]
+    l_name=[]
+    
+    for i in range(len(date)):
+        if name[i] != name[i-1]:
+
+            l_date.append(date[i])
+            l_name.append(name[i])
+    
+    return l_date,l_name
+
+
 def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory,x_ticks):
     
     import matplotlib.pyplot as plt
@@ -43,6 +57,8 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
         av = '1h'
     elif average == 'yearly':
         av = '1y'
+        
+
             
     else:
         raise ValueError ('Incorrect average type.\n Average can be one of the followings: {},{},{},{} and {}'.format('hourly','daily','weekly','monthly','yearly'))
@@ -57,10 +73,6 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
         data0     = data[0].resample(av).mean()
         data1     = data[1].resample(av).mean()
         
-        if x_ticks=='name':
-            demand[i].index = demand[i].index.month_name()
-            data0.index = data0.index.month_name()
-            data1.index = data1.index.month_name()
         
         
         if sp_techs!= None and i in sp_nodes:
@@ -98,11 +110,10 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             xfmt = mdates.DateFormatter(date_format)
             axs[1].xaxis.set_major_formatter(xfmt)
             axs[1].tick_params(axis='x', rotation=rotate)
-            
-            if x_ticks=='name':
-                axs[0].xaxis_date()
-                axs[1].xaxis_date()
 
+            if x_ticks=='name':
+                ticks = date2name(list(data0.index),list(data0.index.month_name()))
+                plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)
 
 
         else:
@@ -134,7 +145,8 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             plt.ylabel(unit)
             
             if x_ticks=='name':
-                ax.xaxis_date()
+                ticks = date2name(list(data0.index),list(data0.index.month_name()))
+                plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)
           
             
         # Title
@@ -146,17 +158,16 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
         fig.savefig('{}\{}_{}_dispatch.{}'.format(directory,i,average,fig_format), dpi=fig.dpi,bbox_inches='tight')
         plt.show()
 
-        return data0
 
 
-def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory):
+
+def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,production,imports,exports,figsize,demand,colors,names,rotate,average,sp_techs,sp_nodes,directory,x_ticks):
     
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
     from matplotlib import gridspec
     
     from calliope_graph.graphs import style_check  
-    from calliope_graph.matrixmaker import prod_imp_exp
     from calliope_graph.matrixmaker import system_matrix
     
     style = style_check(style)
@@ -199,7 +210,10 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
     elif sp_nodes:
         specific = sp_nodes
         
-    
+
+    demand       = demand.resample(av).mean()
+    production   = production.resample(av).mean()
+ 
         
     if specific:
             
@@ -234,7 +248,10 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
         xfmt = mdates.DateFormatter(date_format)
         axs[1].xaxis.set_major_formatter(xfmt)
         axs[1].tick_params(axis='x', rotation=rotate)  
-        
+
+        if x_ticks=='name':
+            ticks = date2name(list(production.index),list(production.index.month_name()))
+            plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)       
     else:
         
                 
@@ -262,7 +279,11 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
     
         # labels
         plt.xlabel('Date')
-        
+
+        if x_ticks=='name':
+            ticks = date2name(list(production.index),list(production.index.month_name()))
+            plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate) 
+            
     plt.ylabel(unit)
     plt.title('System Dispatch',fontsize=title_font)
     

@@ -69,7 +69,7 @@ class C_Graph:
         else: 
             nodes = nodes
             
-        self.a=node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory,x_ticks)
+        node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory,x_ticks)
             
         
     
