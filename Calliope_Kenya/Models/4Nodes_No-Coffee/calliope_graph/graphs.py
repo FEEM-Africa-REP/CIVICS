@@ -313,6 +313,7 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
             data = pie_prod(production[i],kind)
         elif rational == 'consumption':
             data = pie_cons(production[i],imports[i],exports[i],kind)
+            #print(data)
         else:
             raise ValueError ('rational could be one of the follwoings: \n 1. /production/ \n 2. /consumption/')
             
@@ -354,6 +355,8 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
         
         plt.show()
         fig.savefig('{}\{}_{}_pie.{}'.format(directory,i,kind,fig_format), dpi=fig.dpi,bbox_inches='tight')
+        
+    return data
         
         
 

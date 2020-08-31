@@ -204,13 +204,12 @@ def pie_cons(production,imports,exports,kind):
     diff = imports.sum().sum() + exports.sum().sum()
     
     if diff <=0:
-        
         production = pie_prod(production,kind)
-        
     else:
-        imports = pd.DataFrame(imports.sum(axis=1),index=production,columns = ['Imports'])
+        imports = pd.DataFrame(imports.sum(axis=1),index=production.index,columns = ['Imports'])
         production = pd.concat([production,imports],axis=1)
         production = pie_prod(production,kind)
+
         
     return production
 
