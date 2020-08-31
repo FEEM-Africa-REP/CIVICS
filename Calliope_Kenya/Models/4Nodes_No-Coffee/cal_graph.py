@@ -134,7 +134,7 @@ class C_Graph:
         tab_install (figsize,self.install_capacity,self.colors,self.names,self.nodes,table_font,title_font,directory,conversion,style,v_round,fig_format,kind,unit)
         
         
-    def cap_f_plot (self,kind='table',nodes='All', fig_format = 'png' , style = 'ggplot' , title_font = 15,figsize=(8,6),directory='my_graphs',table_font=15,v_round=0):
+    def cap_f_plot (self,kind='table',nodes='All', fig_format = 'png' , style = 'ggplot' , title_font = 15,figsize=(8,6),directory='my_graphs',table_font=15,v_round=4):
         
 
         from calliope_graph.graphs import cap_f_bar 
