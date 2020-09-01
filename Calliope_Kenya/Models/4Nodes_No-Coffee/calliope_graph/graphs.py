@@ -327,7 +327,7 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
         if kind == 'absolute':
             data = data*conversion
             
-        fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=figsize)
+        fig, (ax1, ax2) = plt.subplots( nrows=1, ncols=2, figsize=figsize,gridspec_kw={'width_ratios': [3, 1]})
 
         
         ax1.pie(data['Production'],shadow=False,colors=colors[data.index],startangle=90)
@@ -335,6 +335,11 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
         ax2.patch.set_visible(False)
         ax2.get_xaxis().set_visible(False)
         ax2.get_yaxis().set_visible(False)
+    
+        l, b, w, h = ax1.get_position().bounds
+        ll, bb, ww, hh = ax2.get_position().bounds
+        ax2.set_position([ll*0.85, b , w, h])
+        ax2.axis('off') 
     
         if kind == 'share':
             tab_label = '%'
@@ -348,10 +353,10 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
                               rowColours=colors[data.index],
                               rowLabels= names[data.index],
                               colLabels = [tab_label],
-                              loc='center right',
+                              loc='center',
                               rowLoc ='center',
                               colLoc='center',
-                              cellLoc='center')    
+                              cellLoc='center')   
     
         table.auto_set_font_size(False)
         
@@ -387,14 +392,19 @@ def sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,production
     if kind == 'absolute':
         data = data*conversion
         
-    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=figsize)
+    fig, (ax1, ax2) = plt.subplots( nrows=1, ncols=2, figsize=figsize,gridspec_kw={'width_ratios': [3, 1]})
 
     
     ax1.pie(data['Production'],shadow=False,colors=colors[data.index],startangle=90)
-    
+
     ax2.patch.set_visible(False)
     ax2.get_xaxis().set_visible(False)
     ax2.get_yaxis().set_visible(False)
+
+    l, b, w, h = ax1.get_position().bounds
+    ll, bb, ww, hh = ax2.get_position().bounds
+    ax2.set_position([ll*0.85, b , w, h])
+    ax2.axis('off') 
 
     if kind == 'share':
         tab_label = '%'
@@ -408,7 +418,7 @@ def sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,production
                           rowColours=colors[data.index],
                           rowLabels= names[data.index],
                           colLabels = [tab_label],
-                          loc='center right',
+                          loc='center',
                           rowLoc ='center',
                           colLoc='center',
                           cellLoc='center')    
@@ -418,7 +428,7 @@ def sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,production
     table.scale(0.4, 3)
     table.set_fontsize(table_font)
     
-    fig.suptitle('System', fontsize=title_font)
+    fig.suptitle('System', fontsize=title_font,horizontalalignment='left')
     
     plt.show()
     fig.savefig('{}\system_{}_pie.{}'.format(directory,kind,fig_format), dpi=fig.dpi,bbox_inches='tight')       
