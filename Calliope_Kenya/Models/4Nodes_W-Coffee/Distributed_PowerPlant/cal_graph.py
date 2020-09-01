@@ -45,7 +45,7 @@ class C_Graph:
         self.demand                 = dem_matrix (model,self.co_techs,self.carrier,self.nodes)
         self.install_capacity       = install_cap (model,self.nodes,self.pr_techs)
         self.cap_factor             = cap_fac(model,self.pr_techs,self.nodes,self.carrier,self.production)
-        self.TLC                    = levelized_cost(model)
+        # self.TLC                    = levelized_cost(model)
                         
 
     def node_dispatch (self,x_ticks='date',nodes='All', fig_format = 'png' , unit= '' , style = 'default' , date_format = '%d/%m/%y , %H:%M', title_font = 15,figsize=(8,6),xtick_rotate=70,average='hourly',sp_techs=None ,sp_nodes= None,directory='my_graphs'):
