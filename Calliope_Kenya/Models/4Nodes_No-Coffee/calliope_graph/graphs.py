@@ -116,7 +116,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             if x_ticks=='name':
                 ticks = date2name(list(data0.index),list(data0.index.month_name()))
                 plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)
-                axs[1].set_xticks(ax.get_xticks()[0:len(ticks[0])])
+                axs[1].set_xticks(axs[1].get_xticks()[0:12])
 
 
 
@@ -127,7 +127,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             ax.margins(y=0.1)
             
             # Drawing demand line
-            plt.plot(demand[i].index,demand[i].values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=1)
+            plt.plot(dem.index,dem.values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=1)
             
             # Drawing positivie numbers
             plt.stackplot(data0.index,data0.values.T*conversion,colors=colors[data0.columns],labels=names[data0.columns])
@@ -151,7 +151,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             if x_ticks=='name':
                 ticks = date2name(list(data0.index),list(data0.index.month_name()))
                 plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)
-                ax.set_xticks(ax.get_xticks()[0:len(ticks[0])])
+                ax.set_xticks(ax.get_xticks()[0:12])
           
             
         # Title
@@ -257,7 +257,7 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
         if x_ticks=='name':
             ticks = date2name(list(production.index),list(production.index.month_name()))
             plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate) 
-            axs[1].set_xticks(ax.get_xticks()[0:len(ticks[0])])
+            axs[1].set_xticks(axs[1].get_xticks()[0:12])
     else:
         
                 
@@ -289,7 +289,7 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
         if x_ticks=='name':
             ticks = date2name(list(production.index),list(production.index.month_name()))
             plt.xticks(ticks =ticks[0] ,labels = ticks[1], rotation = rotate)
-            ax.set_xticks(ax.get_xticks()[0:len(ticks[0])])
+            ax.set_xticks(ax.get_xticks()[0:12])
             
     plt.ylabel(unit)
     plt.title('System Dispatch',fontsize=title_font)
@@ -363,8 +363,65 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
         plt.show()
         fig.savefig('{}\{}_{}_pie.{}'.format(directory,i,kind,fig_format), dpi=fig.dpi,bbox_inches='tight')
         
-    return data
+
+def sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,production,imports,exports,figsize,colors,names,directory,table_font,v_round,demand):
+       
+    import matplotlib.pyplot as plt
+
+    
+    from calliope_graph.graphs import style_check 
+    
+    from calliope_graph.matrixmaker import pie_prod  
+    from calliope_graph.matrixmaker import pie_cons 
+    from calliope_graph.matrixmaker import system_matrix       
         
+    style = style_check(style)
+    plt.style.use(style)       
+
+    production = system_matrix(production, demand)
+    production = production[1]
+    
+    data = pie_prod(production,kind)
+
+        
+    if kind == 'absolute':
+        data = data*conversion
+        
+    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=figsize)
+
+    
+    ax1.pie(data['Production'],shadow=False,colors=colors[data.index],startangle=90)
+    
+    ax2.patch.set_visible(False)
+    ax2.get_xaxis().set_visible(False)
+    ax2.get_yaxis().set_visible(False)
+
+    if kind == 'share':
+        tab_label = '%'
+        
+    else:
+        tab_label = unit
+    
+    data=data.round(v_round)
+    
+    table = ax2.table(cellText=data.values,
+                          rowColours=colors[data.index],
+                          rowLabels= names[data.index],
+                          colLabels = [tab_label],
+                          loc='center right',
+                          rowLoc ='center',
+                          colLoc='center',
+                          cellLoc='center')    
+
+    table.auto_set_font_size(False)
+    
+    table.scale(0.4, 3)
+    table.set_fontsize(table_font)
+    
+    fig.suptitle('System', fontsize=title_font)
+    
+    plt.show()
+    fig.savefig('{}\system_{}_pie.{}'.format(directory,kind,fig_format), dpi=fig.dpi,bbox_inches='tight')       
         
 
 def tab_install (figsize,install_cap,colors,names,nodes,table_font,title_font,directory,conversion,style,v_round,fig_format,kind,unit):

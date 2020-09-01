@@ -93,20 +93,21 @@ class C_Graph:
         sys_disp(rational,fig_format,unit,conversion,style,date_format,title_font,self.production,self.imports,self.exports,figsize,self.demand,self.colors,self.names,xtick_rotate,average,sp_techs,sp_nodes,directory,x_ticks)
         
         
-    def node_pie (self,rational='production',nodes='All', fig_format = 'png' , unit= '' , style = 'default' , date_format = '%d/%m/%y , %H:%M', title_font = 15 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=0):
+    def node_pie (self,rational='production',nodes='All', fig_format = 'png' , unit= '' , style = 'ggplot' , title_font = 15 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=3):
        
-        from calliope_graph.units import unit_check  
-        from calliope_graph.units import u_conv   
+        from calliope_graph.units import unit_check2  
+        from calliope_graph.units import u_conv2 
+        from calliope_graph.units import p2e 
         
         from calliope_graph.graphs import nod_pie
 
         if unit == '' :
-            unit = self.m_unit
+            unit = p2e(self.m_unit)
         else:
             unit == unit
         
-        unit = unit_check(unit)
-        conversion = u_conv(self.m_unit,unit)
+        unit = unit_check2(unit)
+        conversion = u_conv2(p2e(self.m_unit),unit)
         
         if nodes == 'All':
             nodes = self.nodes  
@@ -147,16 +148,23 @@ class C_Graph:
             
 
 
-            
+    def system_pie(self,rational='production', fig_format = 'png' , unit= '' , style = 'ggplot' , title_font = 15 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=0):
         
-   # def report_pdf(self,average='hourly',unit='',):
+        from calliope_graph.units import unit_check2  
+        from calliope_graph.units import u_conv2 
+        from calliope_graph.units import p2e 
         
+        from calliope_graph.graphs import sys_pie
+
+        if unit == '' :
+            unit = p2e(self.m_unit)
+        else:
+            unit == unit
         
-        
-       # self.node_dispatch()
-        
-        
-        
+        unit = unit_check2(unit)
+        conversion = u_conv2(p2e(self.m_unit),unit)
+   
+        sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,self.production,self.imports,self.exports,figsize,self.colors,self.names,directory,table_font,v_round,self.demand)
         
         
         

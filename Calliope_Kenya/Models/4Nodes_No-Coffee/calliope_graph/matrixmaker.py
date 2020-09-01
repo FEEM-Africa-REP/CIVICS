@@ -175,6 +175,7 @@ def system_matrix(production,demand,exports=None,imports=None): # Then the expor
     tech_production = production.groupby(level=1,axis=1,sort=False).sum()
     reg_production  = production.groupby(level=0,axis=1,sort=False).sum()
     
+    
     demand = pd.DataFrame(demand.sum(axis=1),index=demand.index,columns=['Demand'])
     
     
