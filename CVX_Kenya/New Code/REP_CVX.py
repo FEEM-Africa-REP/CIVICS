@@ -44,19 +44,24 @@ class C_SUT:
 
     Notes
     -----
-        The attributes and extension dictionary entries are pandas.DataFrame
+        1. The attributes and extension dictionary entries are pandas.DataFrame
         with an MultiIndex.  This index must have the specified level names.
+        
+        2. Capital letters represent the flows and the same letter in small case
+        represents the coefficients.
+        
+        3. Every variable with "_c" represents the values after the last shock 
+        implemented.
+        
+        4. Every variable with "_agg" represents the aggregated variable with
+        the same name.
 
     Attributes
     ----------
     Z : pandas.DataFrame
         Supply and Use flows of activities and commodities
         MultiIndex with levels and aggregatedn and disaggregated names
-        
-    z : pandas.DataFrame
-        Matrix of technical coefficient and market share coefficents
-        indeces as Z 
-        
+      
     U,V : pandas.DataFrame
         Use and Supply Matrices
         MultiIndex with levels and aggregatedn and disaggregated names   
@@ -66,16 +71,44 @@ class C_SUT:
     Y : pandas.DataFrame
         final demand with MultiIndex similar to Z matrix
         
+    S : pandas.DataFrame
+        satellite account
+        MultiIndex with levels and aggregatedn and disaggregated names
 
+    VA : pandas.DataFrame
+        Economic factor flows
+        MultiIndex with levels and aggregatedn and disaggregated names
+        
+    X : pandas.DataFrame
+        Total production of Activities and Commodities
+        MultiIndex with levels and aggregatedn and disaggregated names 
+        
     l : pandas.DataFrame
         Leontief, MultiTndex as Z
-    unit : pandas.DataFrame
-        Unit for each row of Z
-        
 
+    p : pandas.DataFrame
+        price index  
+        
+    Arguments
+    ----------
+    path :  the path of the database excel file.
+    
+    unit :  represepnts the main unit of the flows in the table. This will be 
+            used for the unit conversions. 
+    
+    
+    
+    
     """   
     
     def __init__(self,path,unit):
+        
+        '''  
+        path :  the path of the database excel file.
+                
+        unit :  represepnts the main unit of the flows in the table. This will be 
+                used for the unit conversions. 
+        '''                          
         
         from functions.version import __version__
         from warnings import filterwarnings
@@ -86,9 +119,8 @@ class C_SUT:
         from functions.aggregation import aggregate
         from functions.utility import dict_maker
 
+        # Printing the version and the information of the module
         print(__version__)
-        
-        self.main_path = path
         
         # Check if the unit is correct or not
         self.m_unit = unit_check(unit)
@@ -125,6 +157,31 @@ class C_SUT:
         
     def shock_calc (self,path,Y=False, VA=False, Z=False, S=False,save=True):
         
+        '''  
+        shock_calc:
+            This function is used to implement a shock
+            The shock should be defined through an excel file which is described
+            in detail in the tutorial.
+            
+        As a shock can be implemented in different steps or on differnet matrices
+        the user should identify that which matrix of shock excel file should
+        be implemented by calling the function.
+            
+        Arguments
+        ----------
+        path :  the path of the shock excel file.
+                
+        Y  :  True: Final demand shock
+            
+        Z  :  True: Technical change shock
+             
+        VA :  True: Economic factor change shock
+
+        S  :  True: Satellite account shock  
+        
+        save: True: Saving the results in a dictionary. 
+             
+        '''            
         import functions.shock_io as sh
         from functions.io_calculation import cal_flows
         from functions.aggregation import aggregate
@@ -159,9 +216,55 @@ class C_SUT:
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
                 directory='my_graphs',ranshow=(0,0),title='default',color = 'rainbow', drop=None,save_excel=True):
+        '''  
+        plot_dx:
+            This function is used to plot delta_x between the baseline and the
+            last shock implemented
+            
+        Arguments
+        ----------
+        aggregated  :  
+            True: Showing aggregated results of production
+            
+        unit  :  
+            default: the unit will be equal the the main unit in the database
+            or the user can choose the unit among the acceptable units.
+             
+        level :  
+            None: Both Activities and Commodities will be represented
+            Activities: Activities level
+            Commodities: Commodities level
+
+        kind  :  
+            Absolute: Absolute change
+            Percentage: Relative change
+            
+        
+        fig_format: To save the plot
+                    'png','svg'
+        
+        title_font: size of title font
+        
+        style: Plot style
+        
+        figsize: Figure size
+        
+        directory: the directory to save the results
+        
+        ranshow: it represents the range of the values to be shown:
+                    (Max value,Min value)
+                    
+        color: could be colormap or a list of colors
+        
+        drop: To drop specific categories from the data
+               
+        save_excel: 
+                    If True, the results will be saved also in form of excel file
+                    in the same directory
+             
+        ''' 
         
         from functions.plots import delta_xv
-        
 
         # Check if the shock result exist or not
         try: self.X_c          
@@ -179,7 +282,53 @@ class C_SUT:
     def plot_dv(self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
                 directory='my_graphs',ranshow=(0,0),title='default',color = 'terrain', drop= None,save_excel=True):
+        '''  
+        plot_dv:
+            This function is used to plot delta_VA between the baseline and the
+            last shock implemented
+            
+        Arguments
+        ----------
+        aggregated  :  
+            True: Showing aggregated results of production
+            
+        unit  :  
+            default: the unit will be equal the the main unit in the database
+            or the user can choose the unit among the acceptable units.
+             
+        level :  
+            None: Both Activities and Commodities will be represented
+            Activities: Activities level
+            Commodities: Commodities level
+
+        kind  :  
+            Absolute: Absolute change
+            Percentage: Relative change
+            
         
+        fig_format: To save the plot
+                    'png','svg'
+        
+        title_font: size of title font
+        
+        style: Plot style
+        
+        figsize: Figure size
+        
+        directory: the directory to save the results
+        
+        ranshow: it represents the range of the values to be shown:
+                    (Max value,Min value)
+                    
+        color: could be colormap or a list of colors
+        
+        drop: To drop specific categories from the data
+               
+        save_excel: 
+                    If True, the results will be saved also in form of excel file
+                    in the same directory
+             
+        '''        
         from functions.plots import delta_xv
         
         # Check if the shock result exist or not

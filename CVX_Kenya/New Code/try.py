@@ -5,9 +5,10 @@ Created on Mon Aug 24 12:12:55 2020
 @author: Mohammad Amin Tahavori
 """
 
-import REP_CVX as cvx
+import REP_CVX
+#%%
 
-a = cvx.C_SUT(path=r'Database\Kenya_2014_SAM.xlsx',unit='M KSH') 
+a = REP_CVX.C_SUT(path=r'Database\Kenya_2014_SAM.xlsx',unit='M KSH')
 #%%
 a.shock_calc(path=r'Ecopulpers.xlsx',Y=False,Z=True,VA=True,S=True)  
 a.shock_calc(path=r'Ecopulpers.xlsx',Y=False,Z=True,VA=False,S=False)  
@@ -22,19 +23,13 @@ a.plot_dx()
 #%%
 a.obj_save(file_name='kenya') 
 #%% 
-import pickle
- 
-# Step 2
-with open('kenya', 'rb') as config_dictionary_file:
- 
-    # Step 3
-    config_dictionary = pickle.load(config_dictionary_file)
-    
-    
-    
-    
-    
-    
+
+  #%%
+
+import pandas as pd
+#%%
+
+
     
     
     
