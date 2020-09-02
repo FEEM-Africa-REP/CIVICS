@@ -127,7 +127,7 @@ class C_SUT:
     def plot_ds(self,indicator,aggregated=True,detail=True,unit='default',
                 level='Activities',kind='Absolute',fig_format='png',title_font=15,
                 style='ggplot',figsize=(10, 6),directory='my_graphs',ranshow=(0,0)
-                ,title='default',color = 'terrain', drop= None):
+                ,title='default',color = 'terrain', drop= None,save_excel=True):
         
         from functions.plots import delta_s
         
@@ -141,11 +141,11 @@ class C_SUT:
         
         
         
-        delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces)        
+        delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces,save_excel)        
         
 
     def plot_dp(self,unit='default',level=None,fig_format='png',title_font=15,
-                style='ggplot',figsize=(10, 6),directory='my_graphs',title='default',color = 'terrain',aggregated=False):
+                style='ggplot',figsize=(10, 6),directory='my_graphs',title='default',color = 'terrain',aggregated=False,save_excel=True):
         
         from functions.plots import delta_p
         
@@ -158,7 +158,7 @@ class C_SUT:
             print('For the aggregated results, the mean of the price of aggregated invoices are represented')
         else: p_c,p = self.p_c,self.p
         
-        delta_p(p_c,p,style,level,title,title_font,figsize,directory,fig_format,color)
+        delta_p(p_c,p,style,level,title,title_font,figsize,directory,fig_format,color,save_excel)
 
 
 

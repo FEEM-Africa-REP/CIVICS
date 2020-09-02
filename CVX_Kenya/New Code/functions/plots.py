@@ -139,13 +139,14 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
             d_x.to_excel(writer)
 
  
-def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,indeces):
+def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,indeces,ex_save):
     
     import matplotlib.pyplot as plt
     from functions.check import style_check
     from functions.check import level_check
     from functions.check import kind_check
     from functions.check import indic_check
+    import pandas as pd
 
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()
@@ -205,15 +206,19 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
 
        
     plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
-    plt.show()    
+    plt.show()   
     
+    if ex_save:
+        with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
+            d_x.to_excel(writer)    
 
-def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,color):
+def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,color,ex_save):
     
     import matplotlib.pyplot as plt
     import seaborn as sns
     from functions.check import style_check
-    from functions.check import level_check   
+    from functions.check import level_check 
+    import pandas as pd
     
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()
@@ -254,7 +259,9 @@ def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,colo
     plt.show()  
     
 
-        
+    if ex_save:
+        with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
+            d_x.to_excel(writer)         
     
     
     
