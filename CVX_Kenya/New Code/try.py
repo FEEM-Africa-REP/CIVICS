@@ -19,9 +19,16 @@ a.plot_dx(aggregated=False,style='classic',figsize=(30,10))
 a.impact(saving_sce=['sh',1],invest_sce=['se',1],p_life=10)
 #%%
 a.plot_dx()
-    
-    
-    
+#%%
+a.obj_save(file_name='kenya') 
+#%% 
+import pickle
+ 
+# Step 2
+with open('kenya', 'rb') as config_dictionary_file:
+ 
+    # Step 3
+    config_dictionary = pickle.load(config_dictionary_file)
     
     
     

@@ -1,10 +1,79 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Aug 24 11:13:45 2020
+REP_CVX - A python module for automating SU-IO calculations and generating reports
+==============================================================================
 
-@author: Mohammad Amin Tahavori
+The classes and tools in this module should work with any Supply and Use table following the structure defined in the tutorial.
+
+The main class of the module "C_CUT" :
+The calss has multiple typical tools for input-output analysis:
+    1. Calculating all the matrices of flows and coefficients from a given database
+    2. Implementing shocks 
+    3. Sensitivity Analysis on the shocks
+    4. Policy impact assesment
+    5. Visualizing results and generating reports
+    
+Data storage
+------------
+xlsx files together is used for storing data. In addition,
+the "C_SUT" with all data can also be pickled (binary).
+
+
+----
+Dependencies:
+
+- numpy
+- pandas
+- matplotlib
+- pymrio
+- pickle
+
+:Authors:   Mohammad Amin Tahavori
+            Nicolo Gulinucci
+            Negar Namazifard
+
+:license: BSD 3-Clause License
+
 """
 class C_SUT:
+    
+    """ C_SUT Class
+
+    The class reads the given database in form of an excel file and built all 
+    pandas DataFrames of the flows and coefficients of the IO system. 
+
+    Notes
+    -----
+        The attributes and extension dictionary entries are pandas.DataFrame
+        with an MultiIndex.  This index must have the specified level names.
+
+    Attributes
+    ----------
+    Z : pandas.DataFrame
+        Supply and Use flows of activities and commodities
+        MultiIndex with levels and aggregatedn and disaggregated names
+        
+    z : pandas.DataFrame
+        Matrix of technical coefficient and market share coefficents
+        indeces as Z 
+        
+    U,V : pandas.DataFrame
+        Use and Supply Matrices
+        MultiIndex with levels and aggregatedn and disaggregated names   
+        for U: [index=Commodities,columns=Activities]
+        for V: [index=Activities,columns=Commodities]
+        
+    Y : pandas.DataFrame
+        final demand with MultiIndex similar to Z matrix
+        
+
+    l : pandas.DataFrame
+        Leontief, MultiTndex as Z
+    unit : pandas.DataFrame
+        Unit for each row of Z
+        
+
+    """   
     
     def __init__(self,path,unit):
         
@@ -246,7 +315,11 @@ class C_SUT:
         
         
         
+    def obj_save(self,file_name) :
+        import pickle 
         
+        with open(file_name, 'wb') as config_dictionary_file:
+            pickle.dump(self,config_dictionary_file)
         
         
         
