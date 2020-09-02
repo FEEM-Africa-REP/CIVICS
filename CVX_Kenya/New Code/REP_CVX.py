@@ -89,10 +89,11 @@ class C_SUT:
         
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
-                directory='my_graphs',ranshow=(0,0),title='default',color = 'rainbow', drop=None):
+                directory='my_graphs',ranshow=(0,0),title='default',color = 'rainbow', drop=None,save_excel=True):
         
         from functions.plots import delta_xv
         
+
         # Check if the shock result exist or not
         try: self.X_c          
         except: raise ValueError('To run the plot function, there should be an implemented shock.')
@@ -103,12 +104,12 @@ class C_SUT:
         else:
             X_c,X = self.X_c,self.X
             
-        delta_xv(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop)
+        delta_xv(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop,save_excel)
 
 
     def plot_dv(self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
-                directory='my_graphs',ranshow=(0,0),title='default',color = 'terrain', drop= None):
+                directory='my_graphs',ranshow=(0,0),title='default',color = 'terrain', drop= None,save_excel=True):
         
         from functions.plots import delta_xv
         
@@ -120,7 +121,7 @@ class C_SUT:
         if aggregated:   VA_c,VA = self.VA_c_agg,self.VA_agg    
         else:            VA_c,VA = self.VA_c,self.VA
             
-        delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop)        
+        delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop,save_excel)        
         
         
     def plot_ds(self,indicator,aggregated=True,detail=True,unit='default',
@@ -183,7 +184,7 @@ class C_SUT:
                 
         print("Warning: \n all the shock variables are equal to the last sensitivity file: \'{}\' ".format(i))
         
-    def sensitivity(self,path,):
+    def sensitivity(self,path):
 
         from functions.data_read import sens_info
         from functions.utility import dict_maker
@@ -194,10 +195,15 @@ class C_SUT:
         
         directs,sensitivity_info = sens_info (path)
         i=0
-        
+        self.a = sensitivity_info
         for file in directs:
             excels = [f for f in glob.glob(file + "**/*.xlsx", recursive=True)]
             self.results['sensitivity_{}'.format(self.s_counter)]={'information':sensitivity_info[str(i)]}
+            
+            # Check the affected matrices in every shock
+            mat_list = sensitivity_info[str(i)]['matrices']
+            
+            print('Sensitivity {}. Affected Matrices: {}'.format(i+1,mat_list))
             i+=1
             
             for excel in excels:
@@ -209,10 +215,10 @@ class C_SUT:
                 z_c   = self.z.copy()
                 
                 # check the type of the shock
-                Y_c  = sh.Y_shock  (path,Y_c.copy())                      
-                z_c  = sh.Z_shock  (path,z_c.copy(),self.Z.copy(),self.X.copy())
-                va_c = sh.VA_shock (path,va_c.copy(),self.VA.copy(),self.X.copy())
-                s_c  = sh.S_shock  (path,s_c.copy(),self.S.copy(),self.X.copy())
+                if 'Y' in mat_list : Y_c  = sh.Y_shock  (path,Y_c.copy())                      
+                if 'Z' in mat_list : z_c  = sh.Z_shock  (path,z_c.copy(),self.Z.copy(),self.X.copy())
+                if 'VA' in mat_list : va_c = sh.VA_shock (path,va_c.copy(),self.VA.copy(),self.X.copy())
+                if 'S' in mat_list : s_c  = sh.S_shock  (path,s_c.copy(),self.S.copy(),self.X.copy())
                 
                 # Calculating the shock result
                 l_c,X_c,VA_c,S_c,Z_c,p_c = cal_flows(z_c,Y_c,va_c,s_c,self.indeces)        
@@ -228,7 +234,7 @@ class C_SUT:
                                Y_c_agg,S_c_agg,p_c_agg)
             
             self.s_counter+=1
-                                                                    
+                                                                   
         
     def impact(self,p_life,saving_sce,invest_sce,imports=['Import'],w_ext=['Water'], em_ext=['CO2'], land=['Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
         from functions.impact import impact_assessment

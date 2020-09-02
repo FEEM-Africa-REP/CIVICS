@@ -32,7 +32,7 @@ def drop_fun(data,ranshow):
     return data.drop(columns=drop_list)
 
 
-def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,info,drop):
+def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,info,drop,ex_save):
     
     import matplotlib.pyplot as plt
     from functions.check import unit_check
@@ -40,6 +40,7 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     from functions.check import style_check
     from functions.check import level_check
     from functions.check import kind_check
+    import pandas as pd
 
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()
@@ -123,7 +124,7 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     # Due to competutional errors, even in the case that one thing is not changed, we may have very small differences 
     # This makes the graphs ugly!! To solve the issue we print an error for the user to make them understand.
     
-    if abs(d_x.sum().sum() <= 0.000001):
+    if abs(d_x.sum().sum()) <= 0.000001:
         print('The following matrix seems to be unchanged in the implemented shock, Maybe the numbers represented in the graph are very small and related to computational errors.')
         
     
@@ -132,6 +133,10 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     plt.ylabel(unit)
     plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
     plt.show()
+    
+    if ex_save:
+        with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
+            d_x.to_excel(writer)
 
  
 def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,indeces):
@@ -172,7 +177,7 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     if detail:
         d_x.index = d_x.index.get_level_values(0) 
         
-    if abs(d_x.sum().sum() <= 0.000001):
+    if abs(d_x.sum().sum()) <= 0.000001:
         print('The following matrix seems to be unchanged in the implemented shock, Maybe the numbers represented in the graph are very small and related to computational errors.')
        
     # Specifing the range of showing results
@@ -248,7 +253,8 @@ def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,colo
     plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
     plt.show()  
     
-    
+
+        
     
     
     

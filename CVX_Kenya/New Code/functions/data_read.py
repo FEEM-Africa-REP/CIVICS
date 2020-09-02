@@ -55,21 +55,38 @@ def sens_info(path):
     min_col  = 6
     max_col  = 7
     stp_col  = 8
+    mat_col  = 9
+    matrices = ['Y','S','VA','Z']
     
     sensitivity_info = {}
     counter = 0
     for row in range(rows):
         if worksheet.cell(row=row+1, column=sens_col).value == 'Yes':
+            
+            # Free list to append the affected matrices by the sensitivity
+            mat_list=[]
+            # Inputs by user as a string
+            mat_str = worksheet.cell(row=row+1, column=mat_col).value
+            
+            # Converting the string to a list
+            mat_str.split()
+            for i in range(len(mat_str)):
+                if mat_str[i] in matrices:
+                    mat_list.append(mat_str[i])
+                    
+            
+            
 
-            sensitivity_info['{}'.format(counter)] = {'parameter':worksheet.cell(row=row+1, column=par_col).value,
-                                                                 'minimum':worksheet.cell(row=row+1, column=min_col).value,
-                                                                 'maximum':worksheet.cell(row=row+1, column=max_col).value,
-                                                                 'step':worksheet.cell(row=row+1, column=stp_col).value,
-                                                                 'row':row+1}
+            sensitivity_info['{}'.format(counter)] = {'parameter':  worksheet.cell(row=row+1, column=par_col).value,
+                                                      'minimum':    worksheet.cell(row=row+1, column=min_col).value,
+                                                      'maximum':    worksheet.cell(row=row+1, column=max_col).value,
+                                                      'step':       worksheet.cell(row=row+1, column=stp_col).value,
+                                                      'row':        row+1,
+                                                      'matrices':   mat_list}
             counter+=1                                                    
     
     print ('{} sensitivities are found'.format(counter))
-    if counter == 0: raise ValueError('No sensitivity found.')
+    if counter == 0: raise ValueError('No sensitivity found. Check if the main sheet has the right structure.')
     
     directs=[]
     for i in range (counter):

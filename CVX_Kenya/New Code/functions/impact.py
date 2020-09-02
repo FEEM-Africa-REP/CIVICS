@@ -106,12 +106,12 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
     
     
         # Total Impacts
-        Imp.loc[i,'Water Total Impact'] = Imp.loc[i,'Water Investment'] - p_life * Imp.loc[i,'Water Saving']
-        Imp.loc[i,'Emission Total Impact'] = Imp.loc[i,'Emission Investment'] - p_life * Imp.loc[i,'Emission Saving']
-        Imp.loc[i,'Land Total Impact'] = Imp.loc[i,'Land Investment'] - p_life * Imp.loc[i,'Land Saving']
-        Imp.loc[i,'Import Total Impact'] = Imp.loc[i,'Import Investment'] - p_life * Imp.loc[i,'Import Saving']
-        Imp.loc[i,'Workforce Total Impact'] = Imp.loc[i,'Workforce Investment'] - p_life * Imp.loc[i,'Workforce Saving']
-        Imp.loc[i,'Capital Total Impact'] = Imp.loc[i,'Capital Investment'] - p_life * Imp.loc[i,'Capital Saving']  
+        Imp.loc[i,'Water Total Impact']         = Imp.loc[i,'Water Investment'] - p_life * Imp.loc[i,'Water Saving']
+        Imp.loc[i,'Emission Total Impact']      = Imp.loc[i,'Emission Investment'] - p_life * Imp.loc[i,'Emission Saving']
+        Imp.loc[i,'Land Total Impact']          = Imp.loc[i,'Land Investment'] - p_life * Imp.loc[i,'Land Saving']
+        Imp.loc[i,'Import Total Impact']        = Imp.loc[i,'Import Investment'] - p_life * Imp.loc[i,'Import Saving']
+        Imp.loc[i,'Workforce Total Impact']     = Imp.loc[i,'Workforce Investment'] - p_life * Imp.loc[i,'Workforce Saving']
+        Imp.loc[i,'Capital Total Impact']       = Imp.loc[i,'Capital Investment'] - p_life * Imp.loc[i,'Capital Saving']  
   
     
     return Imp
