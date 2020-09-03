@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Aug 25 14:52:37 2020
-
-@author: Mohammad Amin Tahavori
+aggregation Module
+==============================================================================
+It is used to provide aggregated data frames from unaggregated matrices
 """
 def aggregate(X,Y,VA,S,Z,p):
     

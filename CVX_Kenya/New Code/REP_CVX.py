@@ -28,8 +28,8 @@ Dependencies:
 - pymrio
 - pickle
 
-:Authors:   Mohammad Amin Tahavori
-            Nicolo Gulinucci
+:Authors:   Mohammad Amin Tahavori,
+            Nicolo Gulinucci,
             Negar Namazifard
 
 :license: 
@@ -151,7 +151,7 @@ class C_SUT:
         # A counter for saving the results in a dictionary
         self.counter   = 1      # Shock Counter
         self.s_counter = 1      # Sensitivity Counter
-        self.i_counter = 1
+        self.i_counter = 1      # Impact Assessment Couter
         
         
     def shock_calc (self,path,Y=False, VA=False, Z=False, S=False,save=True):

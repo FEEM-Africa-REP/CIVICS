@@ -1,20 +1,65 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Aug 28 16:47:09 2020
+'''
+impact Module
+==============================================================================
 
-@author: Mohammad Amin Tahavori
-"""
+A module for impact assessment calculations
+
+Functions
+----------
+impact_check:   Taking the information from the user and find and reform 
+                the appropriate sets of information and check the errors in the
+                input to provide the appropriate ValueError
+
+impact_assessment:  calculating the impacts of the policy
+'''
 def impact_check(inv,sav,results):
+    '''
     
+
+    Parameters
+    ----------
+    inv : list
+        a list of the information of the inv step as specified in the class 
+        document.
+    sav : list
+        a list of the information of the saving step as specified in the class 
+        document.
+    results : dictionary
+        results dictionary of the main object.
+
+    Raises
+    ------
+    ValueError
+        1. Wrong format of the inputs
+        2. sav and inv sensitivity impact assessment. IT IS NOT POSSIBLE!
+
+    Returns
+    -------
+    save_out : dict
+        reshaped information of the sav scenario compatible with inv_out.
+    inv_out : dict
+        reshaped information of the inv scenario compatible with save_out.
+    sav_list : list
+        returns the information of the sensitivities for multiple impact assessment
+        for every sensitivity case.
+
+    '''
+    # Acceptable inputs
     list1 = {'sh':'shock','se':'sensitivity'}
     sav_list,inv_list = [],[]
     save_out,inv_out  = {},{}
     
+    # Check if the shape of the input list is correct
     if len(inv)!=2 or len(sav) != 2:
         raise ValueError('Wrong input for invest_sce and saving_sce. \n Two valuse should be given as follow:\
                           \n [type of the input,the number of the specifict input] ')
+     
+    # Check if the input is acceptable or not
     if  inv[0] not in list1 or sav[0] not in list1:
         raise ValueError('The first argument can be one of the followings: {}'.format(list1))       
+    
+    # both inv and sav cant be based on sensitivity
     if inv[0]  == 'se' and sav[0] == 'se':
         raise ValueError('both \'saving_sce\' and \'invest_sce\' cannot be based on \'sensitivity\' level.')
         
@@ -36,22 +81,34 @@ def impact_check(inv,sav,results):
                if key != 'information':
                    sav_list.append(key)    
                    
-    except: raise ValueError('{}_{} does not exists in results dictionary'.format(list1[sav[0]],sav[1])) 
+    except: raise ValueError('{}_{} does not exists in results dictionary'.format(list1[sav[0]],sav[1]))
+    
+    
+    #--------------------------- NOTE ---------------------------
+    # There are 3 different cases that can be happen based on the type of the
+    # input: 1. both shock, 2. sav shock and inv sensitivty or 3. inv shock and 
+    # sav sensitivity. In the cases that a sensitivity exists, we need to have
+    # the same value of the shock matrix repeated by the len of the sensitivity
+    # to ease the calculations
+    #------------------------------------------------------------
     
     
     # Making the dictionaries for outout
+    
+    # The case that sav is based on sensitivity
     if len(sav_list)>len(inv_list):
         for i in sav_list:
             save_out[i]= results['{}_{}'.format(list1[sav[0]],sav[1])][i]
-            inv_out [i]= results['{}_{}'.format(list1[inv[0]],inv[1])]
+            inv_out [i]= results['{}_{}'.format(list1[inv[0]],inv[1])] # Just repeat it
             
-            
+    # The case that inv is based on sensitivity      
     elif len(sav_list)<len(inv_list):
         for i in inv_list:
-            save_out[i]= results['{}_{}'.format(list1[sav[0]],sav[1])]
+            save_out[i]= results['{}_{}'.format(list1[sav[0]],sav[1])] # just repeat it
             inv_out [i]= results['{}_{}'.format(list1[inv[0]],inv[1])][i] 
             sav_list = inv_list
-        
+            
+    # The case that both are based on shock     
     else: 
         sav_list = ['single']
         save_out['single'] = results['{}_{}'.format(list1[sav[0]],sav[1])]
@@ -61,6 +118,34 @@ def impact_check(inv,sav,results):
     return save_out,inv_out,sav_list
 
 def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,labour,capital,imports):
+    
+    '''
+    Parameters
+    ----------
+    As described in the main class
+
+
+    Returns
+    -------
+    Imp : Dataframe
+        Contains all the indicators of the impact assessment
+        
+    Introducing A New Indicator
+    ----------------------------
+    
+    To introduce an indicator the following steps should be done:
+        1. Add the name of the indicator to the list named : "columns"
+        2. In the loop, the way that the indicator is caluclated should be 
+        represented as the follwoing form:
+            Imp.loc[i,'name of the indicator as added in the columns'] = calculation
+            
+    **************************************************************************            
+    NOTE: the parameters results,save_out,inv_out are dict in which contains
+    all the information related to saving scenario,investment scenario, and baseline 
+    scenario to calculate the impact. So, in case that new indicators are added,
+    please take care of that fact, and follow the existing indicators codes.
+    **************************************************************************
+    '''
     
     import pandas as pd
     

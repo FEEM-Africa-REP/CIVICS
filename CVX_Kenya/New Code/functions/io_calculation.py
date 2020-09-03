@@ -1,35 +1,41 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Aug 24 12:16:32 2020
+io_calculation Module
+==============================================================================
+All the functions in this module are used to calculate the input-output
+flows or coefficients.
 
-@author: Mohammad Amin Tahavori
+In most of the cases, pymrio library is used.
 """
 
 def cal_z(Z,X):
+    # Calculating the z coefficient matrix
     import pymrio
     
     return pymrio.calc_A (Z,X)
 
 def cal_s(S,X):
-    # can be used for both S and VA
+    # can be used for both s and va coefficients
     import pymrio
     
     return pymrio.calc_S (S,X)
 
 def cal_l(z):
+    # Calculating leontief coefficient from z
     import pymrio
     
     return pymrio.calc_L(z)
 
 def cal_p(va,l):
+    # calculating the price index
     import pandas as pd
     
     return pd.DataFrame(va.sum().values.reshape(1,len(va.columns)) @ l.values, index=['Price'], columns=va.columns)
 
 def cal_coef (Z,S,VA,X):
-    import pymrio
-
     
+    # calculating all the coefficients together
+    import pymrio
     z  = pymrio.calc_A (Z,X)
     s  = pymrio.calc_S (S,X)
     va = pymrio.calc_S (VA,X)
@@ -39,21 +45,29 @@ def cal_coef (Z,S,VA,X):
     return z,s,va,l,p
 
 def cal_Z (z,X):
+    
+    # Calculating Z flow matrix
     import pymrio 
     
     return pymrio.calc_Z(z, X)
     
 def cal_X(l,Y,index):
+    
+    # Calculating X from l and Y
     import pandas as pd
     
     return pd.DataFrame(l.values @ Y.values , index = index['X_ind'] , columns =  index['X_col'])
     
-def  cal_X_from_L(L, y):  
+def  cal_X_from_L(L, y): 
+    
+    # Calculating X from l and Y by pymrio
     import pymrio
     
     return pymrio.calc_x_from_L(L, y)
     
 def cal_flows(z,Y,va,s,index):
+    
+    # Calculating all the flows together
     import pymrio
     
     l  = pymrio.calc_L(z)
