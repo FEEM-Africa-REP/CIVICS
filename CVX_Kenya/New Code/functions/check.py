@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Aug 24 11:31:13 2020
-
-@author: Mohammad Amin Tahavori
+check Module
+==============================================================================
+All the functions in this module are used to check the possible errors in the 
+inputs of the different functions by the user
 """
+
 def unit_check(unit):
+    '''
+    This function checks if a given Unit is listed in the acceptable units
+    '''
     unit_list = ['M USD','M EUR', 'M KSH','K KSH','K USD','K EUR']
     
     if unit not in unit_list:
@@ -13,6 +18,9 @@ def unit_check(unit):
     return unit
 
 def unit_converter(unit1,unit2):
+    '''
+    This function converts the units between the listed units
+    '''
     # For now, we use following simple script for the conversion. In the next step, a library will be added to the code.
     convert_list = {'M KSH_M USD': 0.00939548 ,'M KSH_M EUR': 0.00833961, 'M KSH_K USD': 0.00939548*1000 ,'M KSH_K EUR': 0.00833961*1000, 'M KSH_K KSH': 1000}
     
@@ -24,7 +32,11 @@ def unit_converter(unit1,unit2):
 
 def style_check(style):
     
-    styles = ['defualt','classic','Solarize_Light2','_classic_test','bmh',
+    '''
+    This function check if the plot style is valid or not.
+    '''
+    
+    styles = ['default','classic','Solarize_Light2','_classic_test','bmh',
               'dark_background','fast','fivethirtyeight','ggplot','grayscale',
               'seaborn','seaborn-bright','seaborn-colorblind','seaborn-dark',
               'seaborn-dark-palette','seaborn-darkgrid','seaborn-deep',
@@ -39,6 +51,13 @@ def style_check(style):
     return style
 
 def level_check(level):
+    '''
+    This function check if the given level is correct or not and provide the
+    title for completing the graph titles by default:
+        
+        If level='Activities'  --> title = ' by Activities'
+        If level='Commodities' --> title = ' by Commodities'
+    '''
     
     levels = ['Activities' , 'Commodities']
     if level != None :
@@ -50,6 +69,10 @@ def level_check(level):
 
 def kind_check (kind):
     
+    '''
+    This function check if the given plot kind is correct or not.
+    '''
+        
     kinds = ['Absolute','Percentage']
     if kind not in kinds:
         raise ValueError('\'kind\' can be: \n 1. \'Absolute\' /n 2. \'Percentage\'')
@@ -58,10 +81,16 @@ def kind_check (kind):
     
 def indic_check (indicator,indicators):
     
+    '''
+    This function check if the given indicator for plot_ds exists in the database
+    or not.
+    '''
+    
     indicators = list(dict.fromkeys(indicators))
 
     if indicator not in indicators:
         raise ValueError('\'{}\' not found in {}'.format(indicator, indicators))
+        
     return indicator
     
 
