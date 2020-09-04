@@ -100,6 +100,7 @@ def sens_info(path):
     import openpyxl
     import os
     import shutil
+    import pandas as pd
 
     # Loading the excel file from the given path and loading the 'main' sheet
     myworkbook=openpyxl.load_workbook(path)
@@ -206,7 +207,7 @@ def sens_info(path):
             
             # loading the main excel file
             myworkbook=openpyxl.load_workbook(path)
-            
+
             # loading the main sheet in which all the calculations are done!
             worksheet= myworkbook.get_sheet_by_name('main')
             
@@ -217,7 +218,9 @@ def sens_info(path):
             name = directs[i] + '\case_{}.xlsx'.format(s_min)
             myworkbook.save(name)
             
-            s_min+=step    
-    
+            s_min+=step   
+
+
+            
     return directs,sensitivity_info
         

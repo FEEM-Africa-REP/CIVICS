@@ -576,6 +576,7 @@ class C_SUT:
 
         from functions.data_read import sens_info
         from functions.utility import dict_maker
+        from functions.utility import value_from_excel
         import functions.shock_io as sh
         from functions.io_calculation import cal_flows
         from functions.aggregation import aggregate
@@ -619,7 +620,8 @@ class C_SUT:
             # Implementing all the excel files taken in the previous step for
             # every set of sensitivities
             for excel in excels:
-
+                
+                value_from_excel(excel)
                 # Taking a copy of all matrices to have both changed and unchanged ones
                 Y_c   = self.Y.copy()
                 va_c  = self.va.copy()
@@ -627,14 +629,15 @@ class C_SUT:
                 z_c   = self.z.copy()
                 
                 # check the type of the shock and calling the function
-                if 'Y' in mat_list  : Y_c  = sh.Y_shock  (path,Y_c.copy())                      
-                if 'Z' in mat_list  : z_c  = sh.Z_shock  (path,z_c.copy(),self.Z.copy(),self.X.copy())
-                if 'VA' in mat_list : va_c = sh.VA_shock (path,va_c.copy(),self.VA.copy(),self.X.copy())
-                if 'S' in mat_list  : s_c  = sh.S_shock  (path,s_c.copy(),self.S.copy(),self.X.copy())
+                if 'Y' in mat_list  : Y_c  = sh.Y_shock  (excel,Y_c.copy())                      
+                if 'Z' in mat_list  : z_c  = sh.Z_shock  (excel,z_c.copy(),self.Z.copy(),self.X.copy())
+                if 'VA' in mat_list : va_c = sh.VA_shock (excel,va_c.copy(),self.VA.copy(),self.X.copy())
+                if 'S' in mat_list  : s_c  = sh.S_shock  (excel,s_c.copy(),self.S.copy(),self.X.copy())
                 
+
                 # Calculating the shock result
                 l_c,X_c,VA_c,S_c,Z_c,p_c = cal_flows(z_c,Y_c,va_c,s_c,self.indeces)        
-        
+
                 # Aggregation of the results
                 X_c_agg,Y_c_agg,VA_c_agg,S_c_agg,Z_c_agg,p_c_agg = aggregate(X_c,Y_c,VA_c,S_c,Z_c,p_c)
                 

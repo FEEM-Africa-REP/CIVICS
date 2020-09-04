@@ -26,6 +26,13 @@ def cal_l(z):
     
     return pymrio.calc_L(z)
 
+def cal_l2(z):
+    # Calculating leontief coefficient from z
+    import numpy as np
+    import pandas as pd
+    
+    return pd.DataFrame(np.linalg.inv(np.identity(len(z)) - z),index=z.index,columns=z.columns)
+
 def cal_p(va,l):
     # calculating the price index
     import pandas as pd
@@ -70,7 +77,7 @@ def cal_flows(z,Y,va,s,index):
     # Calculating all the flows together
     import pymrio
     
-    l  = pymrio.calc_L(z)
+    l  = cal_l2(z)
     X  = cal_X(l,Y,index)
     VA = pymrio.calc_F(va, X)
     S  = pymrio.calc_F(s, X)

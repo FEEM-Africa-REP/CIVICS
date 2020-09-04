@@ -78,7 +78,7 @@ def Z_shock (path,z,Z,X):
     #           Shock on the normal level
     
     #--------------------------------------------------------------------------  
-    
+    print('{}'.format(values))
     for i in range (len(rows)):
         if types[i] == 'Percentage':
             if aggreg[i] == 'No':
@@ -114,7 +114,7 @@ def Z_shock (path,z,Z,X):
                 
         else:
             raise ValueError('Type of the shock can be \'Absolute\' or \'Percentage\'. Please check shock excel file.')
-
+            
     return z
 
 def VA_shock(path,va,VA,X):

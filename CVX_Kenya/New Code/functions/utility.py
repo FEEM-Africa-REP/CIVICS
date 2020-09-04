@@ -29,3 +29,16 @@ def dict_maker(Z=None,X=None,VA=None,p=None,Y=None,va=None,z=None,s=None,
                
     return dictionary
 
+def value_from_excel(path):
+    
+    import xlwings as xl
+    app = xl.App(visible=False)
+    book = app.books.open(path)
+    book.save()
+    app.kill()
+    
+    
+    
+    
+    
+    
