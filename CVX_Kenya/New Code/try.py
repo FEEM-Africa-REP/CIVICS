@@ -15,7 +15,7 @@ a.shock_calc(path=r'Ecopulpers.xlsx',Y=False,Z=True,VA=False,S=False)
 #%%
 a.sensitivity(path=r'Ecopulpers.xlsx')
 #%%
-a.plot_dx(aggregated=False,style='classic',figsize=(30,10))
+a.plot_ds(indicator='Water',kind='Percentage',color=['blue','green','grey'])
 #%%
 a.impact(saving_sce=['sh',1],invest_sce=['se',1],p_life=10)
 #%%

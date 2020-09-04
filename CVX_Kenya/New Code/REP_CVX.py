@@ -22,9 +22,9 @@ the "C_SUT" with all data can also be pickled (binary).
 ----
 Dependencies:
 
-- numpy
 - pandas
 - matplotlib
+- seaborn
 - pymrio
 - pickle
 

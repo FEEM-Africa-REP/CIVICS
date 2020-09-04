@@ -58,11 +58,16 @@ def level_check(level):
         If level='Activities'  --> title = ' by Activities'
         If level='Commodities' --> title = ' by Commodities'
     '''
-    
+    # Acceptable levels
     levels = ['Activities' , 'Commodities']
+    
+    # if level is not None
     if level != None :
+        # Check if it is not in the acceptable levels, raise an error
         if level not in levels: raise ValueError('\'level\' can be: \n 1. \'Activities\' \n 2. \'Commodities\' \n 3. \'None\' ')
+        # If it is, take the level and retrun the title as described before
         else: title , level = ' by {}'.format(level) , [level]
+    # if level is None, retrun both levels and nothing for the title
     else: title , level = '' , levels
         
     return title,level

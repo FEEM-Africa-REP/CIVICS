@@ -12,7 +12,7 @@ indeces:        Provides a dict of the indeces that can be used for different pu
 dict_maker:     Stores the given information in a dictionary.
 '''
 def indeces (S,Z,VA,X):
-    
+
     return {'Z_ind': Z.index , 'VA_ind':VA.index , 'S_ind': S.index , 'X_ind': X.index ,'Z_col': Z.columns , 'VA_col':VA.columns , 'S_col': S.columns , 'X_col':X.columns}
 
 def dict_maker(Z=None,X=None,VA=None,p=None,Y=None,va=None,z=None,s=None,
