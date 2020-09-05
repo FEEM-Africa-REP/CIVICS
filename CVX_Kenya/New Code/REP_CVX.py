@@ -35,6 +35,23 @@ Dependencies:
 :license: 
 
 '''
+from functions.version import __version__
+from warnings import filterwarnings
+from functions.data_read import database
+from functions.check import unit_check
+from functions.io_calculation import cal_coef
+from functions.utility import indeces
+from functions.aggregation import aggregate
+from functions.utility import dict_maker
+import functions.shock_io as sh
+from functions.io_calculation import cal_flows
+from functions.plots import delta_xv
+from functions.plots import delta_s
+from functions.plots import delta_p
+from functions.impact import impact_assessment
+import glob
+import pickle
+
 class C_SUT:
     
     ''' C_SUT Class
@@ -109,14 +126,7 @@ class C_SUT:
                 used for the unit conversions. 
         '''                          
         
-        from functions.version import __version__
-        from warnings import filterwarnings
-        from functions.data_read import database
-        from functions.check import unit_check
-        from functions.io_calculation import cal_coef
-        from functions.utility import indeces
-        from functions.aggregation import aggregate
-        from functions.utility import dict_maker
+
 
         # Printing the version and the information of the module
         print(__version__)
@@ -192,10 +202,7 @@ class C_SUT:
         -----------------------------------------------------------------------
         
         '''            
-        import functions.shock_io as sh
-        from functions.io_calculation import cal_flows
-        from functions.aggregation import aggregate
-        from functions.utility import dict_maker
+
     
         # There should be at least one shock!
         if not Y and not VA and not Z and not S:
@@ -288,7 +295,7 @@ class C_SUT:
              
         ''' 
         
-        from functions.plots import delta_xv
+        
 
         # Check if the shock result exist or not
         try: self.X_c          
@@ -363,7 +370,7 @@ class C_SUT:
                     If True, the results will be saved also in form of excel file
                     in the same directory     
         '''        
-        from functions.plots import delta_xv
+
         
         # Check if the shock result exist or not
         try: self.X_c          
@@ -445,7 +452,7 @@ class C_SUT:
                     If True, the results will be saved also in form of excel file
                     in the same directory     
         '''         
-        from functions.plots import delta_s
+        
         
         # Check if the shock result exist or not
         try: self.X_c          
@@ -502,7 +509,7 @@ class C_SUT:
                     If True, the results will be saved also in form of excel file
                     in the same directory     
         '''          
-        from functions.plots import delta_p
+        
         
         # Check if the shock result exist or not
         try: self.X_c
@@ -549,8 +556,8 @@ class C_SUT:
         -----------------------------------------------------------------------
         '''
         
-        import glob
-        from functions.utility import dict_maker
+        
+
         
         # There should be at least one shock to be implemented!
         if not Y and not VA and not Z and not S:
@@ -707,7 +714,7 @@ class C_SUT:
         -----------------------------------------------------------------------
         '''
         
-        from functions.impact import impact_assessment
+        
         
         # calculating the impacts using the impact_assessment function
         self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports)
@@ -730,7 +737,7 @@ class C_SUT:
             Specifies the name of the file to store the object.
         ''' 
         
-        import pickle 
+         
         
         with open(file_name, 'wb') as config_dictionary_file:
             pickle.dump(self,config_dictionary_file)
