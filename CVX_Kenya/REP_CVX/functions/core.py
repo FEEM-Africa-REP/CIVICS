@@ -702,14 +702,21 @@ class C_SUT:
             pickle.dump(self,config_dictionary_file)
         
         
-    def plot_sens(self,variable,sc_num,title,unit,level,indicator,aggregation=True):
+    def plot_sens(self,variable,sc_num,indicator,unit='default',level='Activities',
+                  title='default',aggregation=True,
+                  box={'color':'black','facecolor':'dodgerblue','linewidth' : 1},
+                  whiskers={'color':'black','linewidth' : 1},
+                  caps={'color':'black','linewidth' : 1},
+                  medians={'color':'black','linewidth' : 1},
+                  fliers={'marker':'o', 'color':'black', 'alpha':0.5}):
         
         # Check if the given varibale is among the acceptable ones or not!
         variable = var_check(variable)
         
         # Reshaping the data and index to plot
-        data,index = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator)
-        ptl_sensitivity(data,index)
+        data,index,title = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title)
+
+        ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers)
         
         
         

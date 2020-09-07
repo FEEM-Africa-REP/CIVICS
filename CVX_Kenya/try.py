@@ -26,7 +26,7 @@ a.obj_save(file_name='kenya')
 a.plot_sens
 #%% 
 
-a.plot_sens(variable='X',sc_num=1,title='a',unit='a',level='Activities',indicator='Activities')
+a.plot_sens(variable='X',sc_num=1,level='Activities',indicator='Activities')
   #%%
 import pandas as pd
 #%%
@@ -36,7 +36,7 @@ q=pd.read_excel(r'C:\Users\payam\Documents\GitHub\CIVICS_Kenya\CVX_Kenya\New Cod
 antar=[]
 for key, value in a.results['sensitivity_1'].items(): 
     if key != 'information':
-        antar.append(a.results['sensitivity_1'][key]['VA_agg']['Activities'].values-a.VA_agg['Activities'].values)
+        antar.append(a.results['sensitivity_1'][key]['X_agg'].loc['Activities'].values-a.X_agg.loc['Activities'].values)
 for i in range(len(antar)):
     antar[i]=antar[i].ravel()
    #%% 
@@ -64,21 +64,21 @@ for i in range(len(a.X_agg.loc['Activities'].index)):
 ## change outline color, fill color and linewidth of the boxes
 for box in bp['boxes']:
     # change outline color
-    box.set( color='#7570b3', linewidth=2)
+    box.set( color='black', linewidth=1)
     # change fill color
-    box.set( facecolor = '#FF69B4' )
+    box.set( facecolor = 'dodgerblue' )
 
 ## change color and linewidth of the whiskers
 for whisker in bp['whiskers']:
-    whisker.set(color='#7570b3', linewidth=2)
+    whisker.set(color='black', linewidth=1)
 
 ## change color and linewidth of the caps
 for cap in bp['caps']:
-    cap.set(color='#7570b3', linewidth=2)
+    cap.set(color='black', linewidth=1)
 
 ## change color and linewidth of the medians
 for median in bp['medians']:
-    median.set(color='#b2df8a', linewidth=2)
+    median.set(color='black', linewidth=1)
 box = ax.get_position()
 ax.set_position([box.x0, box.y0 + box.height * 0.1,
                  box.width, box.height * 0.9])

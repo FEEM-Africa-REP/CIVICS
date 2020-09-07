@@ -227,12 +227,22 @@ def sens_info(path):
     return directs,sensitivity_info
 
 
-def sensitivity_take(variable,scenario,results,aggregation,level,indicator):
+def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_unit,unit,title):
     
+    from REP_CVX.functions.check import unit_check
+    from REP_CVX.functions.check import unit_converter
     from REP_CVX.functions.check import level_check
     #from REP_CVX.functions.check import indic_check
+
+    # this dictionary contains the full name of the variables
+    var_name = {'X': 'Production' , 'VA': 'Value Added' }
     
-    level = level_check(level)
+    # default unit
+    if unit == 'default':
+        unit = m_unit
+        
+    tit,level = level_check(level)
+    conversion = unit_converter(m_unit,unit_check(unit))
     #indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(3)))
     
     try:    data = results['sensitivity_{}'.format(scenario)]
@@ -245,12 +255,12 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator):
         if key != 'information':
             
             if variable == 'X':
-                sens_all.append(data[key][var].loc[level[1]].values-results['baseline'][var].loc[level[1]].values)
+                sens_all.append(data[key][var].loc[level].values*conversion-results['baseline'][var].loc[level].values*conversion)
             # elif variable == 'VA':
             #     sens_all.append(data[key][var][level[0]].values-results['baseline'][var][level[0]].values)
 
                 
-           
+         
     for i in range(len(sens_all)):
         sens_all[i]=sens_all[i].ravel()
 
@@ -262,9 +272,16 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator):
             dt.append(sens_all[j][i])
         sen_to_plt.append(dt)
 
-    index = data[key][var].loc[level[1]].index
+    index = data[key][var].loc[level].index
     
-    return sen_to_plt,index
+    if len(level) != 2:
+        index = index.get_level_values(1)
+    
+    if title == 'default':
+        title = '{}{}'.format(var_name[variable],tit)
+    
+    
+    return sen_to_plt,index,title
 
 
 

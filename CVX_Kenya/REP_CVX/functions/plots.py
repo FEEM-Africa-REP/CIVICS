@@ -420,7 +420,7 @@ def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,colo
             d_x.to_excel(writer)         
     
     
-def ptl_sensitivity(data,index):
+def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers):
     
     
     fig = plt.figure(2, figsize=(9, 6))
@@ -435,7 +435,31 @@ def ptl_sensitivity(data,index):
     for i in range(len(index)):
         label = ax.xaxis.get_major_ticks()[i].label 
         label.set_rotation('vertical')
+    
+    ## change outline color, fill color and linewidth of the boxes
+    for box in bp['boxes']:
+        # change outline color
+        box.set( color=ibox['color'], linewidth=ibox['linewidth'])
+        # change fill color
+        box.set( facecolor = ibox['facecolor'] )
+    
+    ## change color and linewidth of the whiskers
+    for whisker in bp['whiskers']:
+        whisker.set(color= iwhiskers['color'], linewidth= iwhiskers['linewidth'])
+    
+    ## change color and linewidth of the caps
+    for cap in bp['caps']:
+        cap.set(color= icaps['color'], linewidth= icaps['linewidth'])
+    
+    ## change color and linewidth of the medians
+    for median in bp['medians']:
+        median.set(color= imedians['color'], linewidth=imedians['linewidth'])
         
+    ## change the style of fliers and their fill
+    for flier in bp['fliers']:
+        flier.set(marker=ifliers['marker'], color=ifliers['color'], alpha=ifliers['alpha'])
+    
+    plt.title(title)
     plt.show()
     
     
