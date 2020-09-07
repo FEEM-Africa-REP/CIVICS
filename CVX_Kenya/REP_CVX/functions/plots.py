@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from REP_CVX.functions.check import unit_check
+from REP_CVX.functions.check import unit_converter
+from REP_CVX.functions.check import style_check
+from REP_CVX.functions.check import level_check
+from REP_CVX.functions.check import kind_check
+from REP_CVX.functions.check import indic_check
+
+
 """
 plots Module
 ==============================================================================
@@ -24,7 +36,6 @@ delta_p:   This function is used to plot the ratio between the price index in
 
 def x_reshape(X):
     
-    import pandas as pd
     
     '''
     Parameter
@@ -124,13 +135,6 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     data in form of excel file
     
     '''
-    import matplotlib.pyplot as plt
-    from functions.check import unit_check
-    from functions.check import unit_converter
-    from functions.check import style_check
-    from functions.check import level_check
-    from functions.check import kind_check
-    import pandas as pd
 
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()        # After shock
@@ -267,13 +271,6 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     data in form of excel file
     
     '''    
-    import matplotlib.pyplot as plt
-    from functions.check import style_check
-    from functions.check import level_check
-    from functions.check import kind_check
-    from functions.check import indic_check
-    import pandas as pd
-
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()        # After shock
     X   = X.copy()          # Baseline
@@ -369,11 +366,8 @@ def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,colo
     data in form of excel file
     
     '''       
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    from functions.check import style_check
-    from functions.check import level_check 
-    import pandas as pd
+    
+
     
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()        # After shock
@@ -426,10 +420,23 @@ def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,colo
             d_x.to_excel(writer)         
     
     
+def ptl_sensitivity(data,index):
     
     
+    fig = plt.figure(2, figsize=(9, 6))
+
+    # Create an axes instance
+    ax = fig.add_subplot(111)    
     
+    # Create the boxplot
+    bp = ax.boxplot(data,labels=index,manage_ticks=True,patch_artist=True)
     
+    # Rotating the indeces
+    for i in range(len(index)):
+        label = ax.xaxis.get_major_ticks()[i].label 
+        label.set_rotation('vertical')
+        
+    plt.show()
     
     
     

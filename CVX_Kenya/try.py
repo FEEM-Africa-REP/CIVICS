@@ -22,10 +22,12 @@ a.impact(saving_sce=['se',1],invest_sce=['sh',1],p_life=10)
 a.plot_dx()
 #%%
 a.obj_save(file_name='kenya') 
+#%%
+a.plot_sens
 #%% 
 
+a.plot_sens(variable='X',sc_num=1,title='a',unit='a',level='Activities',indicator='Activities')
   #%%
-
 import pandas as pd
 #%%
 q=pd.read_excel(r'C:\Users\payam\Documents\GitHub\CIVICS_Kenya\CVX_Kenya\New Code\sens_Productivity increase due to 100% new machines (not spoiling the cerry)\case_0.5.xlsx',sheet_name='Z')
@@ -34,7 +36,7 @@ q=pd.read_excel(r'C:\Users\payam\Documents\GitHub\CIVICS_Kenya\CVX_Kenya\New Cod
 antar=[]
 for key, value in a.results['sensitivity_1'].items(): 
     if key != 'information':
-        antar.append(a.results['sensitivity_1'][key]['X_agg'].loc['Activities'].values-a.X_agg.loc['Activities'].values)
+        antar.append(a.results['sensitivity_1'][key]['VA_agg']['Activities'].values-a.VA_agg['Activities'].values)
 for i in range(len(antar)):
     antar[i]=antar[i].ravel()
    #%% 
@@ -53,7 +55,7 @@ fig = plt.figure(2, figsize=(9, 6))
 ax = fig.add_subplot(111)
 
 # Create the boxplot
-bp = ax.boxplot(aq,labels=index,manage_ticks=True,patch_artist=True)
+bp = ax.boxplot(aq,manage_ticks=True,patch_artist=True)
 for i in range(len(a.X_agg.loc['Activities'].index)):
     label = ax.xaxis.get_major_ticks()[i].label
     

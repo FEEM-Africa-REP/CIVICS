@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+import pandas as pd
+from REP_CVX.functions.io_calculation import cal_z
+from REP_CVX.functions.io_calculation import cal_s
 """
 shock_io Module
 ==============================================================================
@@ -26,8 +30,6 @@ S_shock  :  satellite account shock implementation
 
 """
 def Y_shock (path,Y):
-
-    import pandas as pd 
     
     # Reading the final demand shock page
     Y_sh = pd.read_excel(path, sheet_name = 'Y', index_col = [0] , header = [0])
@@ -43,9 +45,6 @@ def Y_shock (path,Y):
     return Y
             
 def Z_shock (path,z,Z,X):
-    
-    import pandas as pd
-    from functions.io_calculation import cal_z
     
     # Reading the excel file of the shock
     Z_sh = pd.read_excel(path, sheet_name = 'Z', index_col = [0] , header = [0])
@@ -118,9 +117,6 @@ def Z_shock (path,z,Z,X):
     return z
 
 def VA_shock(path,va,VA,X):
-    
-    import pandas as pd
-    from functions.io_calculation import cal_s
     
     # Reading the excel file of the shock     
     VA_sh = pd.read_excel(path, sheet_name = 'VA', index_col = [0] , header = [0])   
@@ -195,9 +191,6 @@ def VA_shock(path,va,VA,X):
 
 
 def S_shock(path,s,S,X):
-    
-    import pandas as pd
-    from functions.io_calculation import cal_s
     
     # Reading the excel file of the shock
     S_sh = pd.read_excel(path, sheet_name = 'S', index_col = [0] , header = [0])

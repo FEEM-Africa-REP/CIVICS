@@ -98,7 +98,17 @@ def indic_check (indicator,indicators):
         
     return indicator
     
-
+def var_check(var):
+    
+    '''
+    This function check if the given variable is an acceptable one or not.
+    '''    
+    vars = ['VA','X','S','p']
+    
+    if var not in vars:
+        raise ValueError('Acceptable variables are {}'.format(vars))
+        
+    return var
         
 
     

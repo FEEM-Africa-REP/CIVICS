@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+
 """
 data_read Module
 ==============================================================================
@@ -223,4 +225,57 @@ def sens_info(path):
 
             
     return directs,sensitivity_info
+
+
+def sensitivity_take(variable,scenario,results,aggregation,level,indicator):
+    
+    from REP_CVX.functions.check import level_check
+    #from REP_CVX.functions.check import indic_check
+    
+    level = level_check(level)
+    #indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(3)))
+    
+    try:    data = results['sensitivity_{}'.format(scenario)]
+    except: raise ValueError('sensitivity_{} does not exist in results'.format(scenario))
+
+    if aggregation: var = '{}_agg'.format(variable)
+
+    sens_all=[]
+    for key, value in results['sensitivity_{}'.format(scenario)].items(): 
+        if key != 'information':
+            
+            if variable == 'X':
+                sens_all.append(data[key][var].loc[level[1]].values-results['baseline'][var].loc[level[1]].values)
+            # elif variable == 'VA':
+            #     sens_all.append(data[key][var][level[0]].values-results['baseline'][var][level[0]].values)
+
+                
+           
+    for i in range(len(sens_all)):
+        sens_all[i]=sens_all[i].ravel()
+
+    # Reshaping the data into appropriate form
+    sen_to_plt=[]
+    for i in range(len(sens_all[0])):
+        dt=[]
+        for j in range(len(sens_all)):
+            dt.append(sens_all[j][i])
+        sen_to_plt.append(dt)
+
+    index = data[key][var].loc[level[1]].index
+    
+    return sen_to_plt,index
+
+
+
+
+
+
+
+
+
+
+
+
+
         

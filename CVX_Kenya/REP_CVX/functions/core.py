@@ -1,56 +1,27 @@
 # -*- coding: utf-8 -*-
-'''
-REP_CVX - A python module for automating SU-IO calculations and generating reports
-==============================================================================
 
-The classes and tools in this module should work with any Supply and Use table following the structure defined in the tutorial.
-
-The main class of the module "C_CUT" :
-The calss has multiple typical tools for input-output analysis:
-    1. Calculating all the matrices of flows and coefficients from a given database
-    2. Implementing shocks 
-    3. Sensitivity Analysis on the shocks
-    4. Policy impact assesment
-    5. Visualizing results and generating reports
-    
-Data storage
-------------
-xlsx files together is used for storing data. In addition,
-the "C_SUT" with all data can also be pickled (binary).
-
-
-----
-Dependencies:
-
-- pandas
-- matplotlib
-- seaborn
-- pymrio
-- pickle
-
-:Authors:   Mohammad Amin Tahavori,
-            Nicolo Gulinucci,
-            Negar Namazifard
-
-:license: 
-
-'''
-from functions.version import __version__
+from REP_CVX.functions.version import __version__
+from REP_CVX.functions.data_read import database
+from REP_CVX.functions.check import unit_check
+from REP_CVX.functions.io_calculation import cal_coef
+from REP_CVX.functions.utility import indeces
+from REP_CVX.functions.aggregation import aggregate
+from REP_CVX.functions.utility import dict_maker
+from REP_CVX.functions.io_calculation import cal_flows
+from REP_CVX.functions.plots import delta_xv
+from REP_CVX.functions.plots import delta_s
+from REP_CVX.functions.plots import delta_p
+from REP_CVX.functions.plots import ptl_sensitivity
+from REP_CVX.functions.impact import impact_assessment
+from REP_CVX.functions.data_read import sens_info
+from REP_CVX.functions.utility import value_from_excel
+from REP_CVX.functions.check import var_check
+from REP_CVX.functions.data_read import sensitivity_take
 from warnings import filterwarnings
-from functions.data_read import database
-from functions.check import unit_check
-from functions.io_calculation import cal_coef
-from functions.utility import indeces
-from functions.aggregation import aggregate
-from functions.utility import dict_maker
-import functions.shock_io as sh
-from functions.io_calculation import cal_flows
-from functions.plots import delta_xv
-from functions.plots import delta_s
-from functions.plots import delta_p
-from functions.impact import impact_assessment
+
 import glob
 import pickle
+import REP_CVX.functions.shock_io as sh
 
 class C_SUT:
     
@@ -125,8 +96,6 @@ class C_SUT:
             represepnts the main unit of the flows in the table. This will be 
                 used for the unit conversions. 
         '''                          
-        
-
 
         # Printing the version and the information of the module
         print(__version__)
@@ -554,11 +523,8 @@ class C_SUT:
         Note: It is suggested to keep "save" always "True". In this way, all the
                 information can be stored and used easily.
         -----------------------------------------------------------------------
-        '''
-        
-        
-
-        
+        '''       
+       
         # There should be at least one shock to be implemented!
         if not Y and not VA and not Z and not S:
             raise ValueError('At lest one of the arguments should be \'True\' ')
@@ -581,13 +547,6 @@ class C_SUT:
         
     def sensitivity(self,path):
 
-        from functions.data_read import sens_info
-        from functions.utility import dict_maker
-        from functions.utility import value_from_excel
-        import functions.shock_io as sh
-        from functions.io_calculation import cal_flows
-        from functions.aggregation import aggregate
-        import glob
         
         '''
         sensitivity:
@@ -743,14 +702,14 @@ class C_SUT:
             pickle.dump(self,config_dictionary_file)
         
         
+    def plot_sens(self,variable,sc_num,title,unit,level,indicator,aggregation=True):
         
+        # Check if the given varibale is among the acceptable ones or not!
+        variable = var_check(variable)
         
-        
-        
-        
-        
-        
-        
+        # Reshaping the data and index to plot
+        data,index = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator)
+        ptl_sensitivity(data,index)
         
         
         
