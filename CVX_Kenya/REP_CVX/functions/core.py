@@ -585,6 +585,7 @@ class C_SUT:
             
             # Implementing all the excel files taken in the previous step for
             # every set of sensitivities
+            
             for excel in excels:
                 
                 value_from_excel(excel)
@@ -617,6 +618,8 @@ class C_SUT:
                     dict_maker(Z_c,X_c,VA_c,p_c,Y_c,va_c,
                                z_c,s_c,Z_c_agg,X_c_agg,VA_c_agg,
                                Y_c_agg,S_c_agg,p_c_agg)
+                    
+
             
             self.s_counter+=1
                                                                    
@@ -708,15 +711,15 @@ class C_SUT:
                   whiskers={'color':'black','linewidth' : 1},
                   caps={'color':'black','linewidth' : 1},
                   medians={'color':'black','linewidth' : 1},
-                  fliers={'marker':'o', 'color':'black', 'alpha':0.5}):
+                  fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6),title_font=20):
         
         # Check if the given varibale is among the acceptable ones or not!
         variable = var_check(variable)
         
         # Reshaping the data and index to plot
-        data,index,title = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title)
+        data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title)
 
-        ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers)
+        ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font)
         
         
         

@@ -280,8 +280,8 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_uni
     if title == 'default':
         title = '{}{}'.format(var_name[variable],tit)
     
-    
-    return sen_to_plt,index,title
+    legend = '{}, \n range= {} to {}'.format(results['sensitivity_{}'.format(scenario)]['information']['parameter'],results['sensitivity_{}'.format(scenario)]['information']['minimum'],results['sensitivity_{}'.format(scenario)]['information']['maximum'])
+    return sen_to_plt,index,title,legend,unit
 
 
 

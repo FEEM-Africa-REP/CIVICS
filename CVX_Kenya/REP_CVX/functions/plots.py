@@ -420,10 +420,10 @@ def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,colo
             d_x.to_excel(writer)         
     
     
-def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers):
+def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers,figsize,legend,unit,title_font):
     
     
-    fig = plt.figure(2, figsize=(9, 6))
+    fig = plt.figure(2, figsize=figsize)
 
     # Create an axes instance
     ax = fig.add_subplot(111)    
@@ -459,7 +459,9 @@ def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers):
     for flier in bp['fliers']:
         flier.set(marker=ifliers['marker'], color=ifliers['color'], alpha=ifliers['alpha'])
     
-    plt.title(title)
+    plt.title(title,fontsize=title_font)
+    plt.legend(labels=[legend],loc='center left', bbox_to_anchor=(1, 0.5),fancybox=True, shadow=True)
+    plt.ylabel(unit)
     plt.show()
     
     
