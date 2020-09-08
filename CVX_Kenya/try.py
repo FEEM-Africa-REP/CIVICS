@@ -65,14 +65,14 @@ for i in range(len(antar[0])):
     #%%
 import matplotlib.pyplot as plt 
 plt.style.use('ggplot') 
-fig = plt.figure(2, figsize=(9, 6))
+fig = plt.figure(3, figsize=(9, 6))
 
 # Create an axes instance
 ax = fig.add_subplot(111)
 
 # Create the boxplot
-bp = ax.boxplot(aq,manage_ticks=True,patch_artist=True)
-bq = ax.boxplot(aq2,manage_ticks=True,patch_artist=True)
+bp = ax.boxplot(lst1[2],labels=acts,manage_ticks=True,patch_artist=True)
+#bq = ax.boxplot(aq2,manage_ticks=True,patch_artist=True)
 for i in range(len(a.X_agg.loc['Activities'].index)):
     label = ax.xaxis.get_major_ticks()[i].label
     
@@ -103,72 +103,114 @@ ax.set_position([box.x0, box.y0 + box.height * 0.1,
 for flier in bp['fliers']:
     flier.set(marker='o', color='#e7298a', alpha=0.5)
     
-plt.legend(labels=[my_l],loc='upper center', bbox_to_anchor=(0.5,0),
+plt.legend(labels=['Activities'],loc='center left', bbox_to_anchor=(.93, 0.5),
           fancybox=True, shadow=True,bbox_transform=fig.transFigure,columnspacing=2)
 # plt.tight_layout(rect=[1,1,0.0,0])
 #plt.subplots_adjust(left=0.0, bottom=0.1, right=0.45)
 plt.title('hi',fontsize=40)
+props = dict(boxstyle='square', facecolor='wheat', alpha=1)
+
+# place a text box in upper left in axes coords
+ax.text(1.05, .9, my_l, transform=ax.transAxes, fontsize=14,
+        verticalalignment='center', bbox=props)
 plt.show()    
 #%%
 my_l = '{}, \n range= {} to {}'.format(a.results['sensitivity_1']['information']['parameter'],a.results['sensitivity_1']['information']['minimum'],a.results['sensitivity_1']['information']['maximum'])
-    legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
-          fancybox=True, shadow=True, ncol=5)
+#legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
+          #fancybox=True, shadow=True, ncol=5)
 #%%  
-index = ['aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']    
-#%%
+level='Activities'
+s_range = len(a.results['sensitivity_1'])-1
+s_list=[]
+col_len=len(a.results['sensitivity_1']['0']['VA_agg'][level].T)
+acts=a.results['sensitivity_1']['0']['VA_agg'][level].T.index.to_list()
 
-sep =[]
-indes= list(a.VA_agg.index)
-#%%
-for i in range(len(indes)):
-    for key, value in a.results['sensitivity_1'].items(): 
+fst_col=[]
+snd_col=[]
+
+for key, value in a.results['sensitivity_1'].items(): 
+    if key != 'information':
+        s_list.append(key)
+for i in range(col_len):        
+    for j in range(s_range):
     
-        antar=[]
-        if key != 'information':
-            antar.append(a.results['sensitivity_1'][key]['VA_agg'].loc[indes[i],'Activities'].values-a.VA_agg.loc[indes[i],'Activities'].values)
-    sep.append(antar)
-#%%
-for i in range(len(sep)):
+        fst_col.append(s_list[j])
+        snd_col.append(acts[i])
     
-    sep[i][0]=sep[i][0].ravel()
+to_be_filled = pd.DataFrame(columns=[snd_col,fst_col],index=a.results['sensitivity_1']['0']['VA_agg'][level].index)
+
+for i in range(len(acts)):
+    for j in range(len(s_list)):
+        to_be_filled[(acts[i],s_list[j])] = a.results['sensitivity_1'][s_list[j]]['VA_agg'][level][acts[j]].values - a.results['baseline']['VA_agg'][level][acts[j]].values
+        
+to_be_filled=to_be_filled.drop('unused')
 #%%
-for i in range(len(sep)):
+lst1=[None]*len(to_be_filled)
+for i in range(len(lst1)):
+    lst_hlp=[]
+    for j in range(len(acts)):
+        lst_hlp.append(to_be_filled.loc[to_be_filled.index.to_list()[i],acts[j]].values.tolist())
+        
+    lst1[i]=lst_hlp
+#%%
+# --- Your data, e.g. results per algorithm:
+data1 = [5,5,4,3,3,5]
+data2 = [6,6,4,6,8,5]
+data3 = [7,8,4,5,8,2]
+data4 = [6,9,3,6,8,4]
 
-    sep[i]=sep[i][0].tolist()
-        #%%
-for i in range(len(antar[0])):
-    na=[]
-    for j in range(len(antar)):
-        na.append(antar[j][i])
-    aq.append(na)
-    #%%
-import numpy as np
-data_a = sep[0][0]
-data_b = sep[1][0]
+# --- Combining your data:
+data_group1 = lst1[0]
+data_group2 = lst1[1]
 
-ticks = ['A', 'B', 'C']
+# --- Labels for your data:
+labels_list = acts
+xlocations  = range(len(data_group1))
+width       = 0.3
+symbol      = 'r+'
 
-def set_box_color(bp, color):
-    plt.setp(bp['boxes'], color=color)
-    plt.setp(bp['whiskers'], color=color)
-    plt.setp(bp['caps'], color=color)
-    plt.setp(bp['medians'], color=color)
 
-plt.figure()
+ax = plt.gca()
 
-bpl = plt.boxplot(data_a, positions=np.array(range(len(data_a)))*2.0-0.4, sym='', widths=0.6)
-bpr = plt.boxplot(data_b, positions=np.array(range(len(data_b)))*2.0+0.4, sym='', widths=0.6)
-set_box_color(bpl, '#D7191C') # colors are from http://colorbrewer2.org/
-set_box_color(bpr, '#2C7BB6')
+ax.set_xticklabels( labels_list, rotation=0 )
+ax.grid(True, linestyle='dotted')
+ax.set_axisbelow(True)
+ax.set_xticks(xlocations)
+plt.xlabel('X axis label')
+plt.ylabel('Y axis label')
+plt.title('title')
 
-# draw temporary red and blue lines and use them to create a legend
-plt.plot([], c='#D7191C', label='Apples')
-plt.plot([], c='#2C7BB6', label='Oranges')
-plt.legend()
+# --- Offset the positions per group:
+positions_group1 = [x-(width+0.01) for x in xlocations]
+positions_group2 = xlocations
 
-plt.xticks(xrange(0, len(ticks) * 2, 2), ticks)
-plt.xlim(-2, len(ticks)*2)
-plt.ylim(0, 8)
-plt.tight_layout()
-plt.savefig('boxcompare.png')
-    
+plt.boxplot(data_group1, 
+            sym=symbol,
+            labels=['']*len(labels_list),
+            positions=positions_group1, 
+            widths=width, 
+#           notch=False,  
+#           vert=True, 
+#           whis=1.5,
+#           bootstrap=None, 
+#           usermedians=None, 
+#           conf_intervals=None,
+#           patch_artist=False,
+            )
+
+plt.boxplot(data_group2, 
+            labels=labels_list,
+            sym=symbol,
+            positions=positions_group2, 
+            widths=width, 
+#           notch=False,  
+#           vert=True, 
+#           whis=1.5,
+#           bootstrap=None, 
+#           usermedians=None, 
+#           conf_intervals=None,
+#           patch_artist=False,
+            )
+
+        
+plt.show()

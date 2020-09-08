@@ -250,27 +250,22 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_uni
 
     if aggregation: var = '{}_agg'.format(variable)
 
-    sens_all=[]
-    for key, value in results['sensitivity_{}'.format(scenario)].items(): 
-        if key != 'information':
-            
-            if variable == 'X':
+    if variable == 'X':
+        sens_all=[]
+        for key, value in results['sensitivity_{}'.format(scenario)].items(): 
+            if key != 'information':
                 sens_all.append(data[key][var].loc[level].values*conversion-results['baseline'][var].loc[level].values*conversion)
-            # elif variable == 'VA':
-            #     sens_all.append(data[key][var][level[0]].values-results['baseline'][var][level[0]].values)
-
-                
-         
-    for i in range(len(sens_all)):
-        sens_all[i]=sens_all[i].ravel()
-
-    # Reshaping the data into appropriate form
-    sen_to_plt=[]
-    for i in range(len(sens_all[0])):
-        dt=[]
-        for j in range(len(sens_all)):
-            dt.append(sens_all[j][i])
-        sen_to_plt.append(dt)
+     
+        for i in range(len(sens_all)):
+            sens_all[i]=sens_all[i].ravel()
+    
+        # Reshaping the data into appropriate form
+        sen_to_plt=[]
+        for i in range(len(sens_all[0])):
+            dt=[]
+            for j in range(len(sens_all)):
+                dt.append(sens_all[j][i])
+            sen_to_plt.append(dt)
 
     index = data[key][var].loc[level].index
     
