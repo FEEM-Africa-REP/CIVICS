@@ -25,8 +25,8 @@ a.obj_save(file_name='kenya')
 a.plot_sens
 #%% 
 
-a.plot_sens(variable='X',sc_num=1,level='Commodities',indicator='Activities')
-  #%%
+a.plot_sens(variable='VA',sc_num=1,level='Activities',indicator='Activities',rational=0)
+ #%%
 import pandas as pd
 #%%
 q=pd.read_excel(r'C:\Users\payam\Documents\GitHub\CIVICS_Kenya\CVX_Kenya\New Code\sens_Productivity increase due to 100% new machines (not spoiling the cerry)\case_0.5.xlsx',sheet_name='Z')
@@ -52,7 +52,7 @@ for i in range(len(antar[0])):
 antar=[]
 for key, value in a.results['sensitivity_1'].items(): 
     if key != 'information':
-        antar.append(a.results['sensitivity_1'][key]['X_agg'].loc['Commodities'].values-a.X_agg.loc['Commodities'].values)
+        antar.append(a.results['sensitivity_1'][key]['VA_agg']['Activities'].sum()-a.VA_agg['Activities'].sum())
 for i in range(len(antar)):
     antar[i]=antar[i].ravel()
 
@@ -71,7 +71,7 @@ fig = plt.figure(3, figsize=(9, 6))
 ax = fig.add_subplot(111)
 
 # Create the boxplot
-bp = ax.boxplot(lst1[2],labels=acts,manage_ticks=True,patch_artist=True)
+bp = ax.boxplot(aq,labels=acts,manage_ticks=True,patch_artist=True)
 #bq = ax.boxplot(aq2,manage_ticks=True,patch_artist=True)
 for i in range(len(a.X_agg.loc['Activities'].index)):
     label = ax.xaxis.get_major_ticks()[i].label
@@ -152,65 +152,3 @@ for i in range(len(lst1)):
         lst_hlp.append(to_be_filled.loc[to_be_filled.index.to_list()[i],acts[j]].values.tolist())
         
     lst1[i]=lst_hlp
-#%%
-# --- Your data, e.g. results per algorithm:
-data1 = [5,5,4,3,3,5]
-data2 = [6,6,4,6,8,5]
-data3 = [7,8,4,5,8,2]
-data4 = [6,9,3,6,8,4]
-
-# --- Combining your data:
-data_group1 = lst1[0]
-data_group2 = lst1[1]
-
-# --- Labels for your data:
-labels_list = acts
-xlocations  = range(len(data_group1))
-width       = 0.3
-symbol      = 'r+'
-
-
-ax = plt.gca()
-
-ax.set_xticklabels( labels_list, rotation=0 )
-ax.grid(True, linestyle='dotted')
-ax.set_axisbelow(True)
-ax.set_xticks(xlocations)
-plt.xlabel('X axis label')
-plt.ylabel('Y axis label')
-plt.title('title')
-
-# --- Offset the positions per group:
-positions_group1 = [x-(width+0.01) for x in xlocations]
-positions_group2 = xlocations
-
-plt.boxplot(data_group1, 
-            sym=symbol,
-            labels=['']*len(labels_list),
-            positions=positions_group1, 
-            widths=width, 
-#           notch=False,  
-#           vert=True, 
-#           whis=1.5,
-#           bootstrap=None, 
-#           usermedians=None, 
-#           conf_intervals=None,
-#           patch_artist=False,
-            )
-
-plt.boxplot(data_group2, 
-            labels=labels_list,
-            sym=symbol,
-            positions=positions_group2, 
-            widths=width, 
-#           notch=False,  
-#           vert=True, 
-#           whis=1.5,
-#           bootstrap=None, 
-#           usermedians=None, 
-#           conf_intervals=None,
-#           patch_artist=False,
-            )
-
-        
-plt.show()

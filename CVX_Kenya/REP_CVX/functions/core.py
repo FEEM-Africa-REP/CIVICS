@@ -711,13 +711,13 @@ class C_SUT:
                   whiskers={'color':'black','linewidth' : 1},
                   caps={'color':'black','linewidth' : 1},
                   medians={'color':'black','linewidth' : 1},
-                  fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6),title_font=20):
+                  fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6),title_font=20,rational=0):
         
         # Check if the given varibale is among the acceptable ones or not!
         variable = var_check(variable)
         
         # Reshaping the data and index to plot
-        data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title)
+        data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title,rational)
 
         ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font)
         

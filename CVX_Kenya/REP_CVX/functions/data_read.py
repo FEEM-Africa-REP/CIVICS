@@ -227,7 +227,7 @@ def sens_info(path):
     return directs,sensitivity_info
 
 
-def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_unit,unit,title):
+def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_unit,unit,title,rational):
     
     from REP_CVX.functions.check import unit_check
     from REP_CVX.functions.check import unit_converter
@@ -236,6 +236,9 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_uni
 
     # this dictionary contains the full name of the variables
     var_name = {'X': 'Production' , 'VA': 'Value Added' }
+    
+
+        
     
     # default unit
     if unit == 'default':
@@ -250,27 +253,41 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_uni
 
     if aggregation: var = '{}_agg'.format(variable)
 
-    if variable == 'X':
-        sens_all=[]
-        for key, value in results['sensitivity_{}'.format(scenario)].items(): 
-            if key != 'information':
-                sens_all.append(data[key][var].loc[level].values*conversion-results['baseline'][var].loc[level].values*conversion)
-     
-        for i in range(len(sens_all)):
-            sens_all[i]=sens_all[i].ravel()
     
-        # Reshaping the data into appropriate form
-        sen_to_plt=[]
-        for i in range(len(sens_all[0])):
-            dt=[]
-            for j in range(len(sens_all)):
-                dt.append(sens_all[j][i])
-            sen_to_plt.append(dt)
+    sens_all=[]
+    for key, value in results['sensitivity_{}'.format(scenario)].items(): 
+        if key != 'information':
+            if variable == 'X':
+                sens_all.append(data[key][var].loc[level].values*conversion-results['baseline'][var].loc[level].values*conversion)
+            if variable == 'VA':
+                sens_all.append(data[key][var][level].sum(axis=rational)*conversion-results['baseline'][var][level].sum(axis=rational)*conversion)
+                
 
-    index = data[key][var].loc[level].index
+                
+         
+    for i in range(len(sens_all)):
+        sens_all[i]=sens_all[i].ravel()
+
+    # Reshaping the data into appropriate form
+    sen_to_plt=[]
+    for i in range(len(sens_all[0])):
+        dt=[]
+        for j in range(len(sens_all)):
+            dt.append(sens_all[j][i])
+        sen_to_plt.append(dt)
+
+    
+    if variable == 'X':    index = data[key][var].loc[level].index
+    elif variable == 'VA':
+        if rational == 0:
+            index = data[key][var][level].columns
+        elif rational == 1:
+            index = data[key][var][level].index
     
     if len(level) != 2:
-        index = index.get_level_values(1)
+        try: index = index.get_level_values(1)
+        except: index = index
+
     
     if title == 'default':
         title = '{}{}'.format(var_name[variable],tit)
