@@ -227,18 +227,14 @@ def sens_info(path):
     return directs,sensitivity_info
 
 
-def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_unit,unit,title,rational):
+def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_unit,unit,title,rational,indeces):
     
     from REP_CVX.functions.check import unit_check
     from REP_CVX.functions.check import unit_converter
     from REP_CVX.functions.check import level_check
-    #from REP_CVX.functions.check import indic_check
+    from REP_CVX.functions.check import indic_check
 
-    # this dictionary contains the full name of the variables
-    var_name = {'X': 'Production' , 'VA': 'Value Added' }
-    
-
-        
+       
     
     # default unit
     if unit == 'default':
@@ -246,7 +242,10 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_uni
         
     tit,level = level_check(level)
     conversion = unit_converter(m_unit,unit_check(unit))
-    #indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(3)))
+    indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(3)))
+    
+    # this dictionary contains the full name of the variables
+    var_name = {'X': 'Production' , 'VA': 'Value Added', 'S': indicator }    
     
     try:    data = results['sensitivity_{}'.format(scenario)]
     except: raise ValueError('sensitivity_{} does not exist in results'.format(scenario))
@@ -260,6 +259,8 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_uni
             if variable == 'X':
                 sens_all.append(data[key][var].loc[level].values*conversion-results['baseline'][var].loc[level].values*conversion)
             if variable == 'VA':
+                sens_all.append(data[key][var][level].sum(axis=rational)*conversion-results['baseline'][var][level].sum(axis=rational)*conversion)
+            if variable == 'S':
                 sens_all.append(data[key][var][level].sum(axis=rational)*conversion-results['baseline'][var][level].sum(axis=rational)*conversion)
                 
 
@@ -283,6 +284,9 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_uni
             index = data[key][var][level].columns
         elif rational == 1:
             index = data[key][var][level].index
+    elif variable == 'S':
+        index = data[key][var][level].columns 
+        unit = ''
     
     if len(level) != 2:
         try: index = index.get_level_values(1)

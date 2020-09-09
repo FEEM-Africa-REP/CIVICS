@@ -292,8 +292,8 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
         X   = X.loc[(slice(None),slice(None),slice(None),indicator),level].groupby(axis=1,level=4).sum().groupby(axis=0,level=0).sum()
     else:
         # Otherwise, only the main level will be taken
-        X_c = X_c.loc[indicator,level].groupby(axis=1,level=3).sum()
-        X   = X.loc[indicator,level].groupby(axis=1,level=3).sum() 
+        X_c = X_c.loc[indicator,level]
+        X   = X.loc[indicator,level]
         
     # defining the d_x matrix 
     if kind == 'Absolute': 
@@ -351,6 +351,8 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     if ex_save:
         with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
             d_x.to_excel(writer)    
+            
+    return X
 
 def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,color,ex_save):
     

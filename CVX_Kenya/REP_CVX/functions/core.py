@@ -428,6 +428,7 @@ class C_SUT:
         except: raise ValueError('To run the plot function, there should be an implemented shock.')        
 
         # To check the input to the plot function in the aggregated level or disaggregated
+        
         if aggregated and not detail: S_c,S = self.S_c_agg,self.S_agg 
         else: S_c,S = self.S_c,self.S
         
@@ -557,6 +558,25 @@ class C_SUT:
         path:  string
             Defines the path of an excel file, in which the shock is identified
             according to the example in the tutorial.
+            
+        Logic
+        -----
+        Accorign to the structure of the defined example for implementing a shock
+        there is a sheet named 'main' in which contains all the information and
+        calculations of the shock. The user needs to identifiy the parameter
+        in which a senstivity analysis should be done as below:
+            
+            Sensitivity     = Yes 
+            Min             = Minimum value
+            Max             = Maximum value
+            Step            = Step of every sensitivity
+            Affected param  = The affected matrix [Y,VA,S,Z]
+          
+        After reading all the information, the function startes to build excel 
+        files with the sensitivity ranges in a new folder in the same directory
+        with the name of the parmeter and the value of the parmeter for every
+        excel file. At the next step, in a loop, it starts to read the files 
+        and impelement the shocks and stores the results in the 'results' dict.
         '''    
         
         # Given the path, sens_info is called to take all the information of
@@ -629,7 +649,7 @@ class C_SUT:
         '''
         impact:
             This function can be used for the impact assessment analysis of an
-            implemented policy
+            implemented policy and store the results in 'results' dict.
          
          Arguments   
         ----------
@@ -699,27 +719,99 @@ class C_SUT:
             Specifies the name of the file to store the object.
         ''' 
         
-         
-        
         with open(file_name, 'wb') as config_dictionary_file:
             pickle.dump(self,config_dictionary_file)
         
         
-    def plot_sens(self,variable,sc_num,indicator,unit='default',level='Activities',
+    def plot_sens(self,variable,sc_num,indicator=None,unit='default',level='Activities',
                   title='default',aggregation=True,
                   box={'color':'black','facecolor':'dodgerblue','linewidth' : 1},
                   whiskers={'color':'black','linewidth' : 1},
                   caps={'color':'black','linewidth' : 1},
                   medians={'color':'black','linewidth' : 1},
                   fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6),title_font=20,rational=0):
+        '''
         
+
+        Parameters
+        ----------
+        variable : string
+            Defines the variable to be plotted. ['VA','X','S']
+            
+        sc_num : int
+            Defines the number of the specific scenario to be plotted according
+            to the stored scenarios in 'results' dict.
+            
+        indicator : string
+            Defined the name of the indicator in case of plotting S.
+ 
+             
+        unit : string, optional
+            The unit of plot in the case of monetary values. The default is 
+            'default' which takes the major unit.
+            
+        level : String, optional
+            Takes the level of the plot. The default is 'Activities'.
+            
+        title : String, optional
+            Defines the title of the graph. The default is 'default' which the
+            title will be chosen by default.
+            
+        aggregation : boolean, optional
+            Defines if the aggregated results should be plotted or disaggregated 
+            results. The default is True, in which the aggregated results will
+            be plotted.
+            
+        box : Dictionary, optional
+            Defines the properties of the box in the plot. The default is 
+            {'color':'black','facecolor':'dodgerblue','linewidth' : 1}.
+            
+        whiskers : Dictionary, optional
+            Defines the properties of the whiskers in the plot. The default is
+            {'color':'black','linewidth' : 1}.
+        
+        caps : Dictionary, optional
+            Defines the properties of the caps in the plot. The default is 
+            {'color':'black','linewidth' : 1}.
+        
+        medians : Dictionary, optional
+             Defines the properties of the medians in the plot. The default is
+             {'color':'black','linewidth' : 1}.
+        
+        fliers : Dictionary, optional
+            Defines the properties of the fliers in the plot. The default is 
+            {'marker':'o', 'color':'black', 'alpha':0.5}.
+        
+        figsize : tuple, optional
+            Specifies the size of the figures. The default is (9,6).
+        
+        title_font : float, optional
+            Defines the size of the title font. The default is 20.
+       
+        rational : int, optional
+            Defines if the higher level of details should be plotted or the
+            levels such as Activities or Commodities. Used for VA and S plots.
+            The default is 0.
+            
+            expamle:
+                1. level = 'Activities' , rational = 0 , variable=VA:
+                
+                        x_axis :: Activities  
+                        y_axis :: Value added change
+                        
+                2. level = 'Activities' , rational = 1 , variable=VA:
+                
+                        x_axis :: detailed levels of VA  
+                        y_axis :: Value added change
+
+        '''
         # Check if the given varibale is among the acceptable ones or not!
         variable = var_check(variable)
         
         # Reshaping the data and index to plot
-        data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title,rational)
+        data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title,rational,self.indeces)
 
         ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font)
         
-        
+    
         
