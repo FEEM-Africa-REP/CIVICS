@@ -245,7 +245,7 @@ def sensitivity_take(variable,scenario,results,aggregation,level,indicator,m_uni
     indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(3)))
     
     # this dictionary contains the full name of the variables
-    var_name = {'X': 'Production' , 'VA': 'Value Added', 'S': indicator }    
+    var_name = {'X': 'Production' , 'VA': 'Value Added', 'S': '{} change'.format(indicator) }    
     
     try:    data = results['sensitivity_{}'.format(scenario)]
     except: raise ValueError('sensitivity_{} does not exist in results'.format(scenario))
