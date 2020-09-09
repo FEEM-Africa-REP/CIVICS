@@ -6,7 +6,9 @@ REP_CVX - A python module for automating SU-IO calculations and generating repor
 The classes and tools in this module should work with any Supply and Use table following the structure defined in the tutorial.
 
 The main class of the module "C_CUT" :
+    
 The calss has multiple typical tools for input-output analysis:
+    
     1. Calculating all the matrices of flows and coefficients from a given database
     2. Implementing shocks 
     3. Sensitivity Analysis on the shocks
