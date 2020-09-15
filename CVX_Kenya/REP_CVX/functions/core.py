@@ -436,7 +436,8 @@ class C_SUT:
         
 
     def plot_dp(self,unit='default',level=None,fig_format='png',title_font=15,
-                style='ggplot',figsize=(10, 6),directory='my_graphs',title='default',color = 'terrain',aggregated=False,save_excel=True):
+                style='ggplot',figsize=(10, 6),directory='my_graphs',title='default'
+                ,color = 'terrain',aggregated=False,save_excel=True):
         '''  
         plot_dp:
             This function is used to plot change in the price ratio between the baseline and the
@@ -644,7 +645,10 @@ class C_SUT:
             self.s_counter+=1
                                                                    
         
-    def impact(self,p_life,saving_sce,invest_sce,imports=['Import'],w_ext=['Water'], em_ext=['CO2'], land=['Land'], labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],capital=['Capital - Machines']):
+    def impact_assess (self,p_life,saving_sce,invest_sce,imports=['Import'],
+                       w_ext=['Water'], em_ext=['CO2'], land=['Land'], 
+                       labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],
+                       capital=['Capital - Machines'],save_excel=True,directory='my_graphs'):
         
         '''
         impact:
@@ -699,7 +703,7 @@ class C_SUT:
         
         
         # calculating the impacts using the impact_assessment function
-        self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports)
+        self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel)
         
         # Saving the results of impcat assessment
         self.results['impact_{}'.format(self.i_counter)]=self.impact
@@ -729,7 +733,9 @@ class C_SUT:
                   whiskers={'color':'black','linewidth' : 1},
                   caps={'color':'black','linewidth' : 1},
                   medians={'color':'black','linewidth' : 1},
-                  fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6),title_font=20,rational=0):
+                  fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6)
+                  ,title_font=20,rational=0,directory='my_graphs',fig_format='png',
+                  save_excel=True):
         '''
         
 
@@ -803,6 +809,18 @@ class C_SUT:
                 
                         x_axis :: detailed levels of VA  
                         y_axis :: Value added change
+            fig_format: 
+                To save the plot
+                        'png','svg'
+
+            
+            directory: 
+                the directory to save the results
+
+                   
+            save_excel: 
+                        If True, the results will be saved also in form of excel file
+                        in the same directory                           
 
         '''
         # Check if the given varibale is among the acceptable ones or not!
@@ -811,7 +829,7 @@ class C_SUT:
         # Reshaping the data and index to plot
         data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title,rational,self.indeces)
 
-        ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font)
+        ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font,directory,fig_format,save_excel)
         
     
         

@@ -117,7 +117,7 @@ def impact_check(inv,sav,results):
         
     return save_out,inv_out,sav_list
 
-def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,labour,capital,imports):
+def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel):
     
     '''
     Parameters
@@ -148,7 +148,7 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
     '''
     
     import pandas as pd
-    
+    print(1)
     save_out,inv_out,sav_list = impact_check(invest_sce,saving_sce,results)
     
     columns = ['Saving','Investment','Water Saving','Water Investment',
@@ -198,7 +198,11 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
         Imp.loc[i,'Workforce Total Impact']     = Imp.loc[i,'Workforce Investment'] - p_life * Imp.loc[i,'Workforce Saving']
         Imp.loc[i,'Capital Total Impact']       = Imp.loc[i,'Capital Investment'] - p_life * Imp.loc[i,'Capital Saving']  
   
-    
+    if save_excel:
+        print('hi')
+        with pd.ExcelWriter(r'{}/impact.xlsx'.format(directory)) as writer:
+            Imp.to_excel(writer)
+            
     return Imp
     
     

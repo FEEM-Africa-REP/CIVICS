@@ -16,7 +16,7 @@ amin.sensitivity(path=r'Ecopulpers.xlsx')
 #%%
 amin.plot_ds(indicator='Water',kind='Percentage',color=['blue','green','grey'])
 #%%
-amin.impact(saving_sce=['se',1],invest_sce=['sh',1],p_life=10)
+amin.impact_assess(saving_sce=['se',1],invest_sce=['sh',1],p_life=10)
 #%%
 amin.plot_ds(indicator='CO2',detail=True)
 #%%
