@@ -38,7 +38,7 @@ Dependencies:
 :license: 
 
 '''
-
+from REP_CVX.version import __version__
 from REP_CVX.functions.core import C_SUT
 from REP_CVX.functions.io_calculation import cal_z
 from REP_CVX.functions.io_calculation import cal_s

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from REP_CVX.functions.version import __version__
+from REP_CVX.version import info
 from REP_CVX.functions.data_read import database
 from REP_CVX.functions.check import unit_check
 from REP_CVX.functions.io_calculation import cal_coef
@@ -98,7 +98,7 @@ class C_SUT:
         '''                          
 
         # Printing the version and the information of the module
-        print(__version__)
+        print(info)
         
         # Check if the unit is correct or not
         self.m_unit = unit_check(unit)

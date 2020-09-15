@@ -28,3 +28,4 @@ amin.plot_sens
 amin.plot_sens(variable='S',sc_num=1,level='Activities',indicator='CO2',rational=0)
  #%%
 import pymrio
+#%%
