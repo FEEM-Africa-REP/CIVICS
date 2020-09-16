@@ -31,10 +31,13 @@ Dependencies:
 - pickle
 - numpy
 
-:Authors:   Mohammad Amin Tahavori,
-            Nicolo Gulinucci,
-            Negar Namazifard
-
+Author:
+    Mohammad Amin Tahavori
+    
+Co-Authors:
+    Negar Namazifard
+    Nicolo Golinucci
+    
 :license: 
 
 '''

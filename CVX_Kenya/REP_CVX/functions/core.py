@@ -23,7 +23,7 @@ import glob
 import pickle
 import REP_CVX.functions.shock_io as sh
 
-class C_SUT:
+class C_SUT():
     
     ''' C_SUT Class
 
