@@ -23,6 +23,8 @@ import glob
 import pickle
 import REP_CVX.functions.shock_io as sh
 
+
+
 class C_SUT():
     
     ''' C_SUT Class
@@ -832,4 +834,9 @@ class C_SUT():
         ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font,directory,fig_format,save_excel)
         
     
+
+    def get_excel_shock(self,num_index=10):
         
+        from REP_CVX.functions.utility import sh_excel
+        sh_excel(num_index,self.indeces)
+  
