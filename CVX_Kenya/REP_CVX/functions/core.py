@@ -835,7 +835,7 @@ class C_SUT():
         
     
 
-    def get_excel_shock(self,num_index=10):
+    def get_excel_shock(self,num_index=30):
         
         from REP_CVX.functions.utility import sh_excel
         sh_excel(num_index,self.indeces)

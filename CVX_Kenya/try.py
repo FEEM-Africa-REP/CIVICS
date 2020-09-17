@@ -30,3 +30,20 @@ amin.plot_sens(variable='S',sc_num=1,level='Activities',indicator='CO2',rational
 import pymrio
 #%%
 amin.get_excel_shock()
+#%%
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
