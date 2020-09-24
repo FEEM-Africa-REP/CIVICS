@@ -104,7 +104,7 @@ class C_SUT():
         print(info)
         
         # Check if the unit is correct or not
-        self.m_unit = unit_check(unit)
+        self.__m_unit = unit_check(unit)
         
         # Ignoring the warnings 
         filterwarnings("ignore") 
@@ -121,21 +121,18 @@ class C_SUT():
         self.X_agg,self.Y_agg,self.VA_agg,self.S_agg,self.Z_agg,self.p_agg = aggregate(self.X,self.Y,self.VA,self.S,self.Z,self.p)
         
         # Getting indeces
-        self.indeces = indeces (self.S,self.Z,self.VA,self.X)
+        self.__indeces = indeces (self.S,self.Z,self.VA,self.X)
         
         # All the information needs to be stored in every step because it will be used in some other functions
         self.results = {}
         self.results['baseline']= dict_maker(self.Z,self.X,self.VA,self.p,self.Y,self.va,
                                                 self.z,self.s,self.Z_agg,self.X_agg,self.VA_agg,self.Y_agg,self.S_agg,self.p_agg)
-            
-        # In order to identify the sensitivity scenario, the information will be stored in the following dictionary
-        self.sens_info = {}
         
         
         # A counter for saving the results in a dictionary
-        self.counter   = 1      # Shock Counter
-        self.s_counter = 1      # Sensitivity Counter
-        self.i_counter = 1      # Impact Assessment Couter
+        self.__counter   = 1      # Shock Counter
+        self.__s_counter = 1      # Sensitivity Counter
+        self.__i_counter = 1      # Impact Assessment Couter
         
         
     def shock_calc (self,path,Y=False, VA=False, Z=False, S=False,save=True):
@@ -195,16 +192,16 @@ class C_SUT():
         if S:   self.s_c  = sh.S_shock  (path,self.s_c.copy(),self.S.copy(),self.X.copy())
         
         # Calculating the shock result
-        self.l_c,self.X_c,self.VA_c,self.S_c,self.Z_c,self.p_c = cal_flows(self.z_c,self.Y_c,self.va_c,self.s_c,self.indeces)        
+        self.l_c,self.X_c,self.VA_c,self.S_c,self.Z_c,self.p_c = cal_flows(self.z_c,self.Y_c,self.va_c,self.s_c,self.__indeces)        
 
         # Aggregation of the results
         self.X_c_agg,self.Y_c_agg,self.VA_c_agg,self.S_c_agg,self.Z_c_agg,self.p_c_agg = aggregate(self.X_c,self.Y_c,self.VA_c,self.S_c,self.Z_c,self.p_c)
         
         # Saving all the new matrices in the results dictionary.
         if save:
-            self.results['shock_{}'.format(self.counter)]= dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
+            self.results['shock_{}'.format(self.__counter)]= dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
                                                 self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,self.Y_c_agg,self.S_c_agg,self.p_c_agg)
-            self.counter += 1
+            self.__counter += 1
             
         
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
@@ -281,7 +278,7 @@ class C_SUT():
         else:
             X_c,X = self.X_c,self.X
             
-        delta_xv(X_c,X,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop,save_excel)
+        delta_xv(X_c,X,style,unit,self.__m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'X',drop,save_excel)
 
 
     def plot_dv(self,aggregated=True,unit='default',level=None,kind='Absolute',
@@ -353,7 +350,7 @@ class C_SUT():
         if aggregated:   VA_c,VA = self.VA_c_agg,self.VA_agg    
         else:            VA_c,VA = self.VA_c,self.VA
             
-        delta_xv(VA_c,VA,style,unit,self.m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop,save_excel)        
+        delta_xv(VA_c,VA,style,unit,self.__m_unit,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,'VA',drop,save_excel)        
         
         
     def plot_ds(self,indicator,aggregated=True,detail=True,unit='default',
@@ -435,7 +432,7 @@ class C_SUT():
         if aggregated and not detail: S_c,S = self.S_c_agg,self.S_agg 
         else: S_c,S = self.S_c,self.S
         
-        delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces,save_excel,self.__Units)        
+        delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.__indeces,save_excel,self.__Units)        
         
 
     def plot_dp(self,unit='default',level=None,fig_format='png',title_font=15,
@@ -543,9 +540,9 @@ class C_SUT():
             
             # Saving all the results in the results dictionary
             if save:
-                self.results['shock_{}'.format(self.counter)]= dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
+                self.results['shock_{}'.format(self.__counter)]= dict_maker(self.Z_c,self.X_c,self.VA_c,self.p_c,self.Y_c,self.va_c,
                                                     self.z_c,self.s_c,self.Z_c_agg,self.X_c_agg,self.VA_c_agg,self.Y_c_agg,self.S_c_agg,self.p_c_agg)
-                self.counter += 1
+                self.__counter += 1
                 
         print("Warning: \n all the shock variables are equal to the last sensitivity file: \'{}\' ".format(i))
         
@@ -597,7 +594,7 @@ class C_SUT():
             excels = [f for f in glob.glob(file + "**/*.xlsx", recursive=True)]
             
             # Storing the main information of the sensitivity in the results dictionary
-            self.results['sensitivity_{}'.format(self.s_counter)]={'information':sensitivity_info[str(i)]}
+            self.results['sensitivity_{}'.format(self.__s_counter)]={'information':sensitivity_info[str(i)]}
             
             # Check the affected matrices in every shock inserted in the excel file
             mat_list = sensitivity_info[str(i)]['matrices']
@@ -626,7 +623,7 @@ class C_SUT():
                 
 
                 # Calculating the shock result
-                l_c,X_c,VA_c,S_c,Z_c,p_c = cal_flows(z_c,Y_c,va_c,s_c,self.indeces)        
+                l_c,X_c,VA_c,S_c,Z_c,p_c = cal_flows(z_c,Y_c,va_c,s_c,self.__indeces)        
 
                 # Aggregation of the results
                 X_c_agg,Y_c_agg,VA_c_agg,S_c_agg,Z_c_agg,p_c_agg = aggregate(X_c,Y_c,VA_c,S_c,Z_c,p_c)
@@ -637,14 +634,14 @@ class C_SUT():
                 value = str(excel).replace(".xlsx","").replace('{}\case_'.format(file), "")
                 
                 # Storing the data in results dictionary
-                self.results['sensitivity_{}'.format(self.s_counter)][value]=\
+                self.results['sensitivity_{}'.format(self.__s_counter)][value]=\
                     dict_maker(Z_c,X_c,VA_c,p_c,Y_c,va_c,
                                z_c,s_c,Z_c_agg,X_c_agg,VA_c_agg,
                                Y_c_agg,S_c_agg,p_c_agg)
                     
 
             
-            self.s_counter+=1
+            self.__s_counter+=1
                                                                    
         
     def impact_assess (self,p_life,saving_sce,invest_sce,imports=['Import'],
@@ -708,8 +705,8 @@ class C_SUT():
         self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel)
         
         # Saving the results of impcat assessment
-        self.results['impact_{}'.format(self.i_counter)]=self.impact
-        self.i_counter += 1
+        self.results['impact_{}'.format(self.__i_counter)]=self.impact
+        self.__i_counter += 1
         
         
         
@@ -829,7 +826,7 @@ class C_SUT():
         variable = var_check(variable)
         
         # Reshaping the data and index to plot
-        data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.m_unit,unit,title,rational,self.indeces)
+        data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.__m_unit,unit,title,rational,self.__indeces)
 
         ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font,directory,fig_format,save_excel)
         
@@ -838,5 +835,5 @@ class C_SUT():
     def get_excel_shock(self,num_index=30):
         
         from REP_CVX.functions.utility import sh_excel
-        sh_excel(num_index,self.indeces)
+        sh_excel(num_index,self.__indeces)
   

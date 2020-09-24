@@ -14,7 +14,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='??',
-    packages=setuptools.find_packages(),
+    packages=["REP_CVX"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
