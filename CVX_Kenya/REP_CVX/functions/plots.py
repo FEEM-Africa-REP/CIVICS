@@ -257,7 +257,7 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
             d_x.to_excel(writer)
 
  
-def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,indeces,ex_save):
+def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,indeces,ex_save,Units):
    
     '''
     
@@ -285,11 +285,11 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     # To check if the given indicator exists in the database aggregated level
     indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(1)))
     
-    units = pd.DataFrame()
+
     # Implementing the plot style
     plt.style.use(style)   
 
-    a = X
+    print(X_c)
     if detail:
         # For the detailed case, more levels should be taken to show detailed information
         X_c = X_c.loc[(slice(None),indicator),level].groupby(axis=[1,2],level=2).sum().groupby(axis=0,level=0).sum()
@@ -302,7 +302,7 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     # defining the d_x matrix 
     if kind == 'Absolute': 
         # Here the unit won't be printed because there is not a single unit anymore
-        d_x,unit = (X_c - X),''
+        d_x,unit = (X_c - X),''#Units.loc[indicator].iloc[0].values.tolist()
         print('The unit of the graph is the same of the database.')  
     else: d_x,unit = (X_c - X)/X * 100,'%'
 

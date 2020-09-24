@@ -112,7 +112,7 @@ class C_SUT():
         # Reading the Database
         self.SUT,self.U,self.V,self.Z,self.S,self.Y,self.VA,self.X = database (path)
         
-        self.Units =  unit_taker(self.S)
+        self.__Units =  unit_taker(self.S)
         
         # Calculating the baseline coefficients
         self.z,self.s,self.va,self.l,self.p = cal_coef (self.Z,self.S,self.VA,self.X)
@@ -435,7 +435,7 @@ class C_SUT():
         if aggregated and not detail: S_c,S = self.S_c_agg,self.S_agg 
         else: S_c,S = self.S_c,self.S
         
-        self.a = delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces,save_excel)        
+        delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces,save_excel,self.__Units)        
         
 
     def plot_dp(self,unit='default',level=None,fig_format='png',title_font=15,

@@ -36,7 +36,8 @@ def dict_maker(Z=None,X=None,VA=None,p=None,Y=None,va=None,z=None,s=None,
     return dictionary
 
 def unit_taker(S):
-    return pd.DataFrame(S.index.get_level_values(1).to_list(),index=S.index.get_level_values(0).to_list(),columns=['Units']).groupby(level=0)
+    
+    return pd.DataFrame(S.index.get_level_values(2).to_list(),index=S.index.get_level_values(1).to_list(),columns=['Units'])
 
 def value_from_excel(path):
     

@@ -18,7 +18,7 @@ amin.plot_ds(indicator='Water',kind='Percentage',color=['blue','green','grey'])
 #%%
 amin.impact_assess(saving_sce=['se',1],invest_sce=['sh',1],p_life=10)
 #%%
-amin.plot_ds(indicator='CO2',detail=False)
+amin.plot_ds(indicator='CO2',detail=True)
 #%%
 amin.obj_save(file_name='kenya') 
 #%%
