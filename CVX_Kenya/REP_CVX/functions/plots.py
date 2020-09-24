@@ -270,7 +270,9 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     Nothing specific. But it shows the plot, save the plots and save the plotted
     data in form of excel file
     
-    '''    
+    '''  
+    
+    
     # As some processes are needed to be done on the inputs, to keep the main variable unchanged, we will make a copy of them  
     X_c = X_c.copy()        # After shock
     X   = X.copy()          # Baseline
@@ -281,27 +283,29 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     kind        = kind_check (kind)
     
     # To check if the given indicator exists in the database aggregated level
-    indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(3)))
+    indicator   = indic_check (indicator,list(indeces['S_ind'].get_level_values(1)))
     
+    units = pd.DataFrame()
     # Implementing the plot style
     plt.style.use(style)   
-    
+
+    a = X
     if detail:
         # For the detailed case, more levels should be taken to show detailed information
-        X_c = X_c.loc[(slice(None),slice(None),slice(None),indicator),level].groupby(axis=1,level=4).sum().groupby(axis=0,level=0).sum()
-        X   = X.loc[(slice(None),slice(None),slice(None),indicator),level].groupby(axis=1,level=4).sum().groupby(axis=0,level=0).sum()
+        X_c = X_c.loc[(slice(None),indicator),level].groupby(axis=[1,2],level=2).sum().groupby(axis=0,level=0).sum()
+        X   = X.loc[(slice(None),indicator),level].groupby(axis=1,level=[1,2]).sum().groupby(axis=0,level=0).sum()
     else:
         # Otherwise, only the main level will be taken
-        X_c = X_c.loc[indicator,level]
-        X   = X.loc[indicator,level]
-        
+        X_c = X_c.loc[indicator,level].to_frame()
+        X   = X.loc[indicator,level].to_frame()
+
     # defining the d_x matrix 
     if kind == 'Absolute': 
         # Here the unit won't be printed because there is not a single unit anymore
         d_x,unit = (X_c - X),''
         print('The unit of the graph is the same of the database.')  
     else: d_x,unit = (X_c - X)/X * 100,'%'
-    
+
     # if detail is True, we need to reindex it
     if detail:
         # Take only the first level of index
@@ -313,9 +317,10 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     # user to make them understand.        
     if abs(d_x.sum().sum()) <= 0.000001:
         print('The following matrix seems to be unchanged in the implemented shock, Maybe the changes are very small or they are related to computational errors.')
-       
+    
     # Specifing the range of showing results
     d_x = drop_fun(data=d_x, ranshow=ranshow)
+    
     # Transposing the dataframe
     d_x = d_x.T
 
@@ -337,8 +342,8 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
         
     # Otherwise, we don't need to have legends, becuase ther is only one
     else:
-        try:    d_x.plot(kind = 'bar' , stacked = True,legend=False,colormap=color)
-        except: d_x.plot(kind = 'bar' , stacked = True,legend=False,color=color)
+        try:    d_x.T.plot(kind = 'bar' , stacked = False,legend=False,colormap=color)
+        except: d_x.T.plot(kind = 'bar' , stacked = False,legend=False,color=color)
     
     plt.title(title)  
     plt.ylabel(unit)
@@ -352,7 +357,7 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
         with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
             d_x.to_excel(writer)    
             
-    return X
+    return a
 
 def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,color,ex_save):
     

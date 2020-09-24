@@ -12,6 +12,7 @@ indeces:        Provides a dict of the indeces that can be used for different pu
 dict_maker:     Stores the given information in a dictionary.
 '''
 import xlsxwriter
+import pandas as pd
 
         
 def indeces (S,Z,VA,X):
@@ -33,6 +34,9 @@ def dict_maker(Z=None,X=None,VA=None,p=None,Y=None,va=None,z=None,s=None,
             dictionary[outputs[i]]=inputs[i]
                
     return dictionary
+
+def unit_taker(S):
+    return pd.DataFrame(S.index.get_level_values(1).to_list(),index=S.index.get_level_values(0).to_list(),columns=['Units']).groupby(level=0)
 
 def value_from_excel(path):
     

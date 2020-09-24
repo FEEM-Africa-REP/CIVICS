@@ -7,6 +7,7 @@ from REP_CVX.functions.io_calculation import cal_coef
 from REP_CVX.functions.utility import indeces
 from REP_CVX.functions.aggregation import aggregate
 from REP_CVX.functions.utility import dict_maker
+from REP_CVX.functions.utility import unit_taker
 from REP_CVX.functions.io_calculation import cal_flows
 from REP_CVX.functions.plots import delta_xv
 from REP_CVX.functions.plots import delta_s
@@ -110,6 +111,8 @@ class C_SUT():
         
         # Reading the Database
         self.SUT,self.U,self.V,self.Z,self.S,self.Y,self.VA,self.X = database (path)
+        
+        self.Units =  unit_taker(self.S)
         
         # Calculating the baseline coefficients
         self.z,self.s,self.va,self.l,self.p = cal_coef (self.Z,self.S,self.VA,self.X)
@@ -269,8 +272,8 @@ class C_SUT():
         
 
         # Check if the shock result exist or not
-        try: self.X_c          
-        except: raise ValueError('To run the plot function, there should be an implemented shock.')
+        if not hasattr(self, 'X_c'):raise ValueError('To run the plot function, there should be an implemented shock.')
+
         
         # To check the input to the plot function in the aggregated level or disaggregated
         if aggregated:
@@ -344,9 +347,8 @@ class C_SUT():
 
         
         # Check if the shock result exist or not
-        try: self.X_c          
-        except: raise ValueError('To run the plot function, there should be an implemented shock.')
-        
+        if not hasattr(self, 'X_c'):raise ValueError('To run the plot function, there should be an implemented shock.')
+
         # To check the input to the plot function in the aggregated level or disaggregated
         if aggregated:   VA_c,VA = self.VA_c_agg,self.VA_agg    
         else:            VA_c,VA = self.VA_c,self.VA
@@ -359,8 +361,8 @@ class C_SUT():
                 style='ggplot',figsize=(10, 6),directory='my_graphs',ranshow=(0,0)
                 ,title='default',color = 'terrain', drop= None,save_excel=True):
         '''  
-        plot_dv:
-            This function is used to plot delta_VA between the baseline and the
+        plot_ds:
+            This function is used to plot delta_S between the baseline and the
             last shock implemented
             
         Arguments
@@ -426,15 +428,14 @@ class C_SUT():
         
         
         # Check if the shock result exist or not
-        try: self.X_c          
-        except: raise ValueError('To run the plot function, there should be an implemented shock.')        
+        if not hasattr(self, 'X_c'):raise ValueError('To run the plot function, there should be an implemented shock.')
 
         # To check the input to the plot function in the aggregated level or disaggregated
         
         if aggregated and not detail: S_c,S = self.S_c_agg,self.S_agg 
         else: S_c,S = self.S_c,self.S
         
-        delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces,save_excel)        
+        self.a = delta_s(S_c,S,style,level,kind,title,ranshow,title_font,figsize,directory,fig_format,color,indicator,detail,self.indeces,save_excel)        
         
 
     def plot_dp(self,unit='default',level=None,fig_format='png',title_font=15,
@@ -485,9 +486,8 @@ class C_SUT():
         
         
         # Check if the shock result exist or not
-        try: self.X_c
-        except: raise ValueError('To run the plot function, there should be an implemented shock.')
-        
+        if not hasattr(self, 'X_c'):raise ValueError('To run the plot function, there should be an implemented shock.')
+   
         if aggregated: 
             p_c,p = self.p_c_agg,self.p_agg, 
             print('For the aggregated results, the mean of the price of aggregated invoices are represented')

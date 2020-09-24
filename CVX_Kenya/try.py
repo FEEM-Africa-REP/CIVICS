@@ -4,7 +4,7 @@ Created on Mon Aug 24 12:12:55 2020
 
 @author: Mohammad Amin Tahavori
 """
-import REP_CVX_data as aa
+import REP_CVX as aa
 
 
 amin = aa.C_SUT(path=r'Database\Kenya_2014_SAM - New.xlsx',unit='M KSH')
@@ -18,7 +18,7 @@ amin.plot_ds(indicator='Water',kind='Percentage',color=['blue','green','grey'])
 #%%
 amin.impact_assess(saving_sce=['se',1],invest_sce=['sh',1],p_life=10)
 #%%
-amin.plot_ds(indicator='CO2',detail=True)
+amin.plot_ds(indicator='CO2',detail=False)
 #%%
 amin.obj_save(file_name='kenya') 
 #%%
