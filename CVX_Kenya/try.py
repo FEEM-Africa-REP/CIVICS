@@ -14,7 +14,7 @@ amin.shock_calc(path=r'Ecopulpers.xlsx',Y=True,Z=False,VA=False,S=False)
 #%%
 amin.sensitivity(path=r'Ecopulpers.xlsx')
 #%%
-amin.plot_ds(indicator='Water',kind='Percentage',color=['blue','green','grey'])
+amin.plot_ds(indicator='Water',color=['blue','green','grey'])
 #%%
 amin.impact_assess(saving_sce=['se',1],invest_sce=['sh',1],p_life=10)
 #%%
