@@ -4,10 +4,10 @@ Created on Mon Aug 24 12:12:55 2020
 
 @author: Mohammad Amin Tahavori
 """
-import REP_CVX
+import REP_CVX_data as aa
 
 
-amin = REP_CVX.C_SUT(path=r'Database\Kenya_2014_SAM.xlsx',unit='M KSH')
+amin = aa.C_SUT(path=r'Database\Kenya_2014_SAM - New.xlsx',unit='M KSH')
 #%%
 #a.shock_calc(path=r'Ecopulpers.xlsx',Y=False,Z=True,VA=True,S=True)  
 amin.shock_calc(path=r'Ecopulpers.xlsx',Y=True,Z=False,VA=False,S=False)  
