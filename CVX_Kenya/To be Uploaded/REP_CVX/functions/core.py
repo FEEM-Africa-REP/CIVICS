@@ -702,7 +702,7 @@ class C_SUT():
         
         
         # calculating the impacts using the impact_assessment function
-        self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel)
+        self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel,self.__i_counter)
         
         # Saving the results of impcat assessment
         self.results['impact_{}'.format(self.__i_counter)]=self.impact
@@ -710,7 +710,7 @@ class C_SUT():
         
         
         
-    def obj_save(self,file_name):
+    def obj_save(cls,file_name):
         
         '''
         obj_save:
@@ -723,7 +723,7 @@ class C_SUT():
         ''' 
         
         with open(file_name, 'wb') as config_dictionary_file:
-            pickle.dump(self,config_dictionary_file)
+            pickle.dump(cls,config_dictionary_file)
         
         
     def plot_sens(self,variable,sc_num,indicator=None,unit='default',level='Activities',
@@ -733,8 +733,7 @@ class C_SUT():
                   caps={'color':'black','linewidth' : 1},
                   medians={'color':'black','linewidth' : 1},
                   fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6)
-                  ,title_font=20,rational=0,directory='my_graphs',fig_format='png',
-                  save_excel=True):
+                  ,title_font=20,rational=0,directory='my_graphs',fig_format='png'):
         '''
         
 
@@ -828,7 +827,7 @@ class C_SUT():
         # Reshaping the data and index to plot
         data,index,title,legend,unit = sensitivity_take(variable,sc_num,self.results,aggregation,level,indicator,self.__m_unit,unit,title,rational,self.__indeces)
 
-        ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font,directory,fig_format,save_excel)
+        ptl_sensitivity(data,index,title,box,whiskers,caps,medians,fliers,figsize,legend,unit,title_font,directory,fig_format)
         
     
 

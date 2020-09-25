@@ -84,8 +84,8 @@ def Z_shock (path,z,Z,X):
                 z.loc[(level_rows[i],rows[i]),(level_cols[i],cols[i])] = \
                     z.loc[(level_rows[i],rows[i]),(level_cols[i],cols[i])].values * (1+values[i])
             elif aggreg[i] == 'Yes':
-                z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
-                    z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])].values * (1+values[i])      
+                z.loc[(level_rows[i],slice(None),rows[i]),(level_cols[i],cols[i])] = \
+                    z.loc[(level_rows[i],slice(None),rows[i]),(level_cols[i],cols[i])].values * (1+values[i])      
             else: 
                 raise ValueError('Aggregation could be \'Yes\' or \'No\'. Please check shock excel file.') 
                 
@@ -101,13 +101,13 @@ def Z_shock (path,z,Z,X):
                     new_z.loc[(level_rows[i],rows[i]),(level_cols[i],cols[i])].values 
                 
             elif aggreg[i] == 'Yes':
-                Z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
-                    Z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),level_cols[i],cols[i]].values + values[i]
+                Z.loc[(level_rows[i],slice(None),rows[i]),(level_cols[i],cols[i])] = \
+                    Z.loc[(level_rows[i],slice(None),rows[i]),level_cols[i],cols[i]].values + values[i]
                 
                 new_z = cal_z(Z,X)
                 
-                z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
-                    new_z.loc[(level_rows[i],slice(None),slice(None),slice(None),rows[i]),level_cols[i],cols[i]].values    
+                z.loc[(level_rows[i],slice(None),rows[i]),(level_cols[i],cols[i])] = \
+                    new_z.loc[(level_rows[i],slice(None),rows[i]),level_cols[i],cols[i]].values    
             else: 
                 raise ValueError('Aggregation could be \'Yes\' or \'No\'. Please check shock excel file.')  
                 
@@ -156,8 +156,9 @@ def VA_shock(path,va,VA,X):
                 va.loc[rows[i],(level_cols[i],cols[i])] = \
                     va.loc[rows[i],(level_cols[i],cols[i])].values * (1+values[i])
             elif aggreg[i] == 'Yes':
-                va.loc[(slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
-                    va.loc[(slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])].values * (1+values[i])      
+
+                va.loc[(slice(None),rows[i]),(level_cols[i],cols[i])] = \
+                    va.loc[(slice(None),rows[i]),(level_cols[i],cols[i])].values * (1+values[i])      
             else: 
                 raise ValueError('Aggregation could be \'Yes\' or \'No\'. Please check shock excel file.') 
                 
@@ -173,13 +174,13 @@ def VA_shock(path,va,VA,X):
                     new_va.loc[rows[i],(level_cols[i],cols[i])].values
                 
             elif aggreg[i] == 'Yes':
-                VA.loc[(slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
-                    VA.loc[(slice(None),slice(None),slice(None),rows[i]),level_cols[i],cols[i]].values + values[i]
+                VA.loc[(slice(None),rows[i]),(level_cols[i],cols[i])] = \
+                    VA.loc[(slice(None),rows[i]),level_cols[i],cols[i]].values + values[i]
                 
                 new_va = cal_s(VA,X)
                 
-                va.loc[(slice(None),slice(None),slice(None),rows[i]),(level_cols[i],cols[i])] = \
-                    new_va.loc[(slice(None),slice(None),slice(None),rows[i]),level_cols[i],cols[i]].values   
+                va.loc[(slice(None),rows[i]),(level_cols[i],cols[i])] = \
+                    new_va.loc[(slice(None),rows[i]),level_cols[i],cols[i]].values   
                     
             else: 
                 raise ValueError('Aggregation could be \'Yes\' or \'No\'. Please check shock excel file.')  

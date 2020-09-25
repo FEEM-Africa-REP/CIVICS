@@ -428,7 +428,7 @@ def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,colo
             d_x.to_excel(writer)         
     
     
-def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers,figsize,legend,unit,title_font,directory,fig_format,ex_save):
+def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers,figsize,legend,unit,title_font,directory,fig_format):
     
     
     fig = plt.figure(2, figsize=figsize)
@@ -470,19 +470,14 @@ def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers,figsi
     plt.title(title,fontsize=title_font)
     plt.legend(labels=[legend],loc='center left', bbox_to_anchor=(1, 0.5),fancybox=True, shadow=True)
     plt.ylabel(unit)
-    plt.show()
+
     
+    leg = legend.replace("\n","")
     # Save and show the plot
-    plt.savefig('{}\{}_{}.{}'.format(directory,legend,title,fig_format),bbox_inches='tight',dpi=150)
+    plt.savefig('{}\{}_{}.{}'.format(directory,leg,title,fig_format),bbox_inches='tight',dpi=150)
     plt.show() 
     
-    # save the final dataframe in form of an excel file in the same directory
-    if ex_save:
-        with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
-            data.to_excel(writer)      
-    
-    
-    
+
     
     
     

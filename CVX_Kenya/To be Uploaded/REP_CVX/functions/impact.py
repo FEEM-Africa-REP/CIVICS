@@ -117,7 +117,7 @@ def impact_check(inv,sav,results):
         
     return save_out,inv_out,sav_list
 
-def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel):
+def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel,im_num):
     
     '''
     Parameters
@@ -160,6 +160,7 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
     
     Imp = pd.DataFrame(index=sav_list,columns=columns)
     Imp.fillna(0)
+
     
     for i in sav_list:
         
@@ -176,14 +177,14 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
         Imp.loc[i,'Land Saving'] = -save_out[i]['S_agg'].loc[land].sum().sum() + results['baseline']['S_agg'].loc[land].sum().sum()    
 
 
-        Imp.loc[i,'Workforce Investment'] = inv_out[i]['VA'].groupby(level=3).sum().loc[labour].sum().sum() - results['baseline']['VA'].groupby(level=3).sum().loc[labour].sum().sum()   
-        Imp.loc[i,'Workforce Saving'] = -save_out[i]['VA'].groupby(level=3).sum().loc[labour].sum().sum() + results['baseline']['VA'].groupby(level=3).sum().loc[labour].sum().sum() 
+        Imp.loc[i,'Workforce Investment'] = inv_out[i]['VA'].groupby(level=1).sum().loc[labour].sum().sum() - results['baseline']['VA'].groupby(level=1).sum().loc[labour].sum().sum()   
+        Imp.loc[i,'Workforce Saving'] = -save_out[i]['VA'].groupby(level=1).sum().loc[labour].sum().sum() + results['baseline']['VA'].groupby(level=1).sum().loc[labour].sum().sum() 
             
-        Imp.loc[i,'Capital Investment'] = inv_out[i]['VA'].groupby(level=3).sum().loc[capital].sum().sum() - results['baseline']['VA'].groupby(level=3).sum().loc[capital].sum().sum()   
-        Imp.loc[i,'Capital Saving'] = -save_out[i]['VA'].groupby(level=3).sum().loc[capital].sum().sum() + results['baseline']['VA'].groupby(level=3).sum().loc[capital].sum().sum() 
+        Imp.loc[i,'Capital Investment'] = inv_out[i]['VA'].groupby(level=1).sum().loc[capital].sum().sum() - results['baseline']['VA'].groupby(level=1).sum().loc[capital].sum().sum()   
+        Imp.loc[i,'Capital Saving'] = -save_out[i]['VA'].groupby(level=1).sum().loc[capital].sum().sum() + results['baseline']['VA'].groupby(level=1).sum().loc[capital].sum().sum() 
             
-        Imp.loc[i,'Import Investment'] = inv_out[i]['VA'].groupby(level=3).sum().loc[imports].sum().sum() - results['baseline']['VA'].groupby(level=3).sum().loc[imports].sum().sum()
-        Imp.loc[i,'Import Saving'] = -save_out[i]['VA'].groupby(level=3).sum().loc[imports].sum().sum() + results['baseline']['VA'].groupby(level=3).sum().loc[imports].sum().sum()    
+        Imp.loc[i,'Import Investment'] = inv_out[i]['VA'].groupby(level=1).sum().loc[imports].sum().sum() - results['baseline']['VA'].groupby(level=1).sum().loc[imports].sum().sum()
+        Imp.loc[i,'Import Saving'] = -save_out[i]['VA'].groupby(level=1).sum().loc[imports].sum().sum() + results['baseline']['VA'].groupby(level=1).sum().loc[imports].sum().sum()    
  
         Imp.loc[i,'PROI'] = Imp.loc[i,'Saving'] / Imp.loc[i,'Investment']
         Imp.loc[i,'PPBT'] = 1 / Imp.loc[i,'PROI'] 
@@ -198,7 +199,7 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
         Imp.loc[i,'Capital Total Impact']       = Imp.loc[i,'Capital Investment'] - p_life * Imp.loc[i,'Capital Saving']  
   
     if save_excel:
-        with pd.ExcelWriter(r'{}/impact.xlsx'.format(directory)) as writer:
+        with pd.ExcelWriter(r'{}/impact_{}.xlsx'.format(directory,im_num)) as writer:
             Imp.to_excel(writer)
             
     return Imp
