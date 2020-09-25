@@ -54,7 +54,8 @@ case.impact_assess(p_life = 'the project life time',
                    w_ext=['Water'], em_ext=['CO2'], land=['Land'], 
                    labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],
                    capital=['Capital - Machines'])
-                   
+
+# p_life:  Project lifetime
 # imports: Categories of imports in the database
 # w_ext:   Categories of Water in the database     (aggregated)
 # em_ext:  Categories of emissions in the database (aggregated)
