@@ -253,6 +253,7 @@ def sys_disp (rational,fig_format,unit,conversion,style,date_format,title_font,p
         xfmt = mdates.DateFormatter(date_format)
         axs[1].xaxis.set_major_formatter(xfmt)
         axs[1].tick_params(axis='x', rotation=rotate)  
+        axs[1].set_ylabel(unit)
 
         if x_ticks=='name':
             ticks = date2name(list(production.index),list(production.index.month_name()))
