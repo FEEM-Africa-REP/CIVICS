@@ -2,7 +2,7 @@
 **R**esearch **E**mpowerment **P**artnership **C**omprehens**IV**e & **I**ntegrated **C**ountry **S**tudy
 
 ---
-## Dscription
+## Description
 REP_CVX is a python module developed by REP research group in Fondazione Eni Enrico Mattei for CIVICS Kenya Project with to aim to provide an open-source tool for performing **Input-Output** analysis based on the **Supply and Use Framework**.
 
 The module uses excel files as the input data and the outputs are in form of plots, excel files and binary files.
