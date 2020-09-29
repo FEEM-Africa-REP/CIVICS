@@ -19,7 +19,7 @@ Main features:
     
 ---
 ### Where to find it
-The full source code is available on **Github** at : http://github.com - automatic!
+The full source code is available on **[Our Github](https://github.com/FEEM-Africa-REP/CIVICS_Kenya)**:
 
 To use the code, copy it in your site-packages directory: 
 
