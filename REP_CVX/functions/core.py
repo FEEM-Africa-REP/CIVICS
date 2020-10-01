@@ -704,7 +704,7 @@ class C_SUT():
         
         
         # calculating the impacts using the impact_assessment function
-        self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel,self.__i_counter)
+        self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel,self.__i_counter,self.__m_unit,self.__Units)
         
         # Saving the results of impcat assessment
         self.results['impact_{}'.format(self.__i_counter)]=self.impact

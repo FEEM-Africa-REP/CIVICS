@@ -117,7 +117,7 @@ def impact_check(inv,sav,results):
         
     return save_out,inv_out,sav_list
 
-def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel,im_num):
+def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel,im_num,monetary_unit,extensions_units):
     
     '''
     Parameters
@@ -150,15 +150,19 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
     import pandas as pd
     save_out,inv_out,sav_list = impact_check(invest_sce,saving_sce,results)
     
-    columns = ['Saving','Investment','Water Saving','Water Investment',
-               'Emission Saving','Emission Investment', 'Land Saving',
-               'Land Investment','Workforce Saving','Workforce Investment',
-               'Capital Saving','Capital Investment','Import Saving',
-               'Import Investment','PROI','PPBT','Water Total Impact',
-               'Emission Total Impact','Land Total Impact','Import Total Impact',
+    columns = ['Investment','Saving','PROI','PPBT','Water Saving','Emission Saving','Land Saving','Import Saving',
+               'Capital Saving','Workforce Saving','Water Investment','Emission Investment',
+               'Land Investment','Import Investment','Workforce Investment','Capital Investment',
+               'Water Total Impact','Emission Total Impact','Land Total Impact','Import Total Impact',	
                'Workforce Total Impact','Capital Total Impact']
-    
-    Imp = pd.DataFrame(index=sav_list,columns=columns)
+
+    units = [monetary_unit,monetary_unit,'1/years','years',extensions_units.loc['Water'].iloc[0,0],extensions_units.loc['CO2'].iloc[0,0],
+             extensions_units.loc['Land'].iloc[0],monetary_unit, monetary_unit,monetary_unit,extensions_units.loc['Water'].iloc[0,0],
+             extensions_units.loc['CO2'].iloc[0,0], extensions_units.loc['Land'].iloc[0],monetary_unit,monetary_unit,monetary_unit,
+             extensions_units.loc['Water'].iloc[0,0],extensions_units.loc['CO2'].iloc[0,0],extensions_units.loc['Land'].iloc[0],monetary_unit,	
+             monetary_unit,monetary_unit]
+        
+    Imp = pd.DataFrame(index=sav_list,columns=[columns,units])
     Imp.fillna(0)
 
     
@@ -186,6 +190,8 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
         Imp.loc[i,'Import Investment'] = inv_out[i]['VA'].groupby(level=1).sum().loc[imports].sum().sum() - results['baseline']['VA'].groupby(level=1).sum().loc[imports].sum().sum()
         Imp.loc[i,'Import Saving'] = -save_out[i]['VA'].groupby(level=1).sum().loc[imports].sum().sum() + results['baseline']['VA'].groupby(level=1).sum().loc[imports].sum().sum()    
  
+        print(Imp.loc[i,'Saving'] / Imp.loc[i,'Investment'])
+        
         Imp.loc[i,'PROI'] = Imp.loc[i,'Saving'] / Imp.loc[i,'Investment']
         Imp.loc[i,'PPBT'] = 1 / Imp.loc[i,'PROI'] 
     
