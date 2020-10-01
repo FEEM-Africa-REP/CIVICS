@@ -13,7 +13,7 @@ def unit_check(unit):
     unit_list = ['M USD','M EUR', 'M KSH','K KSH','K USD','K EUR']
     
     if unit not in unit_list:
-        raise ValueError('Unit should be one of the followings: {}'.format(unit_list))
+        raise ValueError('Unit should be one of the followings: {}. To add more units, the user can use REP_CVX.functions.check module'.format(unit_list))
         
     return unit
 

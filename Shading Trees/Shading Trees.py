@@ -17,11 +17,11 @@ sh_tree.plot_ds(indicator='Water',color=['Blue','Green','Gray'])
 sh_tree.plot_ds(indicator='Energy',color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
 sh_tree.plot_ds(indicator='FAO Land')
 #%%
-#sh_tree.shock_calc(path=r'Shock\Shading_trees.xlsx',Z=True,VA=True,S=True)
+sh_tree.shock_calc(path=r'Shock\Shading_trees.xlsx',Z=True,VA=True,S=True)
 # sh_tree.plot_dx(level='Commodities',unit = 'K USD')
 # sh_tree.plot_dv(level='Activities',drop='unused',unit='K USD')
 # sh_tree.plot_dv(level='Commodities',drop='unused')
-sh_tree.plot_ds(indicator='CO2')
+# sh_tree.plot_ds(indicator='CO2')
 # sh_tree.plot_ds(indicator='Water',color=['Blue','Green','Gray'])
 # sh_tree.plot_ds(indicator='Energy',color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
 # sh_tree.plot_ds(indicator='FAO Land')
@@ -40,3 +40,8 @@ sh_tree.impact_assess(p_life=20, saving_sce=['se',2], invest_sce=['sh',1])
 sh_tree.impact_assess(p_life=20, saving_sce=['sh',2], invest_sce=['se',1])
 #%%
 results= sh_tree.results
+
+#%%
+
+
+
