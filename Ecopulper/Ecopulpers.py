@@ -9,7 +9,7 @@ eco_p = REP_CVX.C_SUT(path = r'Database\Kenya_2014_SAM.xlsx', unit='M KSH')
 #%%
 eco_p.shock_calc(path=r'Shock\Ecopulpers.xlsx',Y=True)
 eco_p.plot_dx()
-eco_p.plot_dv(level='Activities',drop='unused')
+eco_p.plot_dv(level='Activities',drop='unused',unit='K USD')
 eco_p.plot_dv(level='Commodities',drop='unused')
 eco_p.plot_ds(indicator='CO2')
 eco_p.plot_ds(indicator='Water',color=['Blue','Green','Gray'])
