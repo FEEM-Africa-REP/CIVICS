@@ -65,6 +65,7 @@ def database(path):
         
     except:
         VA = SUT.loc['Factors of production', ['Commodities','Activities']]
+
         
         # computing total production vector (X)
     X = pd.DataFrame(Y.sum(axis=1) + Z.sum(axis=1), index=Z.index, columns=['Total Production'])

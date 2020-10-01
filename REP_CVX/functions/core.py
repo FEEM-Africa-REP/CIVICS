@@ -32,7 +32,14 @@ class C_SUT():
 
     The class reads the given database in form of an excel file and built all 
     pandas DataFrames of the flows and coefficients of the IO system. 
-
+    
+    Arguments
+    ----------
+    path :  the path of the database excel file.
+    
+    unit :  represepnts the main unit of the flows in the table. This will be 
+            used for the unit conversions.  
+            
     Notes
     -----
         1. The attributes and extension dictionary entries are pandas.DataFrame
@@ -79,14 +86,7 @@ class C_SUT():
 
     p : pandas.DataFrame
         price index  
-        
-    Arguments
-    ----------
-    path :  the path of the database excel file.
-    
-    unit :  represepnts the main unit of the flows in the table. This will be 
-            used for the unit conversions.    
-    
+
     ''' 
     
     def __init__(self,path,unit):
@@ -193,7 +193,8 @@ class C_SUT():
         
         # Calculating the shock result
         self.l_c,self.X_c,self.VA_c,self.S_c,self.Z_c,self.p_c = cal_flows(self.z_c,self.Y_c,self.va_c,self.s_c,self.__indeces)        
-
+        
+        
         # Aggregation of the results
         self.X_c_agg,self.Y_c_agg,self.VA_c_agg,self.S_c_agg,self.Z_c_agg,self.p_c_agg = aggregate(self.X_c,self.Y_c,self.VA_c,self.S_c,self.Z_c,self.p_c)
         
@@ -283,7 +284,8 @@ class C_SUT():
 
     def plot_dv(self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
-                directory='my_graphs',ranshow=(0,0),title='default',color = 'terrain', drop= None,save_excel=True):
+                directory='my_graphs',ranshow=(0,0),title='default',color = 'terrain'
+                , drop= None,save_excel=True):
         '''  
         plot_dv:
             This function is used to plot delta_VA between the baseline and the

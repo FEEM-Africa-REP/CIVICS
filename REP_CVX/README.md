@@ -31,13 +31,10 @@ the "C_SUT" with all data can also be pickled (binary).
 - pickle
 - numpy
 
-## Author:   
-1. Mohammad Amin Tahavori
-
-## Co-Authors:
-2. Negar Namazifard,
-3. Nicolo Gulinucci
- 
+## Authors:   
+1. Mohammad Amin Tahavori,
+2. Nicolo Gulinucci,
+3. Negar Namazifard
 
 
 

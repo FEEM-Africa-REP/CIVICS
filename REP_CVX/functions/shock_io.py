@@ -37,10 +37,14 @@ def Y_shock (path,Y):
     # reading the information
     rows   = list(Y_sh['row'].values)
     values = list(Y_sh['value'].values)
-    
+    print(rows)
     # Impelenting the changes
+    print(Y.loc[('Commodities',rows),'Total final demand'])
     Y.loc[('Commodities',rows),'Total final demand'] = \
         Y.loc[('Commodities',rows),'Total final demand'].values + values
+        
+    
+    print(Y.loc[('Commodities',rows),'Total final demand'])
           
     return Y
             
