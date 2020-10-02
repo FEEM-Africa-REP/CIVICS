@@ -89,7 +89,7 @@ class C_SUT():
 
     ''' 
     
-    def __init__(self,path,unit):
+    def __init__(self,path,unit,name='intervention'):
         
         '''  
         path :  string
@@ -98,6 +98,10 @@ class C_SUT():
         unit :  string
             represepnts the main unit of the flows in the table. This will be 
                 used for the unit conversions. 
+                
+        name: string
+            represents the name of the intervention for better representation
+            of the results.
         '''                          
 
         # Printing the version and the information of the module
@@ -105,6 +109,9 @@ class C_SUT():
         
         # Check if the unit is correct or not
         self.__m_unit = unit_check(unit)
+        
+        # Globlizing the name of the intervention
+        self.__name = name
         
         # Ignoring the warnings 
         filterwarnings("ignore") 
@@ -704,7 +711,10 @@ class C_SUT():
         
         
         # calculating the impacts using the impact_assessment function
-        self.impact = impact_assessment(invest_sce,saving_sce,self.results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel,self.__i_counter,self.__m_unit,self.__Units)
+        self.impact = impact_assessment(invest_sce,saving_sce,self.results,
+                                        p_life,w_ext,em_ext,land,labour,capital,
+                                        imports,directory,save_excel,self.__i_counter
+                                        ,self.__m_unit,self.__Units,self.__name)
         
         # Saving the results of impcat assessment
         self.results['impact_{}'.format(self.__i_counter)]=self.impact

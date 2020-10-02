@@ -50,6 +50,10 @@ def impact_check(inv,sav,results):
     sav_list,inv_list = [],[]
     save_out,inv_out  = {},{}
     
+    # This parameter will be used for taking the sensitivity parameter
+    # for better representation of the impact analysis
+    s_par = None
+    
     # Check if the shape of the input list is correct
     if len(inv)!=2 or len(sav) != 2:
         raise ValueError('Wrong input for invest_sce and saving_sce. \n Two valuse should be given as follow:\
@@ -70,6 +74,9 @@ def impact_check(inv,sav,results):
             for key, value in results['{}_{}'.format(list1[inv[0]],inv[1])].items(): 
                if key != 'information':
                    inv_list.append(key)
+               elif key == 'information':
+                   # Returning the the name of the sensitivity parameter
+                   s_par = results['{}_{}'.format(list1[inv[0]],inv[1])][key]['parameter']
     except: 
         raise ValueError('{}_{} does not exists in results dictionary'.format(list1[inv[0]],inv[1]))
       
@@ -80,7 +87,9 @@ def impact_check(inv,sav,results):
             for key, value in results['{}_{}'.format(list1[sav[0]],sav[1])].items(): 
                if key != 'information':
                    sav_list.append(key)    
-                   
+               elif key == 'information':
+                   # Returning the the name of the sensitivity parameter
+                   s_par = results['{}_{}'.format(list1[sav[0]],sav[1])][key]['parameter']                   
     except: raise ValueError('{}_{} does not exists in results dictionary'.format(list1[sav[0]],sav[1]))
     
     
@@ -110,14 +119,16 @@ def impact_check(inv,sav,results):
             
     # The case that both are based on shock     
     else: 
-        sav_list = ['single']
-        save_out['single'] = results['{}_{}'.format(list1[sav[0]],sav[1])]
-        inv_out ['single'] = results['{}_{}'.format(list1[inv[0]],inv[1])]
+        sav_list = ['baseline']
+        save_out['baseline'] = results['{}_{}'.format(list1[sav[0]],sav[1])]
+        inv_out ['baseline'] = results['{}_{}'.format(list1[inv[0]],inv[1])]
         
         
-    return save_out,inv_out,sav_list
+    return save_out,inv_out,sav_list,s_par
 
-def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,labour,capital,imports,directory,save_excel,im_num,monetary_unit,extensions_units):
+def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,
+                      labour,capital,imports,directory,save_excel,im_num,
+                      monetary_unit,extensions_units,name):
     
     '''
     Parameters
@@ -148,7 +159,7 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
     '''
     
     import pandas as pd
-    save_out,inv_out,sav_list = impact_check(invest_sce,saving_sce,results)
+    save_out,inv_out,sav_list,s_par = impact_check(invest_sce,saving_sce,results)
     
     columns = ['Investment','Saving','PROI','PPBT','Water Saving','Emission Saving','Land Saving','Import Saving',
                'Capital Saving','Workforce Saving','Water Investment','Emission Investment',
@@ -156,16 +167,11 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
                'Water Total Impact','Emission Total Impact','Land Total Impact','Import Total Impact',	
                'Workforce Total Impact','Capital Total Impact']
 
-    units = [monetary_unit,monetary_unit,'1/years','years',extensions_units.loc['Water'].iloc[0,0],extensions_units.loc['CO2'].iloc[0,0],
-             extensions_units.loc['Land'].iloc[0],monetary_unit, monetary_unit,monetary_unit,extensions_units.loc['Water'].iloc[0,0],
-             extensions_units.loc['CO2'].iloc[0,0], extensions_units.loc['Land'].iloc[0],monetary_unit,monetary_unit,monetary_unit,
-             extensions_units.loc['Water'].iloc[0,0],extensions_units.loc['CO2'].iloc[0,0],extensions_units.loc['Land'].iloc[0],monetary_unit,	
-             monetary_unit,monetary_unit]
-        
-    Imp = pd.DataFrame(index=sav_list,columns=[columns,units])
+
+    Imp = pd.DataFrame(index=sav_list,columns=columns)
     Imp.fillna(0)
 
-    
+
     for i in sav_list:
         
         Imp.loc[i,'Investment'] = inv_out[i]['VA'].values.sum().sum() - results['baseline']['VA'].sum().sum()
@@ -189,8 +195,7 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
             
         Imp.loc[i,'Import Investment'] = inv_out[i]['VA'].groupby(level=1).sum().loc[imports].sum().sum() - results['baseline']['VA'].groupby(level=1).sum().loc[imports].sum().sum()
         Imp.loc[i,'Import Saving'] = -save_out[i]['VA'].groupby(level=1).sum().loc[imports].sum().sum() + results['baseline']['VA'].groupby(level=1).sum().loc[imports].sum().sum()    
- 
-        print(Imp.loc[i,'Saving'] / Imp.loc[i,'Investment'])
+
         
         Imp.loc[i,'PROI'] = Imp.loc[i,'Saving'] / Imp.loc[i,'Investment']
         Imp.loc[i,'PPBT'] = 1 / Imp.loc[i,'PROI'] 
@@ -203,7 +208,23 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,lab
         Imp.loc[i,'Import Total Impact']        = Imp.loc[i,'Import Investment'] - p_life * Imp.loc[i,'Import Saving']
         Imp.loc[i,'Workforce Total Impact']     = Imp.loc[i,'Workforce Investment'] - p_life * Imp.loc[i,'Workforce Saving']
         Imp.loc[i,'Capital Total Impact']       = Imp.loc[i,'Capital Investment'] - p_life * Imp.loc[i,'Capital Saving']  
-  
+
+    # Reindexing the dataframe for better representation
+    units = [monetary_unit,monetary_unit,'1/years','years',extensions_units.loc['Water'].iloc[0,0],extensions_units.loc['CO2'].iloc[0,0],
+             extensions_units.loc['Land'].iloc[0],monetary_unit, monetary_unit,monetary_unit,extensions_units.loc['Water'].iloc[0,0],
+             extensions_units.loc['CO2'].iloc[0,0], extensions_units.loc['Land'].iloc[0],monetary_unit,monetary_unit,monetary_unit,
+             extensions_units.loc['Water'].iloc[0,0],extensions_units.loc['CO2'].iloc[0,0],extensions_units.loc['Land'].iloc[0],monetary_unit,	
+             monetary_unit,monetary_unit]
+    
+    index_0 = [name] * len(sav_list)
+    if len(sav_list) == 1:
+        index = [index_0,['baseline']]
+    else:
+        index_1 = [s_par]*len(sav_list)
+        index = [index_0,index_1,sav_list]
+
+    Imp.index = index
+    Imp.columns = [columns,units]
     if save_excel:
         with pd.ExcelWriter(r'{}/impact_{}.xlsx'.format(directory,im_num)) as writer:
             Imp.to_excel(writer)
