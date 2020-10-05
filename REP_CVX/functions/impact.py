@@ -219,6 +219,7 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,
     index_0 = [name] * len(sav_list)
     if len(sav_list) == 1:
         index = [index_0,['baseline']]
+        s_par = 'baseline'
     else:
         index_1 = [s_par]*len(sav_list)
         index = [index_0,index_1,sav_list]
@@ -226,7 +227,7 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,
     Imp.index = index
     Imp.columns = [columns,units]
     if save_excel:
-        with pd.ExcelWriter(r'{}/impact_{}.xlsx'.format(directory,im_num)) as writer:
+        with pd.ExcelWriter(r'{}/{}.xlsx'.format(directory,s_par)) as writer:
             Imp.to_excel(writer)
             
     return Imp

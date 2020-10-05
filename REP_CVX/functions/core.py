@@ -20,6 +20,7 @@ from REP_CVX.functions.check import var_check
 from REP_CVX.functions.data_read import sensitivity_take
 from warnings import filterwarnings
 
+import shutil
 import glob
 import pickle
 import REP_CVX.functions.shock_io as sh
@@ -649,6 +650,7 @@ class C_SUT():
                                Y_c_agg,S_c_agg,p_c_agg)
                     
 
+            shutil.rmtree(file)
             
             self.__s_counter+=1
                                                                    
