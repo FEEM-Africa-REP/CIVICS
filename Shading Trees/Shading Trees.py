@@ -1,47 +1,34 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Sep 25 14:27:10 2020
+import REP_CVX
 
-@author: Mohammad Amin Tahavori
-"""
-import REP_CVX as rc
+kenya = REP_CVX.C_SUT(path = r'Database\Kenya_2014_SAM.xlsx', unit='M KSH', name='Shading Trees')
+#%% Investment impact
+kenya.shock_calc(path=r'Shading Trees\Shading Trees.xlsx', Y=True)
 
-sh_tree = rc.C_SUT(path = r'Database\Kenya_2014_SAM.xlsx', unit='M KSH',name='Shading Trees')
-#%%
-sh_tree.shock_calc(path=r'Shading Trees\Shading_trees.xlsx',Y=True)
-# sh_tree.plot_dx()
-# sh_tree.plot_dv(level='Activities',drop='unused')
-# sh_tree.plot_dv(level='Commodities',drop='unused')
-# sh_tree.plot_ds(indicator='CO2')
-# sh_tree.plot_ds(indicator='Water',color=['Blue','Green','Gray'])
-# sh_tree.plot_ds(indicator='Energy',color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
-# sh_tree.plot_ds(indicator='FAO Land')
-#%%
-sh_tree.shock_calc(path=r'Shading Trees\Shading_trees.xlsx',Z=True,VA=True,S=True)
-# sh_tree.plot_dx(level='Commodities',unit = 'K USD')
-# sh_tree.plot_dv(level='Activities',drop='unused',unit='K USD')
-# sh_tree.plot_dv(level='Commodities',drop='unused')
-# sh_tree.plot_ds(indicator='CO2')
-# sh_tree.plot_ds(indicator='Water',color=['Blue','Green','Gray'])
-# sh_tree.plot_ds(indicator='Energy',color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
-# sh_tree.plot_ds(indicator='FAO Land')
-#%%
-sh_tree.sensitivity(path=r'Shading Trees\Shading_trees.xlsx')
+kenya.plot_dx()
+kenya.plot_dv(level='Activities', drop='unused')
+kenya.plot_dv(level='Commodities', drop='unused')
+kenya.plot_ds(indicator='CO2')
+kenya.plot_ds(indicator='Water', color=['Blue','Green','Gray'])
+kenya.plot_ds(indicator='Energy', color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
+kenya.plot_ds(indicator='FAO Land')
+#%% Operation impact
+kenya.shock_calc(path=r'Shading Trees\Shading Trees.xlsx', Z=True, VA=True, S=True)
 
-#%%
-sh_tree.plot_sens(variable='VA', sc_num=1)
-#%%
-sh_tree.plot_sens(variable='VA', sc_num=2)
-#%%
-sh_tree.impact_assess(p_life=20, saving_sce=['sh',2], invest_sce=['sh',1],directory='Impact')
-#%%
-sh_tree.impact_assess(p_life=20, saving_sce=['se',2], invest_sce=['sh',1],directory='Impact')
-#%%
-sh_tree.impact_assess(p_life=20, saving_sce=['sh',2], invest_sce=['se',1],directory='Impact')
-#%%
-results= sh_tree.results
+kenya.plot_dx(level='Commodities', unit='K USD')
+kenya.plot_dv(level='Activities', drop='unused', unit='K USD')
+kenya.plot_dv(level='Commodities', drop='unused')
+kenya.plot_ds(indicator='CO2')
+kenya.plot_ds(indicator='Water', color=['Blue','Green','Gray'])
+kenya.plot_ds(indicator='Energy', color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
+kenya.plot_ds(indicator='FAO Land')
+#%% Sensitivity analysis
+kenya.sensitivity(path=r'Shading Trees\Shading Trees.xlsx')
 
-#%%
-
-
-
+kenya.plot_sens(variable='VA', sc_num=1)
+kenya.plot_sens(variable='VA', sc_num=2)
+#%% Impact assessment
+kenya.impact_assess(p_life=20, saving_sce=['sh',2], invest_sce=['sh',1])
+kenya.impact_assess(p_life=20, saving_sce=['se',2], invest_sce=['sh',1])
+kenya.impact_assess(p_life=20, saving_sce=['sh',2], invest_sce=['se',1])
+#%% Storing all the results
+results = kenya.results

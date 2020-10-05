@@ -1,41 +1,34 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Sep 25 10:42:47 2020
+import REP_CVX
 
-@author: Mohammad Amin Tahavori
-"""
-import REP_CVX 
-eco_p = REP_CVX.C_SUT(path = r'Database\Kenya_2014_SAM.xlsx', unit='M KSH')
-#%%
-eco_p.shock_calc(path=r'Ecopulpers\Ecopulpers.xlsx',Y=True)
-# eco_p.plot_dx()
-# eco_p.plot_dv(level='Activities',drop='unused',unit='K USD')
-# eco_p.plot_dv(level='Commodities',drop='unused')
-# eco_p.plot_ds(indicator='CO2')
-# eco_p.plot_ds(indicator='Water',color=['Blue','Green','Gray'])
-# eco_p.plot_ds(indicator='Energy',color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
-# eco_p.plot_ds(indicator='FAO Land')
-#%%
-eco_p.shock_calc(path=r'Ecopulpers\Ecopulpers.xlsx',Z=True,VA=True,S=True)
-# eco_p.plot_dx()
-# eco_p.plot_dv(level='Activities',drop='unused')
-# eco_p.plot_dv(level='Commodities',drop='unused')
-# eco_p.plot_ds(indicator='CO2')
-# eco_p.plot_ds(indicator='Water',color=['Blue','Green','Gray'])
-# eco_p.plot_ds(indicator='Energy',color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
-# eco_p.plot_ds(indicator='FAO Land')
-#%%
-eco_p.sensitivity(path=r'Ecopulpers\Ecopulpers.xlsx')
-#%%
-eco_p.plot_sens(variable='X', sc_num=1)
-#%%
-eco_p.plot_sens(variable='X', sc_num=2)
-#%%
-eco_p.impact_assess(p_life=10, saving_sce=['sh',2], invest_sce=['sh',1], directory=r'Ecopulpers\Baseline Results')
-#%%
-eco_p.impact_assess(p_life=10, saving_sce=['se',1], invest_sce=['sh',1], directory=r'Ecopulpers\Sensitivity Results')
-#%%
-eco_p.impact_assess(p_life=10, saving_sce=['se',2], invest_sce=['sh',1], directory=r'Ecopulpers\Sensitivity Results')
-#%%
-results= eco_p.results
+kenya = REP_CVX.C_SUT(path = r'Database\Kenya_2014_SAM.xlsx', unit='M KSH', name='Ecopulpers')
+#%% Investment impact
+kenya.shock_calc(path=r'Ecopulpers\Ecopulpers.xlsx', Y=True)
 
+kenya.plot_dx()
+kenya.plot_dv(level='Activities', drop='unused', unit='K USD')
+kenya.plot_dv(level='Commodities', drop='unused')
+kenya.plot_ds(indicator='CO2')
+kenya.plot_ds(indicator='Water', color=['Blue','Green','Gray'])
+kenya.plot_ds(indicator='Energy', color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
+kenya.plot_ds(indicator='FAO Land')
+#%% Operation impact
+kenya.shock_calc(path=r'Ecopulpers\Ecopulpers.xlsx', Z=True, VA=True, S=True)
+
+kenya.plot_dx()
+kenya.plot_dv(level='Activities', drop='unused')
+kenya.plot_dv(level='Commodities', drop='unused')
+kenya.plot_ds(indicator='CO2')
+kenya.plot_ds(indicator='Water', color=['Blue','Green','Gray'])
+kenya.plot_ds(indicator='Energy', color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
+kenya.plot_ds(indicator='FAO Land')
+#%% Sensitivity analysis
+kenya.sensitivity(path=r'Ecopulpers\Ecopulpers.xlsx')
+
+kenya.plot_sens(variable='VA', sc_num=1)
+kenya.plot_sens(variable='VA', sc_num=2)
+#%% Impact assessment
+kenya.impact_assess(p_life=10, saving_sce=['sh', 2], invest_sce=['sh',1], directory=r'Ecopulpers\Baseline Results')
+kenya.impact_assess(p_life=10, saving_sce=['se', 1], invest_sce=['sh',1], directory=r'Ecopulpers\Sensitivity Results')
+kenya.impact_assess(p_life=10, saving_sce=['se', 2], invest_sce=['sh',1], directory=r'Ecopulpers\Sensitivity Results')
+#%% Storing all the results
+results = kenya.results

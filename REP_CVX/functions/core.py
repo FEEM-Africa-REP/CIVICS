@@ -145,6 +145,7 @@ class C_SUT():
         
     def shock_calc (self,path,Y=False, VA=False, Z=False, S=False,save=True):
         
+
         '''  
         shock_calc:
             This function is used to implement a shock
@@ -215,7 +216,8 @@ class C_SUT():
         
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
-                directory='my_graphs',ranshow=(0,0),title='default',color = 'rainbow', drop=None,save_excel=True):
+                directory='Charts',ranshow=(0,0),title='default',color = 'rainbow', drop=None,save_excel=True):
+        directory=self.__name+'\Charts'
         '''  
         plot_dx:
             This function is used to plot delta_x between the baseline and the
@@ -292,8 +294,9 @@ class C_SUT():
 
     def plot_dv(self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
-                directory='my_graphs',ranshow=(0,0),title='default',color = 'terrain'
+                directory='Charts',ranshow=(0,0),title='default',color = 'terrain'
                 , drop= None,save_excel=True):
+        directory=self.__name+'\Charts'
         '''  
         plot_dv:
             This function is used to plot delta_VA between the baseline and the
@@ -365,8 +368,9 @@ class C_SUT():
         
     def plot_ds(self,indicator,aggregated=True,detail=True,unit='default',
                 level='Activities',kind='Absolute',fig_format='png',title_font=15,
-                style='ggplot',figsize=(10, 6),directory='my_graphs',ranshow=(0,0)
+                style='ggplot',figsize=(10, 6),directory='Charts',ranshow=(0,0)
                 ,title='default',color = 'terrain', drop= None,save_excel=True):
+        directory=self.__name+'\Charts'
         '''  
         plot_ds:
             This function is used to plot delta_S between the baseline and the
@@ -446,8 +450,9 @@ class C_SUT():
         
 
     def plot_dp(self,unit='default',level=None,fig_format='png',title_font=15,
-                style='ggplot',figsize=(10, 6),directory='my_graphs',title='default'
+                style='ggplot',figsize=(10, 6),directory='Charts',title='default'
                 ,color = 'terrain',aggregated=False,save_excel=True):
+        directory=self.__name+'\Charts'
         '''  
         plot_dp:
             This function is used to plot change in the price ratio between the baseline and the
@@ -658,8 +663,7 @@ class C_SUT():
     def impact_assess (self,p_life,saving_sce,invest_sce,imports=['Import'],
                        w_ext=['Water'], em_ext=['CO2'], land=['Land'], 
                        labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],
-                       capital=['Capital - Machines'],save_excel=True,directory='my_graphs'):
-        
+                       capital=['Capital - Machines'],save_excel=True,directory='Charts'):
         '''
         impact:
             This function can be used for the impact assessment analysis of an
@@ -710,6 +714,10 @@ class C_SUT():
         -----------------------------------------------------------------------
         '''
         
+        if saving_sce[0] == 'sh' and invest_sce[0] == 'sh':
+            directory = self.__name+'\Baseline Results'
+        else:
+            directory = self.__name+'\Sensitivity Results'
         
         
         # calculating the impacts using the impact_assessment function
@@ -747,7 +755,8 @@ class C_SUT():
                   caps={'color':'black','linewidth' : 1},
                   medians={'color':'black','linewidth' : 1},
                   fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6)
-                  ,title_font=20,rational=0,directory='my_graphs',fig_format='png'):
+                  ,title_font=20,rational=0,directory='\Charts',fig_format='png'):
+        directory=self.__name+'\Charts'
         '''
         
 
