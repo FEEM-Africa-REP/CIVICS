@@ -1,1 +1,0 @@
-__version__ = print('C_Graph: A python class for customizing calliope outputs developed in Fondazione Eni Enrico Mattei. \n Version 0.1: (Single Carrier)')
