@@ -21,6 +21,8 @@ kenya.plot_ds(indicator='CO2')
 kenya.plot_ds(indicator='Water', color=['Blue','Green','Gray'])
 kenya.plot_ds(indicator='Energy', color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
 kenya.plot_ds(indicator='FAO Land')
+
+kenya.plot_dv(level='Commodities',  title = '',drop=['Taxes','Margins','unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Labor - Skilled', 'Labor - Semi Skilled', 'Labor - Unskilled'] , unit='K USD')
 #%% Sensitivity analysis
 kenya.sensitivity(path=r'Biomass\Biomass.xlsx')
 

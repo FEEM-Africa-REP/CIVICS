@@ -11,6 +11,8 @@ kenya.plot_ds(indicator='CO2')
 kenya.plot_ds(indicator='Water', color=['Blue','Green','Gray'])
 kenya.plot_ds(indicator='Energy', color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
 kenya.plot_ds(indicator='FAO Land')
+
+kenya.plot_dv(level='Activities',  color='Accent', drop=['Taxes','Margins','unused','Capital - Land','Capital - Livestock','Capital - Agriculture','Capital - Machines','Import'] , unit='K USD')
 #%% Operation impact
 kenya.shock_calc(path=r'Ecopulpers\Ecopulpers.xlsx', Z=True, VA=True, S=True)
 
@@ -21,6 +23,7 @@ kenya.plot_ds(indicator='CO2')
 kenya.plot_ds(indicator='Water', color=['Blue','Green','Gray'])
 kenya.plot_ds(indicator='Energy', color=['darkgreen','black','orange','aqua','royalblue','gold','peru','yellow','palegreen'])
 kenya.plot_ds(indicator='FAO Land')
+
 #%% Sensitivity analysis
 kenya.sensitivity(path=r'Ecopulpers\Ecopulpers.xlsx')
 
