@@ -18,7 +18,9 @@ from REP_CVX.functions.data_read import sens_info
 from REP_CVX.functions.utility import value_from_excel
 from REP_CVX.functions.check import var_check
 from REP_CVX.functions.data_read import sensitivity_take
+from REP_CVX.functions.utility import sh_excel
 from warnings import filterwarnings
+
 
 import shutil
 import glob
@@ -217,7 +219,9 @@ class C_SUT():
     def plot_dx (self,aggregated=True,unit='default',level=None,kind='Absolute',
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
                 directory='Charts',ranshow=(0,0),title='default',color = 'rainbow', drop=None,save_excel=True):
-        directory=self.__name+'\Charts'
+        
+
+        
         '''  
         plot_dx:
             This function is used to plot delta_x between the baseline and the
@@ -277,7 +281,7 @@ class C_SUT():
              
         ''' 
         
-        
+        directory='{}\{}'.format(self.__name,directory)
 
         # Check if the shock result exist or not
         if not hasattr(self, 'X_c'):raise ValueError('To run the plot function, there should be an implemented shock.')
@@ -296,7 +300,7 @@ class C_SUT():
                 fig_format='png',title_font=15,style='ggplot',figsize=(10, 6),
                 directory='Charts',ranshow=(0,0),title='default',color = 'terrain'
                 , drop= None,save_excel=True):
-        directory=self.__name+'\Charts'
+        
         '''  
         plot_dv:
             This function is used to plot delta_VA between the baseline and the
@@ -355,6 +359,7 @@ class C_SUT():
                     in the same directory     
         '''        
 
+        directory='{}\{}'.format(self.__name,directory)
         
         # Check if the shock result exist or not
         if not hasattr(self, 'X_c'):raise ValueError('To run the plot function, there should be an implemented shock.')
@@ -370,7 +375,7 @@ class C_SUT():
                 level='Activities',kind='Absolute',fig_format='png',title_font=15,
                 style='ggplot',figsize=(10, 6),directory='Charts',ranshow=(0,0)
                 ,title='default',color = 'terrain', drop= None,save_excel=True):
-        directory=self.__name+'\Charts'
+        
         '''  
         plot_ds:
             This function is used to plot delta_S between the baseline and the
@@ -437,7 +442,7 @@ class C_SUT():
                     in the same directory     
         '''         
         
-        
+        directory='{}\{}'.format(self.__name,directory)
         # Check if the shock result exist or not
         if not hasattr(self, 'X_c'):raise ValueError('To run the plot function, there should be an implemented shock.')
 
@@ -452,7 +457,7 @@ class C_SUT():
     def plot_dp(self,unit='default',level=None,fig_format='png',title_font=15,
                 style='ggplot',figsize=(10, 6),directory='Charts',title='default'
                 ,color = 'terrain',aggregated=False,save_excel=True):
-        directory=self.__name+'\Charts'
+        
         '''  
         plot_dp:
             This function is used to plot change in the price ratio between the baseline and the
@@ -496,7 +501,7 @@ class C_SUT():
                     in the same directory     
         '''          
         
-        
+        directory='{}\{}'.format(self.__name,directory)
         # Check if the shock result exist or not
         if not hasattr(self, 'X_c'):raise ValueError('To run the plot function, there should be an implemented shock.')
    
@@ -663,7 +668,7 @@ class C_SUT():
     def impact_assess (self,p_life,saving_sce,invest_sce,imports=['Import'],
                        w_ext=['Water'], em_ext=['CO2'], land=['Land'], 
                        labour=['Labor - Skilled','Labor - Semi Skilled','Labor - Unskilled'],
-                       capital=['Capital - Machines'],save_excel=True,directory='Charts'):
+                       capital=['Capital - Machines'],save_excel=True):
         '''
         impact:
             This function can be used for the impact assessment analysis of an
@@ -755,11 +760,9 @@ class C_SUT():
                   caps={'color':'black','linewidth' : 1},
                   medians={'color':'black','linewidth' : 1},
                   fliers={'marker':'o', 'color':'black', 'alpha':0.5},figsize=(9,6)
-                  ,title_font=20,rational=0,directory='\Charts',fig_format='png'):
-        directory=self.__name+'\Charts'
-        '''
+                  ,title_font=20,rational=0,directory='Charts',fig_format='png'):
         
-
+        '''
         Parameters
         ----------
         variable : string
@@ -844,6 +847,7 @@ class C_SUT():
                         in the same directory                           
 
         '''
+        directory='{}\{}'.format(self.__name,directory)
         # Check if the given varibale is among the acceptable ones or not!
         variable = var_check(variable)
         
@@ -855,7 +859,5 @@ class C_SUT():
     
 
     def get_excel_shock(self,num_index=30):
-        
-        from REP_CVX.functions.utility import sh_excel
         sh_excel(num_index,self.__indeces)
   

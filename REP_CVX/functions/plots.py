@@ -9,6 +9,7 @@ from REP_CVX.functions.check import style_check
 from REP_CVX.functions.check import level_check
 from REP_CVX.functions.check import kind_check
 from REP_CVX.functions.check import indic_check
+from REP_CVX.functions.utility import file_exist
 
 
 """
@@ -244,16 +245,27 @@ def delta_xv(X_c,X,style,unit,m_unit,level,kind,title,ranshow,title_font,figsize
     if abs(d_x.sum().sum()) <= 0.000001:
         print('The following matrix seems to be unchanged in the implemented shock, Maybe the changes are very small or they are related to computational errors.')
         
+    # check if the same file already exists or not
+    i=1
+    dir = '{}\{}_{}.{}'.format(directory,title,i,fig_format)
+    while file_exist(dir): 
+        i+= 1
+        dir = '{}\{}_{}.{}'.format(directory,title,i,fig_format)
     
-       
     plt.title(title,fontsize=title_font)
     plt.ylabel(unit)
-    plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
+    plt.savefig(dir,bbox_inches='tight',dpi=150)
     plt.show()
     
     # Save the dataframe into a excel file in the same directory
+    # Check if the excel file with the same name already exists
+    i=1
+    dir = '{}\{}_{}.xlsx'.format(directory,i,title)
+    while file_exist(dir): 
+        i+= 1
+        dir = '{}\{}_{}.xlsx'.format(directory,i,title)
     if ex_save:
-        with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
+        with pd.ExcelWriter(dir) as writer:
             d_x.to_excel(writer)
 
  
@@ -350,13 +362,24 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     plt.ylabel(unit)
 
     # Saving and showing the plot
-    plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
+    # check if the same file already exists or not
+    i=1
+    dir = '{}\{}_{}.{}'.format(directory,title,i,fig_format)
+    while file_exist(dir): 
+        i+= 1
+        dir = '{}\{}_{}.{}'.format(directory,title,i,fig_format)
+    plt.savefig(dir,bbox_inches='tight',dpi=150)
     plt.show()   
     
     # Saving the final dataframe into an excel file in the same directory
+    i=1
+    dir = '{}\{}_{}.xlsx'.format(directory,i,title)
+    while file_exist(dir): 
+        i+= 1
+        dir = '{}\{}_{}.xlsx'.format(directory,i,title)
     if ex_save:
-        with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
-            d_x.to_excel(writer)    
+        with pd.ExcelWriter(dir) as writer:
+            d_x.to_excel(writer)   
             
 
 
@@ -419,13 +442,25 @@ def delta_p(X_c,X,style,level,title,title_font,figsize,directory,fig_format,colo
     plt.title(title)
     
     # Save and show the plot
-    plt.savefig('{}\{}.{}'.format(directory,title,fig_format),bbox_inches='tight',dpi=150)
+    i=1
+    dir = '{}\{}_{}.{}'.format(directory,title,i,fig_format)
+    while file_exist(dir): 
+        i+= 1
+        dir = '{}\{}_{}.{}'.format(directory,title,i,fig_format)
+    plt.savefig(dir,bbox_inches='tight',dpi=150)
     plt.show()  
+ 
     
     # save the final dataframe in form of an excel file in the same directory
+    i=1
+    dir = '{}\{}_{}.xlsx'.format(directory,i,title)
+    while file_exist(dir): 
+        i+= 1
+        dir = '{}\{}_{}.xlsx'.format(directory,i,title)
     if ex_save:
-        with pd.ExcelWriter('{}\{}.xlsx'.format(directory,title)) as writer:
-            d_x.to_excel(writer)         
+        with pd.ExcelWriter(dir) as writer:
+            d_x.to_excel(writer)   
+                     
     
     
 def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers,figsize,legend,unit,title_font,directory,fig_format):
@@ -474,7 +509,12 @@ def ptl_sensitivity(data,index,title,ibox,iwhiskers,icaps,imedians,ifliers,figsi
     
     leg = legend.replace("\n","")
     # Save and show the plot
-    plt.savefig('{}\{}_{}.{}'.format(directory,leg,title,fig_format),bbox_inches='tight',dpi=150)
+    i=1
+    dir = '{}\{}_{}_{}.{}'.format(directory,leg,title,i,fig_format)
+    while file_exist(dir): 
+        i+= 1
+        dir = '{}\{}_{}_{}.{}'.format(directory,leg,title,i,fig_format)
+    plt.savefig(dir,bbox_inches='tight',dpi=150)
     plt.show() 
     
 

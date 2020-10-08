@@ -13,6 +13,7 @@ dict_maker:     Stores the given information in a dictionary.
 '''
 import xlsxwriter
 import pandas as pd
+import os
 
         
 def indeces (S,Z,VA,X):
@@ -46,7 +47,14 @@ def value_from_excel(path):
     book = app.books.open(path)
     book.save()
     app.kill()
+
+def file_exist(directory):
     
+    # This function checks if a given directory exists or not
+    
+    dir = directory
+    return os.path.exists(dir)
+        
 def sh_excel(num_shock,indeces):
     
     # Defining the headers
