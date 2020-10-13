@@ -11,11 +11,12 @@ Goal:
     The idea is to have an environmental extension in the form of CVX SUT.
 """
 # This parameter tells the model inf it should make a new proxy matrix or not
-rewrite = False
+rewrite = True
 #%%
 # Importing the needed libraries
 import pandas as pd
 import numpy as np
+import os
 #%%
 """
 First step:
@@ -66,6 +67,7 @@ eora_to_sam_ag = []
 agg_list = []
 for i in range(len(sam_sec)):
     if Gi[sam_sec[i]].sum() > 1 :
+
         for j in range(len(eora_sec)):
             if Gi.values[j,i] == 1:
                 eora_agg.append(eora_sec[j])
@@ -115,9 +117,9 @@ for i in range(len(eora_dis_single)):
 #%%
 if rewrite:
     proxy = pd.DataFrame(np.zeros((len(eora_dis_single),len(my_list))),index=eora_dis_single,columns = [eora_to_sam_dis,my_list] )        
-    with pd.ExcelWriter(r'Results\proxy.xlsx') as writer:
+    with pd.ExcelWriter(r'proxy.xlsx') as writer:
         proxy.to_excel(writer)
-    os.startfile(r'Results\proxy.xlsx')
+    os.startfile(r'proxy.xlsx')
     
     input('Click on Enter to Continue:')      
 #%% 
