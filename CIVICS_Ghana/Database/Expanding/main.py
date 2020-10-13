@@ -11,7 +11,7 @@ Goal:
     The idea is to have an environmental extension in the form of CVX SUT.
 """
 # This parameter tells the model inf it should make a new proxy matrix or not
-rewrite = True
+rewrite = False
 #%%
 # Importing the needed libraries
 import pandas as pd
@@ -84,7 +84,7 @@ for i in range (len(eora_sec)):
                 
 #%%
 # Reading EORA Datbase 
-Eora = pd.read_excel(r'IO_GHA_2015_BasicPrice.xlsx',index_col = [0,1,2] , columns = [0])
+Eora = pd.read_excel(r'IO_GHA_2013_BasicPrice.xlsx',index_col = [0,1,2] , columns = [0])
 #%%
 
 for i in range (len(eora_agg)):
@@ -123,7 +123,7 @@ if rewrite:
     
     input('Click on Enter to Continue:')      
 #%% 
-proxy = pd.read_excel(r'Results\proxy.xlsx',index_col = [0] , header = [0,1])
+proxy = pd.read_excel(r'proxy_based on 2013 data.xlsx',index_col = [0] , header = [0,1])
 #%%
 Eora_calc = Eora.copy()
 #%%
@@ -148,7 +148,9 @@ for i in range (len(eora_dis_single)):
 for i in range(len(my_list)):
     Eora = Eora.rename(columns = {my_list[i]:eora_to_sam_dis[i]})            
         
-  
+#%%
+with pd.ExcelWriter(r'dis_E_2013.xlsx') as writer:
+    Eora.to_excel(writer)
 #%%
 """
 Now it is time to disaggregate the final demand resource extention.
