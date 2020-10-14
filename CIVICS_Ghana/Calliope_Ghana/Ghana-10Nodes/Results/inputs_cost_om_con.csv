@@ -1,0 +1,6 @@
+costs,locs,techs,cost_om_con
+monetary,AA,CCGT_pp,0.0249
+monetary,AA,GT_pp,0.0249
+monetary,AA,ICE_pp,0.0249
+monetary,WP,CCGT_pp,0.0249
+monetary,WP,GT_pp,0.0249

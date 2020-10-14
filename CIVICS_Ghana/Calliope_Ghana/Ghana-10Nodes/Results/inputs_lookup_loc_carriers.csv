@@ -1,0 +1,11 @@
+carriers,locs,lookup_loc_carriers
+power,AA,"AA::HV_330:WP::power,AA::demand_power::power,AA::HV_161:CP::power,AA::CCGT_pp::power,AA::HV_161:EP::power,AA::GT_pp::power,AA::ICE_pp::power"
+power,AH,"AH::HV_161:WP::power,AH::demand_power::power,AH::HV_161:CP::power,AH::HV_161:EP::power,AH::HV_161:BA::power"
+power,BA,"BA::HV_161:AH::power,BA::HV_161:NP::power,BA::Hydro_new::power,BA::HV_161:WP::power,BA::demand_power::power"
+power,CP,"CP::HV_161:AH::power,CP::HV_161:AA::power,CP::demand_power::power,CP::HV_161:WP::power,CP::PV::power"
+power,EP,"EP::HV_161:AA::power,EP::HV_161:AH::power,EP::Hydro_old::power,EP::HV_161:TV::power,EP::demand_power::power"
+power,NP,"NP::HV_161:UW::power,NP::demand_power::power,NP::HV_161:UE::power,NP::HV_161:BA::power"
+power,TV,"TV::HV_161:EP::power,TV::demand_power::power,TV::Hydro_old::power"
+power,UE,"UE::demand_power::power,UE::HV_161:NP::power,UE::HV_161:UW::power,UE::PV::power"
+power,UW,"UW::HV_161:UE::power,UW::demand_power::power,UW::HV_161:NP::power"
+power,WP,"WP::HV_161:AH::power,WP::HV_161:CP::power,WP::CCGT_pp::power,WP::demand_power::power,WP::HV_161:BA::power,WP::GT_pp::power,WP::HV_330:AA::power"

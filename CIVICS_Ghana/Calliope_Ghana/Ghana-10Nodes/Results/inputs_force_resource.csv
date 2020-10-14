@@ -1,0 +1,11 @@
+locs,techs,force_resource
+AA,demand_power,1.0
+AH,demand_power,1.0
+BA,demand_power,1.0
+CP,demand_power,1.0
+EP,demand_power,1.0
+NP,demand_power,1.0
+TV,demand_power,1.0
+UE,demand_power,1.0
+UW,demand_power,1.0
+WP,demand_power,1.0

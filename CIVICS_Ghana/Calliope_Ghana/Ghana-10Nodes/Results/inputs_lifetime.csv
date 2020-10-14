@@ -1,0 +1,11 @@
+locs,techs,lifetime
+AA,CCGT_pp,25.0
+AA,GT_pp,25.0
+AA,ICE_pp,20.0
+BA,Hydro_new,50.0
+CP,PV,25.0
+EP,Hydro_old,50.0
+TV,Hydro_old,50.0
+UE,PV,25.0
+WP,CCGT_pp,25.0
+WP,GT_pp,25.0

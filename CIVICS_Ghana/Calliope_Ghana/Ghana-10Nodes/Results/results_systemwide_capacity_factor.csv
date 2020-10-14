@@ -1,0 +1,7 @@
+carriers,techs,systemwide_capacity_factor
+power,ICE_pp,0.0
+power,PV,0.13589166666666666
+power,CCGT_pp,0.4413210787795586
+power,Hydro_old,0.9999575076445005
+power,Hydro_new,1.0
+power,GT_pp,0.0

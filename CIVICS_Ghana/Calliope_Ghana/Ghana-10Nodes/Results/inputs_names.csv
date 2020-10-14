@@ -1,0 +1,10 @@
+techs,names
+ICE_pp,HFO Power Plant
+HV_161,High Voltage Grid_161
+HV_330,High Voltage Grid_330
+PV,PV Utility Scale
+demand_power,Power demand
+CCGT_pp,CCGT Power Plant
+Hydro_old,Hydro Power Plant
+Hydro_new,Hydro Power Plant
+GT_pp,GT Power Plant

@@ -1,0 +1,13 @@
+locs,techs,resource_unit
+AA,demand_power,energy
+AH,demand_power,energy
+BA,demand_power,energy
+CP,PV,energy_per_cap
+CP,demand_power,energy
+EP,demand_power,energy
+NP,demand_power,energy
+TV,demand_power,energy
+UE,PV,energy_per_cap
+UE,demand_power,energy
+UW,demand_power,energy
+WP,demand_power,energy

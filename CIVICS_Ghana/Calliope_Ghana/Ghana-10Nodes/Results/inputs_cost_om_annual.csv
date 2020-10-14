@@ -1,0 +1,11 @@
+costs,locs,techs,cost_om_annual
+monetary,AA,CCGT_pp,19.0
+monetary,AA,GT_pp,13.2
+monetary,AA,ICE_pp,31.5
+monetary,BA,Hydro_new,27.7
+monetary,CP,PV,20.0
+monetary,EP,Hydro_old,9.2
+monetary,TV,Hydro_old,9.2
+monetary,UE,PV,20.0
+monetary,WP,CCGT_pp,19.0
+monetary,WP,GT_pp,13.2

@@ -1,0 +1,10 @@
+techs,inheritance
+ICE_pp,supply
+HV_161,transmission
+HV_330,transmission
+PV,supply
+demand_power,demand
+CCGT_pp,supply
+Hydro_old,supply
+Hydro_new,supply
+GT_pp,supply
