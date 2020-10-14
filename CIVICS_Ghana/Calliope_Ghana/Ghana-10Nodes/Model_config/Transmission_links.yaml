@@ -108,7 +108,7 @@ links:
                     energy_cap_equals: 1611000
                 distance: 4.663
 
-    EP,VT:
+    EP,TV:
         techs:
             HV_161:
                 constraints:
