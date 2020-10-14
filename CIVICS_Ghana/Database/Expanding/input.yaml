@@ -1,0 +1,17 @@
+
+products:
+    electricity:
+        om_cost:
+            fuel: 0.1
+            non_fuel: 0.2
+        inv_cost:
+            0.8
+
+            
+    heat:
+        om_cost:
+            fuel: 0.1
+            non_fuel: 0.2
+        inv_cost:
+            0.8            
+        

@@ -149,6 +149,8 @@ for i in range(len(my_list)):
     Eora = Eora.rename(columns = {my_list[i]:eora_to_sam_dis[i]})            
         
 #%%
+Eora = Eora[Gi.columns.to_list()]
+#%%
 with pd.ExcelWriter(r'dis_E_2013.xlsx') as writer:
     Eora.to_excel(writer)
 #%%
@@ -208,6 +210,18 @@ with pd.ExcelWriter('E.xlsx') as writer:
     E_ext.to_excel(writer,sheet_name = 'Flow')  
     E_coef.to_excel(writer,sheet_name = 'Coefficient')
         
-        
-        
+#%%
+list1=list(Gi.columns)
+list2=list(Eora.columns) 
+ff=[]
+for i in range(len(list1)):
+    a=False
+    for j in range(len(list2)):
+        if list1[i] == list2[j]:
+            a=True
+            break
+        else:
+            a=False
+    if a==False :
+        ff.append(list1[i])
         

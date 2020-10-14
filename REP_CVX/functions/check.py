@@ -10,7 +10,7 @@ def unit_check(unit):
     '''
     This function checks if a given Unit is listed in the acceptable units
     '''
-    unit_list = ['M USD','M EUR', 'M KSH','K KSH','K USD','K EUR']
+    unit_list = ['M USD','M EUR', 'M KSH','K KSH','K USD','K EUR','M GHC']
     
     if unit not in unit_list:
         raise ValueError('Unit should be one of the followings: {}. To add more units, the user can use REP_CVX.functions.check module'.format(unit_list))
