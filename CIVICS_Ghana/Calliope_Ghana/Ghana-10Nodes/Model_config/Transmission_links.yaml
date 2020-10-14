@@ -1,0 +1,147 @@
+
+# Transmission Grid and the connections Definition #
+
+# Parameters and Units:
+
+    # energy_cap_equals:  Capacity of Grid          [kW]
+    # distance:           Distance Between 2 Nodes  [hundreds of km]   
+
+techs:
+
+############################### High Voltage(132) Grid ############################### 
+    HV_161:
+        essentials:
+            name: 'High Voltage Grid_161'
+            parent: transmission
+            carrier: power
+            color: '#00BFFF'
+        constraints:
+            energy_eff_per_distance: 0.995 #TBC (consider distance in in hundreds of km)
+        costs:
+            monetary:
+                om_prod: 0.00013156 #TBC
+                
+############################### High Voltage(220) Grid ############################### 
+    HV_330:
+        essentials:
+            name: 'High Voltage Grid_330'
+            parent: transmission
+            carrier: power
+            color: '#4169E1'
+        constraints:
+            energy_eff_per_distance: 0.995 #TBC (consider distance in in hundreds of km)
+        costs:
+            monetary:
+                om_prod: 0.000120348     #TBC        
+                
+links:                             
+                
+# Connection of Nodes
+                
+    UE,UW:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 364000                 
+                distance: 1.096 # hundreds of km                                 
+                             
+    NP,UE:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 244000 
+                distance: 1.581                  
+                
+    NP,UW:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 182000
+                distance: 0.95              
+
+    BA,NP:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 728000
+                distance: 2.322                
+
+    AH,BA:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 364000
+                distance: 1.15
+
+    AH,EP:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 778000
+                distance: 2.567
+
+    WP,BA:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 364000
+                distance: 0.86
+
+    WP,AH:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 728000
+                distance: 1.422
+
+    WP,CP:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 652000
+                distance: 2.76
+
+    EP,AA:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 1611000
+                distance: 4.663
+
+    EP,VT:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 546000
+                distance: 1.094
+
+    AA,WP:
+        techs:
+            HV_330:
+                constraints:
+                    energy_cap_equals: 1000000
+                distance: 2.19
+
+    AA,CP:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 340000
+                distance: 1.598
+
+    CP,AH:
+        techs:
+            HV_161:
+                constraints:
+                    energy_cap_equals: 170000
+                distance: 0.249
+
+
+
+
+
+
+
+                
+
+ 

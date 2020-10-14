@@ -1,0 +1,156 @@
+
+# Technology Definition #
+
+# Parameters and Units:
+
+    # resource:      limitation over the power output
+    # resource_unit: Defines the unit of numbers provided in resource
+    # energy_eff:    efficiency of power plant             [-]
+    # lifetime:      Life time of the power plant          [year]
+    # energy_cap:    Capital investment of the technology  [$/kW]
+    # om_annual:     Fixed annual O&M cost                 [$/kW]
+    # om_prod:       Variable cost of production           [$/kWh]
+    # om_con:        Variable cost of fuel                 [$/kWh]
+    # energy_cap:    Investment Cost of Technology         [$/kW]
+    # lifetime:      Life time of the Technology           [years]
+    # interest_rate: Interest rate                         [-]
+   
+# Reference: Updated Least Cost Power Development Plan 2017-2035 Report
+
+techs: 
+
+# Conversion Technologies #
+############################### Hydro Power Plants ###############################
+    Hydro_old:
+    
+        essentials:
+            color: '#1d6996'
+            name: 'Hydro Power Plant'
+            parent: supply
+            carrier_out: power                     
+                   
+        constraints:
+            energy_eff: 1.00                       # Timeseries file contains the real energy output year 2015 Source: Field Campaign 
+            lifetime: 50                                  
+                                     
+        costs:
+            monetary:    
+                om_annual: 9.2
+                om_prod: 0.0016                  
+                interest_rate: 0.10                   
+                
+############################### Hydro Power Plants ###############################
+    Hydro_new:
+    
+        essentials:
+            color: '#1d6996'
+            name: 'Hydro Power Plant'
+            parent: supply
+            carrier_out: power                     
+                   
+        constraints:
+            energy_eff: 1.00                       # Timeseries file contains the real energy output year 2015 Source: Field Campaign 
+            lifetime: 50                                  
+                                     
+        costs:
+            monetary:    
+                om_annual: 27.7
+                om_prod: 0.0005                  
+                interest_rate: 0.10                   
+                         
+  
+############################### Combined Cycle Gas Turbine Power Plant ###############################                                      
+    CCGT_pp:
+
+        essentials:
+            color: '#e17c05'
+            name: 'CCGT Power Plant'
+            parent: supply                 
+            carrier_out: power                     
+                  
+        constraints:
+            energy_eff: 0.40                       
+            resource: inf                                                    
+            lifetime: 25                                  
+           
+        costs:
+            monetary:   
+                om_annual: 19          # fixed O&M          
+                om_prod: 0.0043        # variable O&M            
+                om_con: 0.0249       # fuel cost             
+                interest_rate: 0.10                                                    
+
+
+############################### Gas Turbine Power Plant ###############################                                      
+    GT_pp:
+
+        essentials:
+            color: '#e17c05'
+            name: 'GT Power Plant'
+            parent: supply                 
+            carrier_out: power                     
+                  
+        constraints:
+            energy_eff: 0.31                     
+            resource: inf                                                    
+            lifetime: 25                                  
+           
+        costs:
+            monetary:   
+                om_annual: 13.2                    
+                om_prod: 0.0049                    
+                om_con: 0.0249       # fuel cost                   
+                interest_rate: 0.10                                                    
+
+############################# ICE Power Plant #############################                               
+    ICE_pp:
+    
+        essentials:
+            color: '#f70000'
+            name: 'HFO Power Plant'
+            parent: supply            
+            carrier_out: power                     
+   
+        constraints:
+            energy_eff: 0.38                    
+            resource: inf          # every location will have its timeseries                                        
+            lifetime: 20                                  
+         
+        costs:
+            monetary:  
+                om_annual: 31.5                    
+                om_prod: 0.004                  
+                om_con: 0.0249       # fuel cost                   
+                interest_rate: 0.10               
+
+############################# PV Utility Scale #############################                               
+    PV:
+    
+        essentials:
+            color: '#ffff00'
+            name: 'PV Utility Scale'
+            parent: supply            
+            carrier_out: power                     
+   
+        constraints:
+            energy_eff: 1                    
+            resource: inf                                                  
+            lifetime: 25                                  
+         
+        costs:
+            monetary:  
+                om_annual: 20                    
+                interest_rate: 0.10               
+                         
+# Consuming Technologies #
+
+#################################### Electricity ####################################
+    demand_power:
+    
+        essentials:
+            name: 'Power demand'
+            color: '#000000'
+            parent: demand
+            carrier: power
+            
+

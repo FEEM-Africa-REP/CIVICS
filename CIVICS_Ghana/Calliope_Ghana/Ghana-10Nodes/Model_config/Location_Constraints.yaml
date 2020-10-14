@@ -1,0 +1,168 @@
+
+# Location Definition #
+
+# In this model, Ghana is divided into 10 different regions which are:
+
+        #1. Upper East Region: UE
+        #2. Upper West Region: UW 
+        #3. Northern Region: NP
+        #4. Brong Ahafo Region: BA
+        #5. Ashanti Region: AH
+        #6. Western Region: WP 
+        #7. Central Region: CP
+        #8. Eastern Region: EP
+        #9. Greater Accra Region: AA
+        #10. Volta Region: TV
+
+# Parameters:
+
+    # lat: Latitude of the location
+    # lon: Longtitude of the location 
+    # energy_cap_equals: Real Capacity [kW]
+
+# Defining the locations 
+
+locations:
+
+################################### Upper East ##################################                                                   
+    UE:
+        techs:
+
+            PV:
+                constraints:
+                    energy_cap_equals: 2500
+                    resource: file=PV_Utility.csv:UE
+                    resource_unit: energy_per_cap
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:UE 
+                    
+################################### Upper West ##################################                                                 
+    UW:
+    
+        techs:
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:UW 
+                    
+################################### Northern ##################################                                                                                                   
+    NP:
+    
+        techs:
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:NP 
+                    
+################################### Brong Ahafo ##################################                                                                                                                                                      
+    BA:
+ 
+        techs:
+
+            Hydro_new:
+                constraints:
+                    energy_cap_equals: 360000 
+                    resource: inf
+                    # resource: file=Hydro.csv:BA   # decidere cosa fare con l'hydro     
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:BA 
+
+################################### Ashanti ##################################                                                   
+    AH:
+        
+        techs:
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:AH 
+                    
+################################### Western ##################################                                                 
+    WP:
+    
+        techs:
+
+            CCGT_pp:
+                constraints:
+                    energy_cap_equals: 620000 
+
+            GT_pp:
+                constraints:
+                    energy_cap_equals: 230000
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:WP 
+                    
+################################### Central ##################################                                                                                                   
+    CP:
+    
+        techs:
+
+            PV:
+                constraints:
+                    energy_cap_equals: 40000
+                    resource: file=PV_Utility.csv:CP
+                    resource_unit: energy_per_cap
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:CP 
+                    
+################################### Eastern ##################################                                                                                                                                                      
+    EP:
+ 
+        techs:
+
+            Hydro_old:
+                constraints:
+                    energy_cap_equals: 900000 
+                    resource: inf
+                    # resource: file=Hydro.csv:BA   # decidere cosa fare con l'hydro     
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:EP 
+
+################################### Greater Accra ##################################                                                   
+    AA:
+    
+        techs:
+
+            CCGT_pp:
+                constraints:
+                    energy_cap_equals: 860000
+
+            GT_pp:
+                constraints:
+                    energy_cap_equals: 400000
+
+            ICE_pp: 
+                constraints:
+                    energy_cap_equals: 845000 
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:AA 
+                    
+################################### Volta ##################################                                                 
+    TV:
+    
+        techs:
+
+            Hydro_old:
+                constraints:
+                    energy_cap_equals: 140000 
+                    resource: inf
+                    # resource: file=Hydro.csv:BA   # decidere cosa fare con l'hydro     
+
+            demand_power:
+                constraints:
+                    resource: file=Demand.csv:TV 
+        
+
+
+                    
