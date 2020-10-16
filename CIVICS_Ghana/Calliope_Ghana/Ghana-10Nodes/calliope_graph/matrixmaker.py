@@ -90,7 +90,7 @@ def imp_exp (model,nodes,prod,tr_tech,carr):
             
         node_index.append(nodes[0]) 
         node_index.append(nodes[0]) 
-            
+
         exp[j] = exp[j] + '_exp'
         imp[j] = imp[j] + '_imp'
     
@@ -102,8 +102,18 @@ def imp_exp (model,nodes,prod,tr_tech,carr):
     for i in r_nodes:
         tr = []
         for j in tr_tech:
-            tr.append(j + ':' + i)
-        tran_get.append(tr)    
+            tech_ex = j + ':' + i
+            try:
+                add_check = model.get_formatted_array('carrier_con').loc[{'techs':[tech_ex],'carriers':carr,'locs':[node]}].sum('locs').sum('techs').to_pandas().T
+                tr.append(tech_ex)
+            except:
+                a=1
+
+        tran_get.append(tr)
+
+        
+
+    
     
     for i in range(len(exp)):
         
@@ -135,12 +145,19 @@ def imp_exp (model,nodes,prod,tr_tech,carr):
         imports0 = pd.DataFrame(0,index=prod.index,columns=imp)    
     
         tran_get = []
-    
         for h in r_nodes:
             tr = []
             for p in tr_tech:
-                tr.append(p + ':' + h)
+                tech_ex = h + ':' + p
+                try:
+                    add_check = model.get_formatted_array('carrier_con').loc[{'techs':[tech_ex],'carriers':carr,'locs':[node]}].sum('locs').sum('techs').to_pandas().T
+                    tr.append(tech_ex)
+                except:
+                    a = 1
+    
             tran_get.append(tr)
+
+
     
         for n in range(len(exp)):
             exports0[exp[n]] = model.get_formatted_array('carrier_con').loc[{'techs':tran_get[n],'carriers':carr,'locs':[node]}].sum('locs').sum('techs').to_pandas().T

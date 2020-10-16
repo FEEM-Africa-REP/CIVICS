@@ -66,7 +66,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
         raise ValueError ('Incorrect average type.\n Average can be one of the followings: {},{},{},{} and {}'.format('hourly','daily','weekly','monthly','yearly'))
     
     for i in nodes:
-        
+
         data = prod_imp_exp(production,imports,exports,i)
         
         
@@ -128,7 +128,7 @@ def node_disp (nodes,fig_format,unit,conversion,style,date_format,title_font,pro
             
             # Drawing demand line
             plt.plot(dem.index,dem.values*conversion,'black',alpha=0.5, linestyle = '-', label ='Demand',linewidth=1)
-            
+
             # Drawing positivie numbers
             plt.stackplot(data0.index,data0.values.T*conversion,colors=colors[data0.columns],labels=names[data0.columns])
             
