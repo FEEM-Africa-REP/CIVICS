@@ -64,8 +64,8 @@ locations:
             Hydro_new:
                 constraints:
                     energy_cap_equals: 360000 
-                    resource: inf
-                    # resource: file=Hydro.csv:BA   # decidere cosa fare con l'hydro     
+                    resource: file=Hydro.csv:BUI   #historical data     
+                    resource_unit: energy
 
             demand_power:
                 constraints:
@@ -120,8 +120,8 @@ locations:
             Hydro_old:
                 constraints:
                     energy_cap_equals: 900000 
-                    resource: inf
-                    # resource: file=Hydro.csv:BA   # decidere cosa fare con l'hydro     
+                    resource: file=Hydro.csv:AKO   # historical data     
+                    resource_unit: energy
 
             demand_power:
                 constraints:
@@ -156,8 +156,8 @@ locations:
             Hydro_old:
                 constraints:
                     energy_cap_equals: 140000 
-                    resource: inf
-                    # resource: file=Hydro.csv:BA   # decidere cosa fare con l'hydro     
+                    resource: file=Hydro.csv:KPO   # historical data   
+                    resource_unit: energy
 
             demand_power:
                 constraints:
