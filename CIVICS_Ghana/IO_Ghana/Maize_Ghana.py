@@ -4,10 +4,12 @@ Created on Thu Oct 29 10:19:55 2020
 
 @author: nigolred
 """
+import sys
+sys.path.insert(1,r'CIVICS')
 
 import REP_CVX
 
-ghana = REP_CVX.C_SUT(path = r'Database\GHANA_2015_CVX.xlsx', unit = 'M KSH', name='Ghana')
+ghana = REP_CVX.C_SUT(path = r'Database\GHANA_2015_CVX.xlsx', unit = 'M GHC', name='Ghana')
 
 #%%
 In_sec = ['Maize','Poultry','Grain milling','Electricity, gas and steam']

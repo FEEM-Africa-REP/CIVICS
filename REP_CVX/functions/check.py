@@ -22,7 +22,8 @@ def unit_converter(unit1,unit2):
     This function converts the units between the listed units
     '''
     # For now, we use following simple script for the conversion. In the next step, a library will be added to the code.
-    convert_list = {'M KSH_M USD': 0.00939548 ,'M KSH_M EUR': 0.00833961, 'M KSH_K USD': 0.00939548*1000 ,'M KSH_K EUR': 0.00833961*1000, 'M KSH_K KSH': 1000}
+    convert_list = {'M KSH_M USD': 0.00939548 ,'M KSH_M EUR': 0.00833961, 'M KSH_K USD': 0.00939548*1000 ,'M KSH_K EUR': 0.00833961*1000, 'M KSH_K KSH': 1000,
+                    'M GHC_M USD': 0.0000171550, 'M GHC_M EUR': 0.0000145311, 'M GHC_K USD': 0.0000171550*1000, 'M GHC_K EUR': 0.0000145311*1000, 'M GHC_K GHC': 1000}
     
     if unit1 == unit2: conversion = 1
     else: conversion = convert_list['{}_{}'.format(unit1,unit2)]
