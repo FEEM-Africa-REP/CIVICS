@@ -26,7 +26,7 @@ COL_SUM_15 = Z_15.sum() + VA_15.sum()
 ROW_SUM_15 = Z_15.sum(axis=1) + Y_15.sum(axis=1)
 zero = COL_SUM_15 - ROW_SUM_15
 
-GDP_15 = VA_15.groupby(level=1).sum().groupby(axis=1, level=2, sort=False).sum()
+GDP_15 = VA_15.drop('Rest of world').groupby(level=1).sum().groupby(axis=1, level=2, sort=False).sum()
 GDP_15_tot = GDP_15.sum().sum() / 1000 # Value in B LCU
 sGDP_15 = GDP_15.sum() / GDP_15.sum().sum()
 
@@ -44,9 +44,10 @@ COL_SUM_13 = Z_13.sum() + VA_13.sum()
 ROW_SUM_13 = Z_13.sum(axis=1) + Y_13.sum(axis=1)
 zero = COL_SUM_13 - ROW_SUM_13
 
-GDP_13 = VA_13.groupby(level=1).sum().groupby(axis=1, level=2, sort=False).sum()
+GDP_13 = VA_13.drop('Rest of world').groupby(level=1).sum().groupby(axis=1, level=2, sort=False).sum()
 GDP_13_tot = GDP_13.sum().sum() / 1000 # Value in B LCU
 sGDP_13 = GDP_15.sum() / GDP_15.sum().sum()
+
 
 #%%
 dva = (va_15-va_13)/va_15*100

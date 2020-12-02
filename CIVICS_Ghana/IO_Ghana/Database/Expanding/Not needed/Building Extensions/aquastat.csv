@@ -1,0 +1,22 @@
+﻿,,Latest value(s),
+Ghana,Agricultural water withdrawal (10^9 m3/year),1.07,
+Ghana,Industrial water withdrawal (10^9 m3/year),0.095,I
+Ghana,Municipal water withdrawal (10^9 m3/year),0.2996,
+Ghana,Total water withdrawal (10^9 m3/year),0.982,I
+Ghana,Irrigation water withdrawal (10^9 m3/year),,
+Ghana,Irrigation water requirement (10^9 m3/year),0.162,L
+Ghana,Agricultural water withdrawal as % of total water withdrawal (%),66.4,I
+Ghana,Industrial water withdrawal as % of total water withdrawal (%),9.674,I
+Ghana,Municipal water withdrawal as % of total withdrawal (%),23.93,I
+Ghana,Total water withdrawal per capita (m3/inhab/year),49.28,K
+Ghana,Environmental Flow Requirements (10^9 m3/year),33.26,E
+,,,
+,,,
+,,,
+E - External data,,,
+I - AQUASTAT estimate,,,
+K - Aggregate data,,,
+L - Modelled data,,,
+(c) 2020 FAO of the UN,,,
+The information contained in AQUASTAT is provided free of charge to all users. Please quote as follows:,,,
+FAO. 2016. AQUASTAT Main Database - Food and Agriculture Organization of the United Nations (FAO). Website accessed on[01/12/2020 20:6],,,
