@@ -225,7 +225,8 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,
         index = [index_0,index_1,sav_list]
 
     Imp.index = index
-    Imp.columns = [columns,units]
+    print(units)
+    # Imp.columns = [columns,units]
     if save_excel:
         with pd.ExcelWriter(r'{}/{} - {}.xlsx'.format(directory,name,s_par)) as writer:
             Imp.to_excel(writer)

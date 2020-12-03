@@ -10,7 +10,7 @@ def unit_check(unit):
     '''
     This function checks if a given Unit is listed in the acceptable units
     '''
-    unit_list = ['M USD','M EUR', 'M KSH','K KSH','K USD','K EUR','M GHC']
+    unit_list = ['M USD','M EUR', 'M KSH','K KSH','K USD','K EUR','M GHS']
     
     if unit not in unit_list:
         raise ValueError('Unit should be one of the followings: {}. To add more units, the user can use REP_CVX.functions.check module'.format(unit_list))
@@ -23,7 +23,7 @@ def unit_converter(unit1,unit2):
     '''
     # For now, we use following simple script for the conversion. In the next step, a library will be added to the code.
     convert_list = {'M KSH_M USD': 0.00939548 ,'M KSH_M EUR': 0.00833961, 'M KSH_K USD': 0.00939548*1000 ,'M KSH_K EUR': 0.00833961*1000, 'M KSH_K KSH': 1000,
-                    'M GHC_M USD': 0.0000171550, 'M GHC_M EUR': 0.0000145311, 'M GHC_K USD': 0.0000171550*1000, 'M GHC_K EUR': 0.0000145311*1000, 'M GHC_K GHC': 1000}
+                    'M GHS_M USD': 0.0000171550, 'M GHS_M EUR': 0.0000145311, 'M GHS_K USD': 0.0000171550*1000, 'M GHS_K EUR': 0.0000145311*1000, 'M GHS_K GHS': 1000}
     
     if unit1 == unit2: conversion = 1
     else: conversion = convert_list['{}_{}'.format(unit1,unit2)]

@@ -184,10 +184,6 @@ class AgDis():
             'Save in an excel file'
             with pd.ExcelWriter('E_new.xlsx') as writer:
                 self.E_new.to_excel(writer)
-            
-        
-        
-     
 
 #%%        
 ghana = AgDis(concordance = r'Concordance/C_EORA.xlsx',E_matrix=r'Environmental Extension/EE_EORA.xlsx',E_index_col= 3)
