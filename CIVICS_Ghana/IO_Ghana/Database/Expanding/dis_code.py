@@ -186,24 +186,8 @@ class AgDis():
                 self.E_new.to_excel(writer)
 
 #%%        
-ghana = AgDis(concordance = r'Concordance/C_EORA.xlsx',E_matrix=r'Environmental Extension/EE_EORA.xlsx',E_index_col= 3)
+ghana = AgDis(concordance = r'Concordance/C_EORA.xlsx',E_matrix=r'Environmental Extension/EE_EORA_W.xlsx',E_index_col= 3)
 #%%
-#ghana.get_proxy_excel(r'Proxy/P_EORA.xlsx')
+# ghana.get_proxy_excel(r'Proxy/P_EORA_W.xlsx')
 #%%
-ghana.run(proxy=r'Proxy/P_EORA.xlsx',save=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ghana.run(proxy=r'Proxy/P_EORA_W.xlsx',save=True)
