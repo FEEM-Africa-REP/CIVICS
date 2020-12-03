@@ -190,11 +190,11 @@ class AgDis():
      
 
 #%%        
-ghana = AgDis(concordance = 'C_EORA.xlsx',E_matrix='EE_EORA.xlsx',E_index_col= 3)
+ghana = AgDis(concordance = r'Concordance/C_EORA.xlsx',E_matrix=r'Environmental Extension/EE_EORA.xlsx',E_index_col= 3)
 #%%
-ghana.get_proxy_excel('pr.xlsx')
+#ghana.get_proxy_excel(r'Proxy/P_EORA.xlsx')
 #%%
-ghana.run(proxy='pr.xlsx',save=True)
+ghana.run(proxy=r'Proxy/P_EORA.xlsx',save=True)
 
 
 
