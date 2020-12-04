@@ -10,7 +10,7 @@ sys.path.insert(1,r'C:\Users\payam\Documents\GitHub\CIVICS_Kenya')
 
 import REP_CVX
 
-Ghana = REP_CVX.C_SUT(path = r'Database\GHANA_2015_CVX.xlsx', unit = 'M GHS', name='Pumpfed Irrigation for Maize')
+Ghana = REP_CVX.C_SUT(path = r'C:\Users\payam\Documents\GitHub\CIVICS_Kenya\CIVICS_Ghana\IO_Ghana\Database\GHANA_2015_CVX.xlsx', unit = 'M GHS', name='Pumpfed Irrigation for Maize')
 #%%
 Ghana.shock_calc(path=r'Pumpfed Irrigation for Maize/Shock1_inputs.xlsx', Y=True)
 Ghana.plot_dx()
@@ -31,3 +31,5 @@ Ghana.impact_assess(p_life=10, saving_sce=['sh', 2], invest_sce=['sh',1],imports
                     labour=['Labor'],
                     capital=['Capital'])
 
+#%%
+Ghana.get_excel_shock()
