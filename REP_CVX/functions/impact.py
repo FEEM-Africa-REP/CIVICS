@@ -209,12 +209,28 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,
         Imp.loc[i,'Workforce Total Impact']     = Imp.loc[i,'Workforce Investment'] - p_life * Imp.loc[i,'Workforce Saving']
         Imp.loc[i,'Capital Total Impact']       = Imp.loc[i,'Capital Investment'] - p_life * Imp.loc[i,'Capital Saving']  
 
+
+    unit_dict = {}
+    # # Taking extension units:
+    for indicator in ['Water','Land','CO2']:
+        try:    
+            take_ = extensions_units.loc[indicator].iloc[0,0]
+        except: 
+            try:
+                take_ = extensions_units.loc[indicator].iloc[0]
+            except:
+                take_ = extensions_units.loc[indicator][0]
+                
+        unit_dict[indicator] = take_
+        
+        
+    
     # Reindexing the dataframe for better representation
-    units = [monetary_unit,monetary_unit,'1/years','years',extensions_units.loc['Water'].iloc[0,0],extensions_units.loc['CO2'].iloc[0,0],
-             extensions_units.loc['Land'].iloc[0],monetary_unit, monetary_unit,monetary_unit,extensions_units.loc['Water'].iloc[0,0],
-             extensions_units.loc['CO2'].iloc[0,0], extensions_units.loc['Land'].iloc[0],monetary_unit,monetary_unit,monetary_unit,
-             extensions_units.loc['Water'].iloc[0,0],extensions_units.loc['CO2'].iloc[0,0],extensions_units.loc['Land'].iloc[0],monetary_unit,	
-             monetary_unit,monetary_unit]
+    units = [monetary_unit,monetary_unit,'1/years','years',unit_dict['Water'],unit_dict['CO2'],
+              unit_dict['Land'],monetary_unit, monetary_unit,monetary_unit,unit_dict['Water'],
+              unit_dict['CO2'], unit_dict['Land'],monetary_unit,monetary_unit,monetary_unit,
+              unit_dict['Water'],unit_dict['CO2'],unit_dict['Land'],monetary_unit,	
+              monetary_unit,monetary_unit]
     
     index_0 = [name] * len(sav_list)
     if len(sav_list) == 1:
@@ -225,6 +241,7 @@ def impact_assessment(invest_sce,saving_sce,results,p_life,w_ext,em_ext,land,
         index = [index_0,index_1,sav_list]
 
     Imp.index = index
+
     Imp.columns = [columns,units]
     if save_excel:
         with pd.ExcelWriter(r'{}/{} - {}.xlsx'.format(directory,name,s_par)) as writer:

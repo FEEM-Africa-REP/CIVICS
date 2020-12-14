@@ -314,7 +314,10 @@ def delta_s(X_c,X,style,level,kind,title,ranshow,title_font,figsize,directory,fi
     # defining the d_x matrix 
     if kind == 'Absolute': 
         # Here the unit won't be printed because there is not a single unit anymore
-        d_x,unit = (X_c - X),Units.loc[indicator].iloc[0].values.tolist()[0]
+        if not isinstance(Units.loc[indicator].iloc[0],str):
+            d_x,unit = (X_c - X),Units.loc[indicator].iloc[0].values.tolist()[0]
+        else:
+            d_x,unit = (X_c - X),Units.loc[indicator].iloc[0]
 
     else: d_x,unit = (X_c - X)/X * 100,'%'
 

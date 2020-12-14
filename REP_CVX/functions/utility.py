@@ -64,6 +64,7 @@ def sh_excel(num_shock,indeces):
     va    = indeces['VA_ind'].get_level_values(0).to_list()
     types = ['Percentage','Absolute']
     yn = ['Yes','No']
+    ext = indeces['S_ind'].get_level_values(0).to_list()
     
     
     # Building the excel file
@@ -86,9 +87,12 @@ def sh_excel(num_shock,indeces):
         indeces.write('A{}'.format(i+1),rc[i])
     for i in range(len(va)):
         indeces.write('B{}'.format(i+1),va[i])
+    for i in range(len(ext)):
+        indeces.write('C{}'.format(i+1),ext[i])
 
     act_com_ref = '=indeces!$A$1:$A${}'.format(len(rc))
     va_ref      = '=indeces!$B$1:$B${}'.format(len(va))
+    ext_ref     = '=indeces!$C$1:$C${}'.format(len(ext)) 
     
     # Building the main sheet
     main = workbook.add_worksheet('main')
@@ -195,6 +199,37 @@ def sh_excel(num_shock,indeces):
                                       'source': types})  
         Z.data_validation('H{}'.format(i+2), {'validate': 'list',
                                       'source': yn})
+    
+    # Building the S sheet
+    S = workbook.add_worksheet('S')
+
+    
+    # Write the header cells and some data that will be used in the examples.
+    heading1 = 'Number'
+    heading2 = 'row'
+    heading3 = 'col'
+    heading4 = 'type'
+    heading5 = 'value'
+    
+    S.write('A1', heading1, header_format)
+    S.write('B1', heading2, header_format)
+    S.write('C1', heading3, header_format)
+    S.write('D1', heading4, header_format)
+    S.write('E1', heading5, header_format)
+
+    
+    for i in range(num_shock):
+        
+        S.write('A{}'.format(i+2), str(i))
+        
+        S.data_validation('B{}'.format(i+2), {'validate': 'list',
+                                      'source': ext_ref})
+        S.data_validation('C{}'.format(i+2), {'validate': 'list',
+                                      'source': act_com_ref})  
+        S.data_validation('D{}'.format(i+2), {'validate': 'list',
+                                      'source': types})
+
+
 
     workbook.close()
 

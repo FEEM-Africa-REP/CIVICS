@@ -1,0 +1,26 @@
+Ghana	GHA	Industries	Agriculture	
+Ghana	GHA	Industries	Fishing	
+Ghana	GHA	Industries	Mining and Quarrying	
+Ghana	GHA	Industries	Food & Beverages	
+Ghana	GHA	Industries	Textiles and Wearing Apparel	
+Ghana	GHA	Industries	Wood and Paper	
+Ghana	GHA	Industries	Petroleum, Chemical and Non-Metallic Mineral Products	
+Ghana	GHA	Industries	Metal Products	
+Ghana	GHA	Industries	Electrical and Machinery	
+Ghana	GHA	Industries	Transport Equipment	
+Ghana	GHA	Industries	Other Manufacturing	
+Ghana	GHA	Industries	Recycling	
+Ghana	GHA	Industries	Electricity, Gas and Water	
+Ghana	GHA	Industries	Construction	
+Ghana	GHA	Industries	Maintenance and Repair	
+Ghana	GHA	Industries	Wholesale Trade	
+Ghana	GHA	Industries	Retail Trade	
+Ghana	GHA	Industries	Hotels and Restraurants	
+Ghana	GHA	Industries	Transport	
+Ghana	GHA	Industries	Post and Telecommunications	
+Ghana	GHA	Industries	Finacial Intermediation and Business Activities	
+Ghana	GHA	Industries	Public Administration	
+Ghana	GHA	Industries	Education, Health and Other Services	
+Ghana	GHA	Industries	Private Households	
+Ghana	GHA	Industries	Others	
+Ghana	GHA	Industries	Re-export & Re-import	

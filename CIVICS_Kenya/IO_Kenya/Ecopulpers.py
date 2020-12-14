@@ -4,7 +4,6 @@ kenya = REP_CVX.C_SUT(path = r'Database\Kenya_2014_SAM.xlsx', unit='M KSH', name
 #%% Investment impact
 kenya.shock_calc(path=r'Ecopulpers\Ecopulpers.xlsx', Y=True)
 
-kenya.plot_dx()
 # kenya.plot_dv(level='Activities', drop='unused', unit='K USD')
 # kenya.plot_dv(level='Commodities', drop='unused')
 # kenya.plot_ds(indicator='CO2')
