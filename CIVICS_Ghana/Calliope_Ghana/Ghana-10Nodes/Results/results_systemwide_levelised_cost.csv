@@ -1,5 +1,7 @@
 carriers,costs,techs,systemwide_levelised_cost
-power,monetary,PV,0.0
-power,monetary,CCGT_pp,0.06655000000001282
-power,monetary,Hydro_old,0.0016000000000001026
+power,monetary,CCGT_pp,0.06655000000001948
+power,monetary,GT_pp,0.08522258064515852
+power,monetary,ICE_pp,0.06952631578952963
+power,monetary,Hydro_old,0.001599999999999271
 power,monetary,Hydro_new,0.0005
+power,monetary,PV,0.0

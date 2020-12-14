@@ -1,11 +1,14 @@
 locs,techs,resource_unit
 AA,demand_power,energy
 AH,demand_power,energy
+BA,Hydro_new,energy
 BA,demand_power,energy
 CP,PV,energy_per_cap
 CP,demand_power,energy
+EP,Hydro_old,energy
 EP,demand_power,energy
 NP,demand_power,energy
+TV,Hydro_old,energy
 TV,demand_power,energy
 UE,PV,energy_per_cap
 UE,demand_power,energy

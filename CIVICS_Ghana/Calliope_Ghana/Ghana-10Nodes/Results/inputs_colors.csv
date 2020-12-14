@@ -1,10 +1,10 @@
 techs,colors
-ICE_pp,#f70000
-HV_161,#00BFFF
-HV_330,#4169E1
-PV,#ffff00
-demand_power,#000000
 CCGT_pp,#e17c05
+GT_pp,#e17c05
+ICE_pp,#f70000
 Hydro_old,#1d6996
 Hydro_new,#1d6996
-GT_pp,#e17c05
+HV_330,#4169E1
+demand_power,#000000
+PV,#ffff00
+HV_161,#00BFFF
