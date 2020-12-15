@@ -63,7 +63,8 @@ for Scenario in Scenarios:
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
-fig = make_subplots(rows=1, cols=len(Scenarios), subplot_titles=Scenarios, shared_yaxes=True)
+subtitles = ['+50% increase in local production of grain & hybrid system','+100% increase in local production of grain & hybrid system', '+50% increase in local production of grain & solar system', '+100% increase in local production of grain & solar system']
+fig = make_subplots(rows=1, cols=len(Scenarios), subplot_titles=subtitles, shared_yaxes=True)
 colors = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
 sectors = list(Delta[Scenarios[0]].columns)
 indicators = list(Delta[Scenarios[0]].index)
@@ -89,6 +90,10 @@ for c in Scenarios:
                              mode='markers',
                              showlegend=sl), row=1, col=Scenarios.index(c)+1)
 
-fig.update_layout(title='Use of Resources by Scenario with respect to the baseline with the dedicated mini-grid', barmode='relative', legend_title_text='Sectors')
+fig.update_layout(title='Use of Resources by Scenario with respect to the baseline with the dedicated stand-alone system', barmode='relative', 
+                  legend_title_text='Sectors',
+                  font_family='Palatino Linotype',
+                  font_size=20)
 fig.write_html('Resource Use.html')
+fig.write_image('Resource Use.svg', width=2200, height=1000)
 

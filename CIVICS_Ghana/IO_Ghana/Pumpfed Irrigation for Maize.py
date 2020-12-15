@@ -40,5 +40,15 @@ Ghana.impact_assess(p_life=10, saving_sce=['sh', 2], invest_sce=['se',2],imports
                     w_ext=['Water'], em_ext=['CO2'], land=['Land'], 
                     labour=['Labor'],
                     capital=['Capital'], save_excel=True)
+#%%
+Ghana.impact_assess(p_life=10, saving_sce=['se', 1], invest_sce=['sh',1],imports=['Import'],
+                    w_ext=['Water'], em_ext=['CO2'], land=['Land'], 
+                    labour=['Labor'],
+                    capital=['Capital'], save_excel=True)
+#%%
+Ghana.impact_assess(p_life=10, saving_sce=['se', 4], invest_sce=['sh',1],imports=['Import'],
+                    w_ext=['Water'], em_ext=['CO2'], land=['Land'], 
+                    labour=['Labor'],
+                    capital=['Capital'], save_excel=True)
 
     
