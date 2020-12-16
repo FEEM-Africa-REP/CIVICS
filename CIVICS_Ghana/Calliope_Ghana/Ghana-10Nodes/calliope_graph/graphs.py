@@ -330,7 +330,7 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
         fig, (ax1, ax2) = plt.subplots( nrows=1, ncols=2, figsize=figsize,gridspec_kw={'width_ratios': [3, 1]})
 
         
-        ax1.pie(data['Production'],shadow=False,colors=colors[data.index],startangle=90)
+        ax1.pie(data['Production'],shadow=False,colors=colors[data.index],startangle=90,alpha=0.1)
         
         ax2.patch.set_visible(False)
         ax2.get_xaxis().set_visible(False)
@@ -356,7 +356,8 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
                               loc='center',
                               rowLoc ='center',
                               colLoc='center',
-                              cellLoc='center')   
+                              cellLoc='center',
+                              alpha = 0.1)   
     
         table.auto_set_font_size(False)
         
@@ -369,7 +370,7 @@ def nod_pie(nodes,rational,fig_format,unit,conversion,kind,style,title_font,prod
         fig.savefig('{}\{}_{}_pie.{}'.format(directory,i,kind,fig_format), dpi=fig.dpi,bbox_inches='tight')
         
 
-def sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,production,imports,exports,figsize,colors,names,directory,table_font,v_round,demand):
+def sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,production,imports,exports,figsize,colors,names,directory,table_font,v_round,demand,alpha):
        
     import matplotlib.pyplot as plt
 
@@ -395,7 +396,7 @@ def sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,production
     fig, (ax1, ax2) = plt.subplots( nrows=1, ncols=2, figsize=figsize,gridspec_kw={'width_ratios': [3, 1]})
 
     
-    ax1.pie(data['Production'],shadow=False,colors=colors[data.index],startangle=90)
+    ax1.pie(data['Production'],shadow=False,colors=colors[data.index],startangle=90,wedgeprops={'alpha':alpha})
 
     ax2.patch.set_visible(False)
     ax2.get_xaxis().set_visible(False)
@@ -421,13 +422,17 @@ def sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,production
                           loc='center',
                           rowLoc ='center',
                           colLoc='center',
-                          cellLoc='center')    
+                          cellLoc='center',
+                          )    
 
     table.auto_set_font_size(False)
     
     table.scale(0.4, 3)
     table.set_fontsize(table_font)
     
+    for cell in table._cells:
+        table._cells[cell].set_alpha(alpha)  
+        
     fig.suptitle('System', fontsize=title_font,horizontalalignment='left')
     
     plt.show()

@@ -148,7 +148,7 @@ class C_Graph:
             
 
 
-    def system_pie(self,rational='production', fig_format = 'png' , unit= '' , style = 'ggplot' , title_font = 15 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=0):
+    def system_pie(self,rational='production', fig_format = 'png' , unit= '' , style = 'ggplot' , title_font = 15 , kind = 'share' ,table_font=15,figsize=(16, 8),directory='my_graphs',v_round=0,alpha=0.8):
         
         from calliope_graph.units import unit_check2  
         from calliope_graph.units import u_conv2 
@@ -164,7 +164,7 @@ class C_Graph:
         unit = unit_check2(unit)
         conversion = u_conv2(p2e(self.m_unit),unit)
    
-        sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,self.production,self.imports,self.exports,figsize,self.colors,self.names,directory,table_font,v_round,self.demand)
+        sys_pie(rational,fig_format,unit,conversion,kind,style,title_font,self.production,self.imports,self.exports,figsize,self.colors,self.names,directory,table_font,v_round,self.demand,alpha)
         
         
         

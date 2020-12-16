@@ -15,4 +15,4 @@ model.run()
 import cal_graph as CG
 variable=CG.C_Graph(model=model,ex_path=r'Graph_inputs.xlsx',unit='kW')
 #%%
-variable.system_pie(table_font=12)
+variable.system_pie(table_font=12.5,fig_format='png',figsize=(16, 6))
